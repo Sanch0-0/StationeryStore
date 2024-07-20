@@ -1,6 +1,5 @@
 venv/
 .env
-media/items/*
 media/products/*
 __pycache__
 plan.md

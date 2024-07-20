@@ -1,3 +1,46 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, logout
 
-# Create your views here.
+from .models import User
+from .forms import UserCreationForm, LoginForm
+
+
+def register_view(request):
+
+    form = UserCreationForm()
+    if request.method == "POST":
+        form = UserCreationForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request=request, template_name='registration.html', context=context)
+
+
+def loigin_view(request):
+
+    form = LoginForm()
+    message = ''
+    if request.method == "POST":
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            user = authenticate(
+                request=request,
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password']
+                )
+            if user is not None:
+                login(request=request, user=user)
+                return redirect()
+            message = "Invalid data"
+
+    context = {
+        'form': form,
+        'message': message,
+    }
+
+    return render(request=request, template_name='login.html', context=context)
