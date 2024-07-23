@@ -44,3 +44,15 @@ def loigin_view(request):
     }
 
     return render(request=request, template_name='login.html', context=context)
+
+
+def logout_view(request):
+
+    return render(request=request, template_name="logout.html")
+
+
+def logout_apply_view(request):
+
+    logout(request)
+    return redirect('login')
+

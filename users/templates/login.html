@@ -1,5 +1,5 @@
 
-<form action="{% url 'login_view' %}" method="post"> {% csrf_token %}
+<form action="{% url 'login' %}" method="post"> {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="login">
 </form>
