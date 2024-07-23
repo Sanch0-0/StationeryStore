@@ -37,3 +37,13 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=100, widget=forms.PasswordInput)
 
 
+class ProfileUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = [
+            "full_name",
+            "mobile_phone",
+            "country",
+            "image"
+        ]
