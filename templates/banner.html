@@ -1,0 +1,60 @@
+{% load static %}
+
+<div id="showcase">
+    <div class="container">
+    <div class="row">
+    <div class="col-sm-8">
+    <div class="slider_wrap">
+    <div class="nivoSlider">
+    <a href="collections/teaching.html">
+    <img alt="" src="{% static 'cdn/shop/t/2/assets/slide1_image.jpg@v=98963254024330942581400252944' %}" title="#htmlcaption-1"/>
+    </a>
+    <a href="collections/classroom.html">
+    <img alt="" src="{% static 'cdn/shop/t/2/assets/slide2_image.jpg@v=140597612170840630171400252945' %}" title="#htmlcaption-2"/>
+    </a>
+    <a href="collections/binders-folders.html">
+    <img alt="" src="{% static 'cdn/shop/t/2/assets/slide3_image.jpg@v=175403008735047548901400252946' %}" title="#htmlcaption-3"/>
+    </a>
+    </div>
+    </div>
+    <script type="text/javascript">
+    $(window).load(function() {
+        $('.nivoSlider').nivoSlider({
+            effect:'fade',
+            animSpeed:500,
+            pauseTime:7000,
+            startSlide:0,
+            pauseOnHover:true,
+            directionNav:false,
+            directionNavHide:false,
+            controlNav:true
+        });
+    });
+    </script>
+    </div>
+    <div class="col-sm-4">
+    <div class="custom_showcase custom_showcase1">
+    <a href="collections/teaching.html">
+    <img src="{% static 'cdn/shop/t/2/assets/custom_showcase1_img.png@v=53468474497479421481400255163' %}"/>
+    <h3>Binders</h3>
+    <h4>Starting at $1.99</h4>
+    </a>
+    </div>
+    <div class="custom_showcase custom_showcase2">
+    <a href="collections/calculators.html">
+    <img src="{% static 'cdn/shop/t/2/assets/custom_showcase2_img.png@v=63648424160568979801400255163' %}"/>
+    <h3>Pencils</h3>
+    <h4>Starting at $5.95</h4>
+    </a>
+    </div>
+    <div class="custom_showcase custom_showcase3">
+    <a href="collections/arts-crafts.html">
+    <img src="{% static 'cdn/shop/t/2/assets/custom_showcase3_img.png@v=128564072689118292591400255163' %}"/>
+    <h3>Knives</h3>
+    <h4>Starting at $3.49</h4>
+    </a>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>

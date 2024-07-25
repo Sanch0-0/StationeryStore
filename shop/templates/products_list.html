@@ -1,0 +1,68 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+
+
+{% block content %}
+{% include 'banner.html' %}
+
+<!-- MAIN CONTENT -->
+<div id="main" role="main">
+<div class="container">
+<div class="row sidebar_left">
+
+
+<div class="column_center">
+  <div class="col-sm-9" id="main_content">
+
+    <div class="index-scope">
+    <!--
+    -->
+    <h2 class="page_heading">Featured Products</h2>
+    <div class="product-listing__index">
+    <div class="product_listing_main"><div class="row">
+
+    {% for product in products %}
+    <div class="product col-sm-4">
+    <div>
+    <div class="product_img">
+    <a href="collections/vendors/products/2-d-ring-file-a4.html">
+    <img alt="2-D Ring File A4" src="{% static 'cdn/shop/products/2-d_ring_file_a4_1_medium.jpeg@v=1400243781' %}"/>
+    </a>
+    </div>
+    <div class="product_info">
+    <div class="product_name">
+    <a href="collections/vendors/products/2-d-ring-file-a4.html">2-D Ring File A4</a>
+    </div>
+    <div class="product_price">
+    <span class="money">$25.00</span>
+    <!--
+        This is just a regular add product form.
+        You should be able to add any valid input fields to it
+    -->
+    <form action="https://tm-shopify047-stationery.myshopify.com/cart/add" method="post">
+    <!-- We can leave this in, since the select comes later,
+            so it will override if user picks something different. -->
+    <input name="id" type="hidden" value="693763971"/>
+    <!-- START BUY -->
+    <button class="btn btn-cart" type="submit">Add to cart</button>
+    <!-- END BUY -->
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    {% endfor %}
+
+
+    </div></div>
+    </div>
+    </div>
+
+</div>
+</div>
+
+{% include 'sidebar.html' %}
+
+{% endblock %}

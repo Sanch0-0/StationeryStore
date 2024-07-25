@@ -6,7 +6,12 @@ from .models import  Product
 
 
 def index(request):
-    return render(request, "home.html")
+    products = Product.objects.all()
+
+    context = {
+        "products": products
+    }
+    return render(request, "products_list.html", context)
 
 
 def get_product_by_id(request, id):
