@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseNotFound
 # from django.core.paginator import Paginator
 
@@ -20,11 +20,9 @@ def get_product_by_id(request, id):
     try:
         product = Product.objects.get(id=id)
     except Product.DoesNotExist:
-        return HttpResponseNotFound("Products not found")
-  
+        return HttpResponseNotFound("Product not found")
+
     context = {
         "product": product
     }
-    return render(request, "product_ifno.html", context)
-
-
+    return render(request, "product_info.html", context)
