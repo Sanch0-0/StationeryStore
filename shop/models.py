@@ -1,4 +1,5 @@
 from django.db import models
+import random
 
 
 class Category(models.Model):
@@ -11,9 +12,10 @@ class Category(models.Model):
         return self.name
 
     @property
-    def get_first_20_products(self):
-        products = self.products.all()[:20]
-        return products
+    def get_first_12_random_products(self):
+        products = list(Product.objects.all())
+        random_products = random.sample(products, min(len(products), 12))
+        return random_products
 
 
 class Product(models.Model):

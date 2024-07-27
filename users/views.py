@@ -32,7 +32,7 @@ def loigin_view(request):
                 request=request,
                 email=form.cleaned_data['email'],
                 password=form.cleaned_data['password']
-                )
+            )
             if user is not None:
                 login(request=request, user=user)
                 return redirect()
@@ -48,7 +48,8 @@ def loigin_view(request):
 
 def update_view(request):
 
-    form = ProfileUpdateForm(data=request.POST, files=request.FILES, instance=request.user)
+    form = ProfileUpdateForm(
+        data=request.POST, files=request.FILES, instance=request.user)
 
     if form.is_valid():
         form.save()
@@ -62,7 +63,6 @@ def profile_view(request):
     context = {
         "form": form
     }
-
 
     return render(request=request, template_name="profile.html", context=context)
 

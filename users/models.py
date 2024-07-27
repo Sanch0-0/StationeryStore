@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django_countries.fields import CountryField
 from shop.models import Product
 
+
 class CustomUserManager(BaseUserManager):
 
     def create(self, **kwargs):
@@ -38,16 +39,18 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
 
     email = models.EmailField("Email", unique=True, null=False, blank=False)
-    full_name = models.CharField("Full name", max_length=100, null=True, blank=True)
-    mobile_phone = models.CharField("Phone number", max_length=20, null=True, blank=False)
-    image = models.ImageField("Avatar", upload_to='users/avatar', default='users/default/Default_avatar.jpg', blank=True)
+    full_name = models.CharField(
+        "Full name", max_length=100, null=True, blank=True)
+    mobile_phone = models.CharField(
+        "Phone number", max_length=20, null=True, blank=False)
+    image = models.ImageField("Avatar", upload_to='users/avatar',
+                              default='users/default/Default_avatar.jpg', blank=True)
     favorites = models.ManyToManyField(Product, related_name="users")
     country = CountryField("Country", null=True, blank=False)
 
     username = None
     first_name = None
     last_name = None
-
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

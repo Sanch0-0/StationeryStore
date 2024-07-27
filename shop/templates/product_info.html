@@ -1,24 +1,31 @@
-{% extends 'index.html' %}
-
-{% load static %}
-
+{% extends 'index.html' %} 
+{% load static %} 
 {% block content %}
-
-
 
 <!-- MAIN CONTENT -->
 <div id="main" role="main">
-<div class="container">
-<div class="row sidebar_left">
+  <div class="container">
+    <div class="row sidebar_left">
+      <h2>{{ category.name }}</h2>
 
+      <ul>
+        {% for product in products %}
+        <li>
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+          <h3>{{ product.name }}</h3>
+          <p>{{ product.description }}</p>
+          <p>Price: ${{ product.price }}</p>
+        </li>
+        {% empty %}
+        <li>No products found in this category.</li>
+        {% endfor %}
+      </ul>
 
-<div class="column_center">
-  <div class="col-sm-9" id="main_content">
+      <div class="column_center">
+        <div class="col-sm-9" id="main_content"></div>
+      </div>
 
-
+      {% include 'sidebar.html' %} {% endblock %}
+    </div>
   </div>
 </div>
-
-{% include 'sidebar.html' %}
-
-{% endblock %}
