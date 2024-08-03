@@ -12,6 +12,7 @@
 <title>Stationery | Stationery</title>
 <link href="{% static 'index.html' %}" rel="canonical"/>
 <link href="{% static 'cdn/shop/t/2/assets/favicon.ico@v=57453645606032007371400252243' %}" rel="shortcut icon" type="image/x-icon"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <script>window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.start');</script><meta content="/5005249/digital_wallets/dialog" id="shopify-digital-wallet" name="shopify-digital-wallet"/>
 <script async="async" src="https://tm-shopify047-stationery.myshopify.com/checkouts/internal/preloads.js?locale=en-US"></script>
 <script async="async" crossorigin="anonymous" src="https://shop.app/checkouts/internal/preloads.js?locale=en-US&amp;shop_id=5005249"></script>
@@ -473,9 +474,9 @@ for (var attr in meta) {
 <div class="col-sm-6">
 <!-- USER MENU -->
 <ul class="header_user">
-<li><a href="https://tm-shopify047-stationery.myshopify.com/account/login" id="customer_login_link">Log in</a></li>
-<li><a href="https://tm-shopify047-stationery.myshopify.com/account/register" id="customer_register_link">Create an account</a></li>
-<li class="checkout"><a href="https://tm-shopify047-stationery.myshopify.com/cart">Check out</a></li>
+<li><a href="{% url 'login' %}" id="customer_login_link">Log in</a></li>
+<li><a href="{% url 'registration'%}" id="customer_register_link">Create an account</a></li>
+<li class="checkout"><a href="{% url 'logout' %}">Check out</a></li>
 </ul>
 </div>
 <div class="col-sm-6">
@@ -499,7 +500,7 @@ for (var attr in meta) {
 <div class="col-sm-7">
 <!-- LOGO -->
 <div id="logo">
-<a href="index.html">
+<a href="{% url 'index' %}">
 
             Stationery
 
@@ -529,10 +530,10 @@ for (var attr in meta) {
 <nav role="navigation">
 <ul class="sf-menu visible-md visible-lg">
 <li class="first active">
-<a href="index.html" title="">Home</a>
+<a href="{% url 'index' %}" title="">Home</a>
 </li>
 <li class="has-dropdown">
-<a href="collections/all.html" title="">Products</a>
+<a href="{% url 'get_all_products' %}" title="">Products</a>
 <ul>
 <li class="first"><a class="first" href="collections/teaching.html">Teaching</a></li>
 <li class=""><a class="" href="collections/classroom.html">Classroom</a></li>
@@ -555,7 +556,7 @@ for (var attr in meta) {
 </li>
 </ul>
 <!-- HEADER CART -->
-<div class="header_cart"><a href="https://tm-shopify047-stationery.myshopify.com/cart"><i class="fa fa-shopping-cart"></i><span class="cart-total-items"><span class="count">0</span></span><span>item(s)</span> – <span class="money cart-total-price">$0.00</span></a></div>
+<div class="header_cart"><a href="{% url 'get_cart' %}"><i class="fa fa-shopping-cart"></i><span class="cart-total-items"><span class="count">0</span></span><span>item(s)</span> – <span class="money cart-total-price">$0.00</span></a></div>
 </nav>
 </div>
 </div>

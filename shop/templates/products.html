@@ -1,0 +1,208 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block content %}
+{% include 'banner.html' %}
+
+<!-- MAIN CONTENT -->
+<div id="main" role="main">
+  <div class="container">
+    <ul class="breadcrumb">
+      <li>
+        <a
+          href="{% url 'index' %}"
+          class="homepage-link"
+          title="Back to the frontpage"
+          >Home</a
+        >
+      </li>
+
+      <li><span class="page-title">Products</span></li>
+    </ul>
+
+    <div class="row sidebar_left">
+      <div class="column_center">
+        <div id="main_content" class="col-sm-9">
+          <div class="collection-scope">
+            <div class="page_header">
+              <h1 class="page_heading">Products</h1>
+            </div>
+
+            <div class="page_content">
+              <ul class="tags clearfix">
+                <li class="active">
+                  <a href="all.html">All</a>
+                </li>
+
+                <li>
+                  <a
+                    href="all/dolor.html"
+                    title="Narrow selection to products matching tag Dolor"
+                    >Dolor</a
+                  >
+                </li>
+
+                <li>
+                  <a
+                    href="all/lorem-ipsum.html"
+                    title="Narrow selection to products matching tag Lorem ipsum"
+                    >Lorem ipsum</a
+                  >
+                </li>
+
+                <li>
+                  <a
+                    href="all/sit-amet.html"
+                    title="Narrow selection to products matching tag Sit amet"
+                    >Sit amet</a
+                  >
+                </li>
+              </ul>
+
+              <div class="product-listing__collection">
+                <div class="product_listing_main">
+                    <div class="row">
+                      {% for product in products %}
+                      <div class="product col-sm-4">
+                        <div>
+                          <div class="product_img">
+                            <a href="{% url 'get_product_by_id' product.id %}">
+                              <img
+                                alt="{{ product.name }}"
+                                src="{{ product.image.url }}"
+                              />
+                            </a>
+                          </div>
+                          <div class="product_info">
+                            <div class="product_name">
+                              <a href="{% url 'get_product_by_id' product.id %}">{{ product.name }}</a>
+                            </div>
+
+                            <div class="product_desc">
+                                {{ product.description }}
+                            </div>
+                            
+                            {% if product.discount == 0 %}
+                              <span class="original-price">${{ product.price }}</span>
+                            {% elif product.discount != 0 %}
+                              <div class="product-price">
+                                <div class="old-price-wrapper">
+                                  <span class="price-striked">${{ product.price }}</span>
+                                  <span class="discount-percentage">- {{ product.discount }}%</span>
+                                </div>
+                                <span class="discounted-price">${{ product.price_with_discount }}</span>
+                              </div>
+                            {% endif %}
+    
+                            <form method="post" action="{% url 'add_to_cart' product.id %}" class="button">
+                              {% csrf_token %}
+                              <button class="btn btn-cart" type="submit">Add to cart</button>
+                            </form>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      {% empty %}
+                      <p>No products available.</p>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          {% include 'sidebar.html' %}
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<style>
+
+.product_listing_main .row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px; 
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.product_name {
+  font-size: 15px;
+  text-align: center;
+}
+
+.original-price {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  font-size: 24px;
+  color: #3b3b3b;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.product-price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.old-price-wrapper {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.price-striked {
+  color: gray;
+  text-decoration: line-through;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.discount-percentage {
+  color: rgb(255, 72, 103);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.discounted-price {
+  color: #3b3b3b;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.product_desc {
+  display: -webkit-box; /* Establish a flex container with WebKit */
+  -webkit-line-clamp: 3; /* WebKit-specific, limits text to 3 lines */
+  line-clamp: 3; /* Standard, but not yet widely supported */
+  -webkit-box-orient: vertical; /* WebKit-specific, orient the box vertically */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis (...) to indicate overflow */
+  font-size: 13px;
+  line-height: 1.5;
+  max-height: calc(2.0em * 3); /* Limit the height to 3 lines */
+}
+    
+</style>
+    
+{% endblock %}

@@ -113,3 +113,15 @@ Product Types
         Flashcards
         Interactive Games
         Student Planners
+
+
+
+
+
+                                            <!-- <div class="product_details">
+                                        <div class="product_type">
+                                            Type: 
+                                            <a href="{% url 'category_page' product.category.id %}" title="{{ product.category.name }}">{{ product.category.name }}</a>
+                                        </div>
+                                        <div class="product_vendor">Vendor: {{ product.vendor }}</div>
+                                    </div> -->

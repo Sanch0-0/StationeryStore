@@ -31,21 +31,23 @@
                         <div class="product_name">
                           <a href="{% url 'get_product_by_id' product.id %}">{{ product.name }}</a>
                         </div>
-
-                        <div class="product-price">
-                          <div class="original-price">
+                        
+                        {% if product.discount == 0 %}
+                          <span class="original-price">${{ product.price }}</span>
+                        {% elif product.discount != 0 %}
+                          <div class="product-price">
+                            <div class="old-price-wrapper">
                               <span class="price-striked">${{ product.price }}</span>
-
-                              <span class="discount-percentage">{{ product.discount }}%</span>
+                              <span class="discount-percentage">- {{ product.discount }}%</span>
+                            </div>
+                            <span class="discounted-price">${{ product.price_with_discount }}</span>
                           </div>
-                          <div class="discounted-price">${{ product.price_with_discount }}</div>
-                        </div>
+                        {% endif %}
 
-                        <!-- {% if product.discount > 0 %}
-                        <p class="price_text"><span style="color: #262626"><sup>${{ product.price }} - {{ product.discount }}%</sup> ${{ product.price_with_discount }}</span></p>
-                        {% elif product.discount == 0 %}
-                        <p class="price_text"><span style="color: #262626"><font size="+2">${{ product.price }}</font></span></p>
-                        {% endif %} -->
+                        <form method="post" action="{% url 'add_to_cart' product.id %}" class="button">
+                          {% csrf_token %}
+                          <button class="btn btn-cart" type="submit">Add to cart</button>
+                        </form>
 
                       </div>
                     </div>
@@ -67,35 +69,79 @@
 
 
 <style>
-.product-price {
-  font-family: Arial, sans-serif;
+
+.product_listing_main .row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px; 
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.product_name {
+  font-size: 15px;
+  text-align: center;
 }
 
 .original-price {
   display: flex;
-  align-items: center;
-  margin-bottom: 5px;
+  justify-content: center;
+  width: 100%;
+  font-size: 24px;
+  color: #3b3b3b;
+  font-weight: bold;
+  margin-top: 29px;
 }
 
-.discount-percentage {
-  color: rgb(192, 17, 40);
-  font-size: 14px;
-  font-weight: bold;
-  margin-left: 8px;
+.product-price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.old-price-wrapper {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
 }
 
 .price-striked {
   color: gray;
   text-decoration: line-through;
   font-size: 14px;
+  margin-right: 8px;
+}
+
+.discount-percentage {
+  color: rgb(255, 72, 103);
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .discounted-price {
-  color: black;
-  font-size: 18px;
+  color: #3b3b3b;
+  font-size: 24px;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
 }
-</style>
 
+.button {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+
+</style>
 
 {% endblock %}

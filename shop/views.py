@@ -3,14 +3,16 @@ from django.http import HttpResponseNotFound
 # from django.core.paginator import Paginator
 
 from .models import  Product, Category
+import random
 
 
 def index(request):
-    products = Product.objects.all()
+    products = list(Product.objects.all())
+    random_products = random.sample(products, min(len(products), 9))
     categories = Category.objects.all()
 
     context = {
-        "products": products,
+        "products": random_products,
         "categories": categories,
     }
     return render(request, "products_list.html", context)
@@ -18,7 +20,7 @@ def index(request):
 
 def get_product_by_id(request, id):
     try:
-        product = Product.objects.get(id=id)
+        product = get_object_or_404(Product, id=id)
     except Product.DoesNotExist:
         return HttpResponseNotFound("Product not found")
 
@@ -26,3 +28,14 @@ def get_product_by_id(request, id):
         "product": product
     }
     return render(request, "product_info.html", context)
+
+
+def get_all_products(request):
+    products = Product.objects.all()
+    categories = Category.objects.all()
+
+    context = {
+        "products": products,
+        "categories": categories,
+    }
+    return render(request, "products.html", context)
