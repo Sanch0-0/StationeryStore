@@ -31,7 +31,7 @@
                         <div class="product_name">
                           <a href="{% url 'get_product_by_id' product.id %}">{{ product.name }}</a>
                         </div>
-                        
+
                         {% if product.discount == 0 %}
                           <span class="original-price">${{ product.price }}</span>
                         {% elif product.discount != 0 %}
@@ -73,7 +73,7 @@
 .product_listing_main .row {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -15px; 
+  margin: 0 -15px;
 }
 
 .product {
@@ -108,7 +108,7 @@
 }
 
 .old-price-wrapper {
-  display: flex; 
+  display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 5px;

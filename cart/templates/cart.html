@@ -1,35 +1,426 @@
 {% extends 'index.html' %}
+
 {% load static %}
 
 {% block content %}
 
-<div>
-  <h2>Корзина</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Продукт</th>
-        <th>Количество</th>
-        <th>Цена</th>
-        <th>Итого</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in cart_items_with_total %}
-      <tr>
-        <td>{{ item.product.name }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>${{ item.price }}</td>
-        <td>${{ item.total }}</td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="4">Ваша корзина пуста.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <h3>Общая сумма: ${{ total_price }}</h3>
+
+
+
+
+<!-- <tbody class="cart-table-body table-item">
+  <tr class="cart-table-row item-info" data-ac-test="list-products_item">
+    <td rowspan="2" data-th="Item" class="cart-table-product-image col item">
+      <a
+        href="https://www.ryman.co.uk/casio-fx-85gtcw-solar-powered-scientific-calculator-1"
+        title="Casio FX 85GTCW Solar Powered Scientific Calculator"
+        tabindex="-1"
+        class="cart-table-product-photo"
+      >
+        <span class="product-image-container" style="width: 165px">
+          <span class="product-image-wrapper" style="padding-bottom: 100%">
+            <img
+              loading="lazy"
+              width="225"
+              height="225"
+              class="product-image-photo"
+              src="https://www.ryman.co.uk/media/catalog/product/3/4/3410040017_1.jpg?quality=80&amp;bg-color=255,255,255&amp;fit=bounds&amp;height=165&amp;width=165&amp;canvas=165:165"
+              max-width="165"
+              max-height="165"
+              alt="Casio FX 85GTCW Solar Powered Scientific Calculator"
+          /></span>
+        </span>
+      </a>
+
+      <div class="cart-table-actions mobile">
+        <a
+          href="#social-login-popup"
+          data-action="add-to-wishlist"
+          class="use-ajax action action-towishlist"
+          data-popup="1"
+        >
+          Move to Wish List
+        </a>
+        <a
+          class="action action-edit"
+          href="https://www.ryman.co.uk/checkout/cart/configure/id/64023670/product_id/496039/"
+          title="Edit item parameters"
+        >
+          <span>Edit</span>
+        </a>
+
+        <a
+          href="#"
+          title="Remove item"
+          class="action action-delete"
+          data-post='{"action":"https:\/\/www.ryman.co.uk\/checkout\/cart\/delete\/","data":{"id":"64023670","uenc":"aHR0cHM6Ly93d3cucnltYW4uY28udWsvY2hlY2tvdXQvY2FydC8~"}}'
+          data-ac-test="product_action_delete-from-cart"
+        >
+          <span> Remove </span>
+        </a>
+      </div>
+    </td>
+
+    <td class="cart-table-product-description col">
+      <h4 class="cart-table-product-name" data-ac-test="product_name">
+        <a
+          class="cart-table-product-link"
+          href="https://www.ryman.co.uk/casio-fx-85gtcw-solar-powered-scientific-calculator-1"
+        >
+          Casio FX 85GTCW Solar Powered Scientific Calculator
+        </a>
+      </h4>
+      <span class="no-display" data-ac-test="product_id">3410040017</span>
+
+      <div class="cart-table-product-sku">Product Code: 3410040017</div>
+
+      <p class="cart-item-availability-available">In Stock</p>
+    </td>
+
+    <td class="cart-table-price col price" data-th="Price">
+      <span class="cart-table-label-mobile"> Price: </span>
+      <span class="price-including-tax" data-label="inc VAT">
+        <span class="cart-price"> <span class="price">£13.99</span> </span>
+      </span>
+    </td>
+
+    <td class="cart-table-qty col qty" data-th="Qty">
+      <div class="cart-stepper-container">
+        <div class="cart-stepper control qty">
+          <div class="stepper-minus js-stepper-minus disabled"></div>
+
+          <input
+            id="cart-64023670-qty"
+            name="cart[64023670][qty]"
+            data-cart-item-id="3410040017"
+            value="1"
+            type="number"
+            title="Qty"
+            class="stepper-input input-text qty"
+            data-validate="{required:true,'validate-greater-than-zero':true}"
+            data-role="cart-item-qty"
+            data-ac-test="product_quantity"
+            sd_sf="ovmm"
+          />
+
+          <div class="stepper-plus js-stepper-plus"></div>
+
+          <button
+            type="submit"
+            name="update_cart_action"
+            data-cart-item-update=""
+            value="update_qty"
+            title="Update Shopping Basket"
+            class="stepper-refresh js-stepper-refresh action update"
+            style="display: none"
+          >
+            <span>Update Shopping Basket</span>
+          </button>
+        </div>
+      </div>
+      <div class="cart-table-actions actions-toolbar">
+        <a
+          href="#social-login-popup"
+          data-action="add-to-wishlist"
+          class="use-ajax action action-towishlist"
+          data-popup="1"
+        >
+          Move to Wish List
+        </a>
+        <a
+          class="action action-edit"
+          href="https://www.ryman.co.uk/checkout/cart/configure/id/64023670/product_id/496039/"
+          title="Edit item parameters"
+        >
+          <span>Edit</span>
+        </a>
+
+        <a
+          href="#"
+          title="Remove item"
+          class="action action-delete"
+          data-post='{"action":"https:\/\/www.ryman.co.uk\/checkout\/cart\/delete\/","data":{"id":"64023670","uenc":"aHR0cHM6Ly93d3cucnltYW4uY28udWsvY2hlY2tvdXQvY2FydC8~"}}'
+          data-ac-test="product_action_delete-from-cart"
+        >
+          <span> Remove </span>
+        </a>
+      </div>
+    </td>
+
+    <td class="cart-table-subtotal col subtotal" data-th="Product Subtotal">
+      <span class="cart-table-label-mobile"> Subtotal: </span>
+      <span class="price-including-tax" data-label="inc VAT">
+        <span class="cart-price"> <span class="price">£13.99</span> </span>
+      </span>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4" class="cart-table-extra-info"></td>
+  </tr>
+</tbody>
+
+
+<style>
+
+.cart-table, .cart-table-head, .cart-table-body {
+    width: 100%;
+    border-radius: 4px;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    unicode-bidi: isolate;
+    border-color: inherit;
+}
+
+.cart-table {
+    border-collapse: separate;
+}
+
+table {
+    border-collapse: separate;
+    text-indent: initial;
+    border-spacing: 2px;
+}
+
+
+
+</style> -->
+
+<!-- MAIN CONTENT -->
+<div id="main" role="main">
+  <div class="container">
+    <ul class="breadcrumb">
+      <li class="firstItem">
+        <a
+          href="https://tm-shopify047-stationery.myshopify.com/"
+          class="homepage-link"
+          title="Back to the frontpage"
+          >Home</a
+        >
+      </li>
+
+      <li class="lastItem">
+        <span class="page-title">Your Shopping Cart</span>
+      </li>
+    </ul>
+
+
+
+    <div class="row sidebar_left">
+      <div class="column_center">
+        <div id="main_content" class="col-sm-9">
+          <div class="cart-scope">
+            <div class="page_header">
+              <h1 class="page_heading">Shopping Cart</h1>
+            </div>
+
+            <div class="controls">
+              <!-- Checkbox and label -->
+              <label>
+                <input type="checkbox" checked />
+                <span>Выбрать все</span>
+              </label>
+
+              <!-- Delete button -->
+              <button style="background-color: #f91155;">
+                Удалить выбранные
+              </button>
+
+              <!-- Share button with icon -->
+              <button style="background-color: #007bff;">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1-1.414 1.414L9 4.414V9a1 1 0 1 1-2 0V4.414l-.293.293a1 1 0 0 1-1.414-1.414zM2 9a3 3 0 0 1 3-3 1 1 0 0 1 0 2 1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1 1 1 0 1 1 0-2 3 3 0 0 1 3 3v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3z"
+                  ></path>
+                </svg>
+                Поделиться
+              </button>
+            </div>
+
+            <div class="page_content">
+              <form
+                action="https://tm-shopify047-stationery.myshopify.com/cart"
+                method="post"
+                class=""
+              >
+                <div class="cart-list">
+                  <div class="row cart-item">
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                      <div class="item_image">
+                        <a
+                          href="https://tm-shopify047-stationery.myshopify.com/collections/all/products/2-hole-punch-0102"
+                        >
+                          <img
+                            src="./Cart_files/2-hole_punch_0102_1_medium.jpeg"
+                            alt="2-hole punch 0102"
+                          />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                      <div class="item_remove pull-right">
+                        <a
+                          href="https://tm-shopify047-stationery.myshopify.com/cart/change?line=1&amp;quantity=0"
+                          ><i class="fa fa-times"></i
+                        ></a>
+                      </div>
+
+                      <div class="product_name">
+                        <a
+                          href="https://tm-shopify047-stationery.myshopify.com/collections/all/products/2-hole-punch-0102"
+                        >
+                          2-hole punch 0102
+                        </a>
+                      </div>
+
+                      <h3 class="item_vendor">tm-shopify047-stationery</h3>
+
+                      <div class="item_price">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <div class="price">
+                              <span class="money" data-currency-usd="$39.00"
+                                >$39.00</span
+                              >
+                            </div>
+                          </div>
+                          <div class="col-sm-8">
+                            <div class="qty">
+                              <label for="updates[]"
+                                >Qty:
+                                <input
+                                  type="number"
+                                  name="updates[]"
+                                  id="updates_693763995"
+                                  value="1"
+                                  class="input-small form-control"
+                              /></label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="total col-sm-12">
+                            <h3>
+                              Total:
+                              <span class="money" data-currency-usd="$39.00"
+                                >$39.00</span
+                              >
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="cart_subtotal">
+                  <h3>
+                    Subtotal
+                    <span class="money" data-currency-usd="$39.00">$39.00</span>
+                  </h3>
+                </div>
+                <div class="cart_buttons">
+                  <a
+                    href="https://tm-shopify047-stationery.myshopify.com/collections/arts-crafts"
+                    >Continue shopping</a
+                  >
+                  <span class="or">or</span>
+                  <input
+                    type="submit"
+                    name="update"
+                    value="Update cart"
+                    class="btn btn-primary"
+                  />
+                  <span class="or">or</span>
+                  <input
+                    type="submit"
+                    name="checkout"
+                    value="Check out"
+                    class="btn btn-primary"
+                  />
+                </div>
+
+                <div class="cart_instructions">
+                  <label>Special instructions for seller</label>
+                  <textarea class="form-control" name="note"></textarea>
+                </div>
+              </form>
+            </div>
+            <div id="payment-methods">
+              <ul>
+                <li class="firstItem">
+                  <img src="{% static 'payment/cc-amex.png' %}" alt="" />
+                </li>
+                <li><img src="{% static 'payment/cc-discover.png' %}" alt="" /></li>
+                <li><img src="{% static 'payment/cc-visa.png' %}" alt="" /></li>
+                <li><img src="{% static 'payment/cc-mastercard.png' %}" alt="" /></li>
+                <li><img src="{% static 'payment/cc-maestro.png' %}" alt="" /></li>
+                <li><img src="{% static 'payment/cc-cirrus.png' %}" alt="" /></li>
+                <li><img src="{% static 'payment/cc-paypal.png' %}" alt="" /></li>
+                <li class="lastItem">
+                  <img src="{% static 'payment/cc-google.png' %}" alt="" />
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% include 'sidebar.html' %}
+    </div>
+  </div>
 </div>
+
+
+<style>
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Space between elements */
+    padding: 10px;
+    border: 1px solid #ece5e3;
+    background-color: #f9f9f9;
+  }
+
+  .controls label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+
+  .controls button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #f91155;
+    color: white;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+
+  .controls button:hover {
+    background-color: #e00d49;
+  }
+
+  .controls svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
 
 {% endblock %}

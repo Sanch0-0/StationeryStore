@@ -1,6 +1,4 @@
 from django.db import models
-import random
-
 
 class Category(models.Model):
     name = models.CharField(verbose_name="name", max_length=30)
@@ -10,12 +8,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
-    # @property
-    # def get_first_9_random_products(self):
-    #     products = list(Product.objects.all())
-    #     random_products = random.sample(products, min(len(products), 12))
-    #     return random_products
 
 
 class Product(models.Model):

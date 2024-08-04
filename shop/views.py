@@ -4,6 +4,7 @@ from django.http import HttpResponseNotFound
 
 from .models import  Product, Category
 import random
+from .filters import ProductsFilter
 
 
 def index(request):
@@ -15,7 +16,7 @@ def index(request):
         "products": random_products,
         "categories": categories,
     }
-    return render(request, "products_list.html", context)
+    return render(request, "home.html", context)
 
 
 def get_product_by_id(request, id):
@@ -30,12 +31,12 @@ def get_product_by_id(request, id):
     return render(request, "product_info.html", context)
 
 
-def get_all_products(request):
-    products = Product.objects.all()
+def search_products(request):
     categories = Category.objects.all()
+    products_filter = ProductsFilter(data=request.GET, queryset=Product.objects.all())
 
     context = {
-        "products": products,
+        "products_filter": products_filter,
         "categories": categories,
     }
-    return render(request, "products.html", context)
+    return render(request, "search_products.html", context)

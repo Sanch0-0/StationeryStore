@@ -1,0 +1,46 @@
+{% load static %}
+
+<div class="column_left column col-sm-3">
+  <form action="" method="get">
+  <div class="widget widget__collections">
+    <h3 class="widget_header">Categories</h3>
+    <div class="widget_content">
+        {{ products_filter.form.category }}
+    </div>
+  </div>
+  <div class="widget widget__types">
+    <h3 class="widget_header">Filters</h3>
+    <div class="widget_content">
+      <ul class="list">
+        <p>
+          <p>Name</p>
+          {{ products_filter.form.name }}
+        </p>
+        <p class="Marker &amp; Highlighter">
+          <p>Price grater then</p>
+          {{ products_filter.form.price__gt }}
+        </p>
+        <p class="Paper &amp; Materials">
+          <p>Price less then</p>
+
+          {{ products_filter.form.price__lt }}
+        </p>
+        <p class="Paper &amp; Materials">
+          <p>Discount</p>
+          {{ products_filter.form.has_discount }}
+        </p>
+        <input type="submit" value="Apply">
+      </ul>
+    </div>
+  </div>
+
+
+<style>
+  select {
+    width: 100%;
+  }
+
+  ul.list {
+    font-size: 16px;
+  }
+</style>

@@ -513,8 +513,8 @@ for (var attr in meta) {
 <div class="custom_header1">1 (800) 603 6035</div>
 <!-- HEADER SEARCH -->
 <div class="header_search">
-<form action="https://tm-shopify047-stationery.myshopify.com/search" class="search-form" method="get" role="search">
-<input class="hint" id="search-field" name="q" placeholder="Search store..." type="text"/>
+<form action="" class="search-form" method="get" role="search">
+<input class="hint" id="search-field" name="name" placeholder="Search store..." type="text"/>
 <button id="search-submit" type="submit"><i class="fa fa-search"></i></button>
 </form>
 </div>
@@ -533,7 +533,7 @@ for (var attr in meta) {
 <a href="{% url 'index' %}" title="">Home</a>
 </li>
 <li class="has-dropdown">
-<a href="{% url 'get_all_products' %}" title="">Products</a>
+<a href="{% url 'search_products' %}" title="">Products</a>
 <ul>
 <li class="first"><a class="first" href="collections/teaching.html">Teaching</a></li>
 <li class=""><a class="" href="collections/classroom.html">Classroom</a></li>
@@ -572,16 +572,12 @@ for (var attr in meta) {
 <div class="container">
 <div class="row sidebar_left">
 
-
 <div class="column_center">
   <div class="col-sm-9" id="main_content">
 
     {% include 'content.html' %}
   </div>
 </div>
-
-{% include 'sidebar.html' %}
-
 
 {% endblock %}
 </div>
