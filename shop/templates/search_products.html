@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
 
 {% load static %}
+{% load thumbnail %}
 
 {% block content %}
 {% include 'banner.html' %}
@@ -70,7 +71,7 @@
                             <a href="{% url 'get_product_by_id' product.id %}">
                               <img
                                 alt="{{ product.name }}"
-                                src="{{ product.image.url }}"
+                                src="{% thumbnail product.image 'product_thumbnail' %}"
                               />
                             </a>
                           </div>

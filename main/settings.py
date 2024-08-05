@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'easy_thumbnails',
+    'image_cropping',
     'shop',
     'users',
     'cart',
@@ -119,6 +121,22 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + ('easy_thumbnails.processors.colorspace',
+     'easy_thumbnails.processors.autocrop',
+     'easy_thumbnails.processors.scale_and_crop',
+     'easy_thumbnails.processors.filters',)
+
+# Optionally, set up thumbnail aliases
+THUMBNAIL_ALIASES = {
+    '': {
+        'product_thumbnail': {'size': (150, 150), 'crop': True},
+    },
+}
+
 
 
 # Internationalization

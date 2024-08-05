@@ -3,13 +3,12 @@ from django.http import HttpResponseNotFound
 # from django.core.paginator import Paginator
 
 from .models import  Product, Category
-import random
 from .filters import ProductsFilter
 
 
 def index(request):
-    products = list(Product.objects.all())
-    random_products = random.sample(products, min(len(products), 9))
+    # Using raw SQL for random selection
+    random_products = Product.objects.raw('SELECT * FROM shop_product ORDER BY RANDOM() LIMIT 9')
     categories = Category.objects.all()
 
     context = {

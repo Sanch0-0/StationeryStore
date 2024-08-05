@@ -1,5 +1,7 @@
 {% extends 'index.html' %}
+
 {% load static %}
+
 {% block content %}
 
 <div id="main" role="main">
@@ -61,7 +63,7 @@
                                                 <span class="discounted-price">${{ product.price_with_discount }}</span>
                                             {% endif %}
                                         </p>
-                                        
+
                                     </div>
 
                                     <form action="{% url 'add_to_cart' product.id %}" method="post" enctype="multipart/form-data" class='form-horizontal' id="product-actions">
@@ -87,7 +89,7 @@
                                             <span style="font-size: 18px;">Category:   </span>
                                             <a href="#" title="{{ product.category.name }}">{{ product.category.name }}</a>
                                         </div>
-                                    
+
                                         <div class="product_rating">
                                             <a style="font-size: 18px;">Rating:</a>
                                             <div class="rate">
@@ -103,13 +105,13 @@
                                                 <label for="star1" title="1 star"><i class="fas fa-star"></i></label>
                                             </div>
                                         </div>
-                                    
+
                                         <div id="product_description" class="rte" itemprop="description">
                                             <h4 style="font-size: 16px;">Description:</h4>
                                             <p>{{ product.description }}</p>
                                         </div>
                                     </div>
-                                    
+
 
                                     <!-- AddThis Button BEGIN -->
                                     <div class="addthis_toolbox addthis_default_style ">
@@ -339,12 +341,12 @@
 }
 
 .rate > input:checked ~ label i {
-    color: #ffc700;    
+    color: #ffc700;
 }
 
 .rate:not(:checked) > label:hover i,
 .rate:not(:checked) > label:hover ~ label i {
-    color: #deb217;  
+    color: #deb217;
 }
 
 .rate > input:checked + label:hover i,
