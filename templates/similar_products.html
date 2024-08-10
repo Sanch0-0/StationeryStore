@@ -1,0 +1,61 @@
+{% load static %}
+{% load thumbnail %}
+
+<div class="widget_related_products">
+    <h1>Other similar products</h1>
+
+    <div class="widget_content">
+        <ul class="row product_listing_main product_listing_related">
+            {% for product in related_products %}
+            <div class="product col-sm-3">
+                <div>
+                    <div>
+                        <a class="product_img_link" href="{% url 'get_product_by_id' product.id %}">
+                          <img
+                              alt="{{ product.name }}"
+                              src="{% thumbnail product.image 'product_thumbnail' %}"
+                              class="product_img"
+                          />
+                        </a>
+                      </div>
+
+                    <div class="product_info">
+                        <div class="product_name">
+                            <a href="{% url 'get_product_by_id' product.id %}" title="{{ product.name }}">{{ product.name }}</a>
+                        </div>
+                        <div class="product_price">
+                            {% if product.discount == 0 %}
+                            <span class="orig-price">${{ product.price }}</span>
+                            {% elif product.discount != 0 %}
+                            <span class="discount-price">${{ product.price_with_discount }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<style>
+
+.product_price {
+    color: #3b3b3b;
+}
+
+.product_name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.product_img {
+  border: 2px solid rgb(90, 90, 90);
+  box-sizing: border-box;   
+}
+
+</style>

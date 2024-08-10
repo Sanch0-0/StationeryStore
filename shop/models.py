@@ -14,7 +14,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     image = models.ImageField(verbose_name="image", upload_to="products")
-    cropping = ImageRatioField('image', '150x150', verbose_name="cropping")
+    cropping = ImageRatioField('image', '200x200', verbose_name="cropping")
     name = models.CharField(verbose_name="name", max_length=50)
     description = models.TextField(verbose_name="description")
     price = models.DecimalField(verbose_name="price", max_digits=7, decimal_places=2, default=1, blank=True)

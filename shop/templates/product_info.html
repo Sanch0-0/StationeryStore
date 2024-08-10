@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
 
 {% load static %}
+{% load thumbnail %}
 
 {% block content %}
 
@@ -80,19 +81,19 @@
                                                 <input min="1" type="number" id="quantity" name="quantity" value="1" class="form-control input-small" />
                                                 <button class="btn btn-cart" type="submit" id="add-to-cart">Add to cart</button>
                                             </div>
-                                        </div><!-- /.options -->
+                                        </div>
                                     </form>
 
                                     <!-- Paste 'product_details' here! ----------------------------->
                                     <div class="product_details">
                                         <div class="product_category">
-                                            <span style="font-size: 18px;">Category:   </span>
+                                            <span>Category:</span>
                                             <a href="#" title="{{ product.category.name }}">{{ product.category.name }}</a>
                                         </div>
 
                                         <div class="product_rating">
-                                            <a style="font-size: 18px;">Rating:</a>
                                             <div class="rate">
+                                                <a class="rating">Rating:   </a>
                                                 <input type="radio" id="star5" name="rate" value="5" />
                                                 <label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
                                                 <input type="radio" id="star4" name="rate" value="4" />
@@ -105,23 +106,14 @@
                                                 <label for="star1" title="1 star"><i class="fas fa-star"></i></label>
                                             </div>
                                         </div>
+                                    </div>
 
+                                    <div class="product_desc">
                                         <div id="product_description" class="rte" itemprop="description">
                                             <h4 style="font-size: 16px;">Description:</h4>
                                             <p>{{ product.description }}</p>
                                         </div>
                                     </div>
-
-
-                                    <!-- AddThis Button BEGIN -->
-                                    <div class="addthis_toolbox addthis_default_style ">
-                                        <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-                                        <a class="addthis_button_tweet"></a>
-                                        <a class="addthis_button_pinterest_pinit"></a>
-                                        <a class="addthis_counter addthis_pill_style"></a>
-                                    </div>
-                                    <script type="text/javascript" src="https://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4d89903e1583a34e"></script>
-                                    <!-- AddThis Button END -->
 
                                 </div>
                             </div>
@@ -132,8 +124,10 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
+                    {% include 'similar_products.html' %}
+
                 </div>
 
                 {% include 'sidebar.html' %}
@@ -307,22 +301,35 @@
 .product_category,
 .product_rating,
 #product_description {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     padding-bottom: 15px;
 }
 
 .product_category a {
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .product_rating {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.product_desc {
+    border-bottom: 1px solid #ddd;
 }
 
 .rate {
+    display: flex;
+    align-items: center;
     float: left;
-    height: 46px;
-    padding: 0 10px;
+}
+
+.rating {
+    font-size: 16px;
+}
+
+label {
+    display: flex;
+    align-items: center;
 }
 
 .rate:not(:checked) > input {

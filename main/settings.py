@@ -133,7 +133,7 @@ THUMBNAIL_PROCESSORS = (
 # Optionally, set up thumbnail aliases
 THUMBNAIL_ALIASES = {
     '': {
-        'product_thumbnail': {'size': (150, 150), 'crop': True},
+        'product_thumbnail': {'size': (200, 200), 'crop': True},
     },
 }
 

@@ -6,11 +6,8 @@
     <div class="widget_content">
       <ul class="list">
         {% for category in categories %}
-        <li class="{{ category.name|slugify }}">
-          <a
-            href="{% url 'get_product_by_id' category.id %}"
-            title="{{ category.name }}"
-          >
+        <li>
+          <a href="{% url 'search_products' %}?category={{ category.name }}" title="{{ category.name }}">
             {{ category.name }}
           </a>
         </li>

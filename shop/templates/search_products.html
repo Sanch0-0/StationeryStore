@@ -22,43 +22,38 @@
       <li><span class="page-title">Products</span></li>
     </ul>
 
+
     <div class="row sidebar_left">
       <div class="column_center">
         <div id="main_content" class="col-sm-9">
           <div class="collection-scope">
             <div class="page_header">
-              <h1 class="page_heading">Products</h1>
+              <h1 class="page_heading">Sort by: </h1>
             </div>
 
             <div class="page_content">
               <ul class="tags clearfix">
+
                 <li class="active">
-                  <a href="all.html">All</a>
+                  <a href="all.html">Default</a>
+                </li>
+
+                <li class=>
+                  <a href="all.html">Newest</a>
                 </li>
 
                 <li>
-                  <a
-                    href="all/dolor.html"
-                    title="Narrow selection to products matching tag Dolor"
-                    >Dolor</a
-                  >
+                  <a href="all/dolor.html">Cheap first</a>
                 </li>
 
                 <li>
-                  <a
-                    href="all/lorem-ipsum.html"
-                    title="Narrow selection to products matching tag Lorem ipsum"
-                    >Lorem ipsum</a
-                  >
-                </li>
+                  <a href="all/lorem-ipsum.html">Expensive first</a>
+                <li>
 
                 <li>
-                  <a
-                    href="all/sit-amet.html"
-                    title="Narrow selection to products matching tag Sit amet"
-                    >Sit amet</a
-                  >
+                  <a href="all/sit-amet.html">Rating</a>
                 </li>
+
               </ul>
 
               <div class="product-listing__collection">
@@ -67,16 +62,16 @@
                       {% for product in products_filter.qs %}
                       <div class="product col-sm-4">
                         <div>
-                          <div class="product_img">
-                            <a href="{% url 'get_product_by_id' product.id %}">
-                              <img
+                          <a class="product_img_link" href="{% url 'get_product_by_id' product.id %}">
+                            <img
                                 alt="{{ product.name }}"
                                 src="{% thumbnail product.image 'product_thumbnail' %}"
-                              />
-                            </a>
-                          </div>
+                                class="product_img"
+                            />
+                          </a>
+                          
                           <div class="product_info">
-                            <div class="product_name">
+                            <div class="products_name">
                               <a href="{% url 'get_product_by_id' product.id %}">{{ product.name }}</a>
                             </div>
 
@@ -98,7 +93,7 @@
 
                             <form method="post" action="{% url 'add_to_cart' product.id %}" class="button">
                               {% csrf_token %}
-                              <button class="btn btn-cart" type="submit">Add to cart</button>
+                              <button class="btn btn-cart" type="submit" style="font-size: 16px;">Add to cart</button>
                             </form>
 
                           </div>
@@ -126,7 +121,7 @@
 .product_listing_main .row {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -15px;
+  margin: 0 0px;
 }
 
 .product {
@@ -137,9 +132,25 @@
   padding: 20px;
 }
 
-.product_name {
-  font-size: 15px;
+.product_img_link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;  
+}
+
+.product_img {
+  border: 2px solid rgb(90, 90, 90);
+  box-sizing: border-box;   
+}
+
+.products_name {
+  font-size: 17px;
   text-align: center;
+  color: #3b3b3b;
+  margin-top: 10px;
+  font-weight: bolder;
 }
 
 .original-price {
@@ -149,7 +160,7 @@
   font-size: 24px;
   color: #3b3b3b;
   font-weight: bold;
-  margin-top: 5px;
+  margin-top: 25px;
 }
 
 .product-price {
@@ -193,15 +204,15 @@
 }
 
 .product_desc {
-  display: -webkit-box; /* Establish a flex container with WebKit */
-  -webkit-line-clamp: 3; /* WebKit-specific, limits text to 3 lines */
-  line-clamp: 3; /* Standard, but not yet widely supported */
-  -webkit-box-orient: vertical; /* WebKit-specific, orient the box vertically */
+  display: -webkit-box; 
+  -webkit-line-clamp: 3; 
+  line-clamp: 3; 
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis; /* Add ellipsis (...) to indicate overflow */
+  text-overflow: ellipsis;
   font-size: 13px;
   line-height: 1.5;
-  max-height: calc(2.0em * 3); /* Limit the height to 3 lines */
+  max-height: calc(2.0em * 3); 
 }
 
 </style>

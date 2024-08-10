@@ -19,23 +19,44 @@ def index(request):
 
 
 def get_product_by_id(request, id):
-    try:
-        product = get_object_or_404(Product, id=id)
-    except Product.DoesNotExist:
-        return HttpResponseNotFound("Product not found")
+    # Retrieve the product or return a 404 error if it doesn't exist
+    product = get_object_or_404(Product, id=id)
+    categories = Category.objects.all()
+
+    # Use raw SQL to find 4 random products from the same category, excluding the current product
+    query = '''
+        SELECT * FROM shop_product
+        WHERE category_id = %s AND id != %s
+        ORDER BY RANDOM()
+        LIMIT 8
+    '''
+    related_products = Product.objects.raw(query, [product.category_id, product.id])
 
     context = {
-        "product": product
+        "product": product,
+        "related_products": related_products,
+        "categories": categories,
     }
     return render(request, "product_info.html", context)
 
 
 def search_products(request):
     categories = Category.objects.all()
-    products_filter = ProductsFilter(data=request.GET, queryset=Product.objects.all())
+    category_id = request.GET.get('category', None)
+
+    if category_id:
+        selected_category = Category.objects.filter(id=category_id).first()
+        if selected_category:
+            products_filter = ProductsFilter(data=request.GET, queryset=Product.objects.filter(category=selected_category))
+        else:
+            products_filter = ProductsFilter(data=request.GET, queryset=Product.objects.all())
+    else:
+        products_filter = ProductsFilter(data=request.GET, queryset=Product.objects.all())
 
     context = {
         "products_filter": products_filter,
         "categories": categories,
     }
     return render(request, "search_products.html", context)
+
+

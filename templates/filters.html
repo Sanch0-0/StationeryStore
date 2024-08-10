@@ -1,46 +1,111 @@
 {% load static %}
 
 <div class="column_left column col-sm-3">
-  <form action="" method="get">
-  <div class="widget widget__collections">
-    <h3 class="widget_header">Categories</h3>
-    <div class="widget_content">
-        {{ products_filter.form.category }}
-    </div>
-  </div>
-  <div class="widget widget__types">
-    <h3 class="widget_header">Filters</h3>
-    <div class="widget_content">
-      <ul class="list">
-        <p>
-          <p>Name</p>
-          {{ products_filter.form.name }}
-        </p>
-        <p class="Marker &amp; Highlighter">
-          <p>Price grater then</p>
-          {{ products_filter.form.price__gt }}
-        </p>
-        <p class="Paper &amp; Materials">
-          <p>Price less then</p>
+  <form action="{% url 'search_products' %}" method="get">
+      <div class="widget widget__collections">
+          <h3 class="widget_header">Categories</h3>
+          <div class="widget_content">
+              <select name="category" id="id_category">
+                  <option value="">All Categories</option>
+                  {% for category in categories %}
+                      <option value="{{ category.id }}" {% if request.GET.category|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>
+                          {{ category.name }}
+                      </option>
+                  {% empty %}
+                  <option disabled>No categories available.</option>
+                  {% endfor %}
+              </select>
+          </div>
+      </div>
 
-          {{ products_filter.form.price__lt }}
-        </p>
-        <p class="Paper &amp; Materials">
-          <p>Discount</p>
-          {{ products_filter.form.has_discount }}
-        </p>
-        <input type="submit" value="Apply">
-      </ul>
-    </div>
-  </div>
+      <div class="widget widget__types">
+          <h3 class="widget_header">Filters</h3>
+          <div class="widget_content">
+              <ul class="list">
+                  <li>
+                      <label for="id_name">Name</label>
+                      {{ products_filter.form.name }}
+                  </li>
+                  <li>
+                      <label for="id_price__gt">Price greater than</label>
+                      {{ products_filter.form.price__gt }}
+                  </li>
+                  <li>
+                      <label for="id_price__lt">Price less than</label>
+                      {{ products_filter.form.price__lt }}
+                  </li>
+                  <li>
+                      <label for="id_has_discount">Discount</label>
+                      <select name="has_discount" id="id_has_discount">
+                          <option value="">All</option>
+                          <option value="True" {% if request.GET.has_discount == 'True' %}selected{% endif %}>Yes</option>
+                          <option value="False" {% if request.GET.has_discount == 'False' %}selected{% endif %}>No</option>
+                      </select>
+                  </li>
+              </ul>
+              <div class="button">
+                  <button class="btn btn-cart" type="submit" style="font-size: 15px;">Apply</button>
+              </div>
+          </div>
+      </div>
+  </form>
+</div>
 
 
 <style>
-  select {
-    width: 100%;
-  }
+    .widget_content .list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
 
-  ul.list {
-    font-size: 16px;
-  }
+    .widget_header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .widget_content {
+        margin-bottom: 20px;
+    }
+
+    .list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .list li {
+        margin-bottom: 10px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .button {
+        text-align: right;
+    }
+
+    .btn-cart {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 </style>
+
+
