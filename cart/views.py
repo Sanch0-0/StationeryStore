@@ -29,7 +29,7 @@ def get_cart(request):
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    quantity = request.GET.get("quantity", 1)
+    quantity = request.POST.get("quantity", 1)
 
     cart, created = Cart.objects.get_or_create(user=request.user)
 
@@ -38,7 +38,10 @@ def add_to_cart(request, product_id):
         product=product,
     )
 
-    cart_item.quantity += int(quantity)
+    if created:
+        cart_item.quantity = int(quantity)
+    else:
+        cart_item.quantity += int(quantity)
     cart_item.save()
 
     return redirect(request.META.get("HTTP_REFERER", "/"))
