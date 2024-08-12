@@ -30,23 +30,25 @@
         <div id="main_content" class="col-sm-9">
           <div class="cart-scope">
             <div class="page_header">
-              <h1 class="page_heading">Shopping Cart</h1>
+              <h3 class="page_head">Shopping Cart</h3>
             </div>
 
             <div class="controls">
               <!-- Checkbox and label -->
-              <label>
-                <input type="checkbox" checked />
-                <span>Выбрать все</span>
+              <label class="custom-checkbox-label">
+                <input class="selection" type="checkbox"/>
+                <span class="custom-checkbox"></span>
+                <span style="font-weight: bold;">Select all</span>
               </label>
+
 
               <!-- Delete button -->
               <button style="background-color: #f91155;">
-                Удалить выбранные
+                Delete selected
               </button>
 
               <!-- Share button with icon -->
-              <button style="background-color: #007bff;">
+              <button style="background-color: #3b3b3b;">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -58,7 +60,7 @@
                     d="M7.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1-1.414 1.414L9 4.414V9a1 1 0 1 1-2 0V4.414l-.293.293a1 1 0 0 1-1.414-1.414zM2 9a3 3 0 0 1 3-3 1 1 0 0 1 0 2 1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1 1 1 0 1 1 0-2 3 3 0 0 1 3 3v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3z"
                   ></path>
                 </svg>
-                Поделиться
+                Share
               </button>
             </div>
 
@@ -191,55 +193,101 @@
           </div>
         </div>
       </div>
-      {% include 'sidebar.html' %}
+      {% include 'cart_menu.html' %}
     </div>
   </div>
 </div>
 
 
 <style>
-  .controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; /* Space between elements */
-    padding: 10px;
-    border: 2px solid #ece5e3;
-    background-color: #f9f9f9;
-    margin-top: 20px;
-  }
+.controls {
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  gap: 20px; /* Space between elements */
+  padding: 10px;
+  border: 2px solid #ece5e3;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+}
 
-  .controls label {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-  }
+h3.page_head {
+  font-size: 30px;
+}
 
-  .controls button {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #f91155;
-    color: white;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    border-radius: 4px;
-  }
+/* Hide the default checkbox */
+.custom-checkbox-label input[type="checkbox"] {
+  display: none;
+}
 
-  .controls button:hover {
-    background-color: #e00d49;
-  }
+/* Style the custom checkbox */
+.custom-checkbox-label .custom-checkbox {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #f0f0f0; /* Default background color */
+  border: 2px solid #3b3b3b; /* Border color */
+  border-radius: 4px;
+  position: relative;
+  vertical-align: middle;
+  cursor: pointer;
+  margin-bottom: 2%;
+}
 
-  .controls svg {
-    width: 16px;
-    height: 16px;
-    fill: currentColor;
-  }
+/* Style the custom checkbox when checked */
+.custom-checkbox-label input[type="checkbox"]:checked + .custom-checkbox {
+  background-color: #3b3b3b; /* Background color when checked */
+  border-color: #3b3b3b;
+}
+
+/* Checkmark styling */
+.custom-checkbox-label .custom-checkbox::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Display the checkmark when checked */
+.custom-checkbox-label input[type="checkbox"]:checked + .custom-checkbox::after {
+  opacity: 1;
+}
+
+.controls label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.controls button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+
+
+.controls svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
 
 </style>
 

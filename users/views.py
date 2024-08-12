@@ -29,20 +29,28 @@ def register_view(request):
 
 
 def login_view(request):
+
     form = LoginForm()
 
     if request.method == "POST":
         form = LoginForm(data=request.POST)
 
-        if form.is_valid():
+        if request.user.is_authenticated:
+            messages.success(request, "You are already logged in.")
+
+        elif form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
             user = authenticate(
                 request=request,
-                email=form.cleaned_data['email'],
-                password=form.cleaned_data['password']
+                email=email,
+                password=password
             )
+
             if user is not None:
                 login(request=request, user=user)
-                
+
+
                 # Check if "Remember me" was selected
                 if not request.POST.get('remember'):
                     request.session.set_expiry(0)
@@ -99,4 +107,4 @@ def logout_apply_view(request):
         messages.success(request, "You have been logged out.")
     else:
         messages.error(request, "You've already logged out.")
-    return redirect('logout') 
+    return redirect('logout')
