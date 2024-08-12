@@ -113,3 +113,8 @@ Product Types
         Flashcards
         Interactive Games
         Student Planners
+
+
+task for toworrow:
+redirecting to home page after succesful registration/log-in/logout
+error report afteer wrong registration/login

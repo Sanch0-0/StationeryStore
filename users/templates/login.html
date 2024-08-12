@@ -1,5 +1,183 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
 
-<form action="{% url 'login' %}" method="post"> {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="login">
-</form>
+<div class="login-wraper">
+  
+  <form class="login-form" action="{% url 'login' %}" method="POST">
+    <h1 class="login">Log in</h1>
+    {% csrf_token %}
+
+    <div class="imgcontainer">
+      <img src="/media/users/default/user-avatar.png" alt="Avatar" class="avatar" />
+    </div>
+
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="message {{ message.tags }}"{% endif %}>
+          {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <script>
+      // Check if there's a success message
+      const messages = document.querySelectorAll('.message.success');
+      if (messages.length > 0) {
+        // Delay the redirect by 2 seconds (2000 ms)
+        setTimeout(function() {
+          window.location.href = "{% url 'index' %}";
+        }, 2000);
+      }
+    </script>
+    {% endif %}
+
+    <div class="container-login">
+      <label for="email"><b>Email</b></label>
+      <input type="text" name="email" placeholder="Enter Email" required />
+  
+      <label for="password"><b>Password</b></label>
+      <input type="password" name="password" placeholder="Enter Password" required />
+
+      <button class="login-btn" type="submit">Login</button>
+      <label class="remember">
+        <input class="check" type="checkbox" checked="checked" name="remember" />
+        Remember me
+      </label>
+    </div>
+
+    <div class="container-login" style="background-color: #f1f1f1">
+        <button type="button" class="cancelbtn" onclick="clearForm()">Cancel</button>
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+  </form>
+</div>
+
+<style>
+  .login-wraper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    margin: 10% 0%;
+  }
+
+  h1.login {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .messages {
+    text-align: center;
+    width: 100%; 
+    margin: 20px 0; 
+    padding: 10px; 
+    box-sizing: border-box;
+  }
+
+  .message {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .message.success {
+    color: #4CAF50;
+    background-color: #DFF2BF;
+  }
+
+  .message.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+  }
+
+  form.login-form {
+    width: 100%;
+    max-width: 500px;
+    background-color: rgba(255, 255, 255, 0.521);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    min-width: 60vh;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  .check {
+    width: 20px;
+    height: 20px;
+  }
+
+  label {
+    font-size: 16px;
+  }
+
+  button.login-btn {
+    background-color: #3b3b3b;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  button:hover {
+    opacity: 0.8;
+  }
+
+  .cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #344347;
+    color: white;
+  }
+
+  .imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+  }
+
+  img.avatar {
+    width: 40%;
+    border-radius: 50%;
+  }
+
+  .container-login {
+    padding: 10px;
+  }
+
+  span.psw {
+    float: right;
+    padding-top: 6px;
+    text-decoration: underline;
+    font-size: 16px;
+  }
+
+  @media screen and (max-width: 300px) {
+    span.psw {
+      display: block;
+      float: none;
+    }
+    .cancelbtn {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+    function clearForm() {
+        document.querySelector('.login-form').reset();
+    }
+</script>
+
+{% endblock %}

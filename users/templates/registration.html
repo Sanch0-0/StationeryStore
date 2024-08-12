@@ -5,8 +5,32 @@
 {% block content %}
 
 <div class="register-wraper">
-    <div class="register-container">
-        <h1>Register</h1>
+
+  <div class="register-container">
+    <h1 class="register">Create an account</h1>
+
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="message {{ message.tags }}"{% endif %}>
+          {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <script>
+      // Check if there's a success message
+      const messages = document.querySelectorAll('.message.success');
+      if (messages.length > 0) {
+        // Delay the redirect by 2 seconds (2000 ms)
+        setTimeout(function() {
+          window.location.href = "{% url 'index' %}";
+        }, 2000);
+      }
+    </script>
+    {% endif %}
+
+
         <p>Please fill in this form to create an account.</p>
         <hr>
 
@@ -14,21 +38,20 @@
             {% csrf_token %}
 
             <label for="email"><b>Email</b></label>
-            <input type="email" placeholder="Enter Email" name="email" id="email" required>
-
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
-
-            <label for="psw-repeat"><b>Repeat Password</b></label>
-            <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
-
+            <input type="text" placeholder="Enter Email" name="email" id="email" required>
+        
+            <label for="password1"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password1" id="password1" required>
+        
+            <label for="password2"><b>Repeat Password</b></label>
+            <input type="password" placeholder="Repeat Password" name="password2" id="password2" required>
             <hr>
-            <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
-
+            <p>By creating an account you agree to our <a class="url" href="#">Terms & Privacy</a>.</p>
+            
             <button type="submit" class="registerbtn">Register</button>
         </form>
-
-        <p class="sign-in">Already have an account? <a href="{% url 'login' %}">Sign in</a>.</p>
+        <hr>
+        <p class="sign-in">Already have an account? <a class="url" href="{% url 'login' %}">Sign in</a>.</p>
 
     </div>
 
@@ -42,23 +65,52 @@
   align-items: center;
   min-height: 80vh;
   width: 100%;
+  margin: 10% 0%;
+}
+
+.messages {
+    text-align: center;
+    width: 100%; 
+    margin: 20px 0; 
+    padding: 10px; 
+    box-sizing: border-box;
+  }
+
+  .message {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .message.success {
+    color: #4CAF50;
+    background-color: #DFF2BF;
+  }
+
+  .message.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+  }
+
+h1.register {
+  font-weight: bold;
 }
 
 .register-container {
   width: 100%;
   max-width: 500px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.521);
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
 }
 
-p.sign-in {
-    text-align: center;
-}
+label {
+    font-size: 16px;
+  }
 
-/* Ensure form fields and buttons are styled properly */
 input[type=text], input[type=password] {
   width: 100%;
   padding: 15px;
@@ -83,12 +135,16 @@ input[type=text]:focus, input[type=password]:focus {
 }
 
 hr {
-  border: 1px solid #f1f1f1;
+  border: 1px solid #b9b9b9;
   margin-bottom: 25px;
 }
 
+p.sign-in {
+  text-align: center;
+}
+
 .registerbtn {
-  background-color: #04AA6D;
+  background-color: #3b3b3b;
   color: white;
   padding: 16px 20px;
   margin: 8px 0;
@@ -102,8 +158,9 @@ hr {
   opacity: 1;
 }
 
-a {
+a.url {
   color: dodgerblue;
+  text-decoration: underline;
 }
 
 .signin {

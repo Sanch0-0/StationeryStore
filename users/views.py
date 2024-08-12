@@ -1,32 +1,39 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
 
 from .models import User
 from .forms import UserCreationForm, LoginForm, ProfileUpdateForm
 
 
 def register_view(request):
-
     form = UserCreationForm()
     if request.method == "POST":
         form = UserCreationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect()
+            messages.success(request, "Registration successful!")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    if field == 'non_field_errors':
+                        messages.error(request, error)
+                    else:
+                        messages.error(request, f"{field.capitalize()}: {error}")
 
     context = {
         'form': form,
     }
 
-    return render(request=request, template_name='registration.html', context=context)
+    return render(request, 'registration.html', context)
 
 
-def loigin_view(request):
-
+def login_view(request):
     form = LoginForm()
-    message = ''
+
     if request.method == "POST":
         form = LoginForm(data=request.POST)
+
         if form.is_valid():
             user = authenticate(
                 request=request,
@@ -35,15 +42,29 @@ def loigin_view(request):
             )
             if user is not None:
                 login(request=request, user=user)
-                return redirect()
-            message = "Invalid data"
+                
+                # Check if "Remember me" was selected
+                if not request.POST.get('remember'):
+                    request.session.set_expiry(0)
+                else:
+                    request.session.set_expiry(1209600)  # 2 weeks
+
+                messages.success(request, "Login successful!")
+            else:
+                if not User.objects.filter(email=email).exists():
+                    messages.error(request, "This email is not registered.")
+                else:
+                    messages.error(request, "Invalid email or password.")
+        else:
+            # Manually add errors for specific fields
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
 
     context = {
         'form': form,
-        'message': message,
     }
-
-    return render(request=request, template_name='login.html', context=context)
+    return render(request, 'login.html', context)
 
 
 def update_view(request):
@@ -73,6 +94,9 @@ def logout_view(request):
 
 
 def logout_apply_view(request):
-
-    logout(request)
-    return redirect('login')
+    if request.user.is_authenticated:
+        logout(request)
+        messages.success(request, "You have been logged out.")
+    else:
+        messages.error(request, "You've already logged out.")
+    return redirect('logout') 

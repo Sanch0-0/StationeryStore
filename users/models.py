@@ -40,11 +40,23 @@ class User(AbstractUser):
 
     email = models.EmailField("Email", unique=True, null=False, blank=False)
     full_name = models.CharField(
-        "Full name", max_length=100, null=True, blank=True)
+        "Full name", 
+        max_length=100, 
+        null=True, 
+        blank=True
+        )
     mobile_phone = models.CharField(
-        "Phone number", max_length=20, null=True, blank=False)
-    image = models.ImageField("Avatar", upload_to='users/avatar',
-                              default='users/default/Default_avatar.jpg', blank=True)
+        "Phone number", 
+        max_length=20, 
+        null=True, 
+        blank=False
+        )
+    image = models.ImageField(
+        "Avatar", 
+        upload_to='users/avatar',
+        default='users/default/Default_avatar.jpg', 
+        blank=True
+        )
     favorites = models.ManyToManyField(Product, related_name="users")
     country = CountryField("Country", null=True, blank=False)
 

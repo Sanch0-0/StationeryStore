@@ -3,25 +3,27 @@ from .models import User
 
 class UserCreationForm(forms.ModelForm):
 
-    password1 = forms.CharField(label='First password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Second password', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='First password', min_length=8, widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Second password', min_length=8, widget=forms.PasswordInput)
 
     class Meta:
-
         model = User
-        fields = [
-            'email'
-        ]
+        fields = ['email']
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("A user with that email already exists.")
+        return email
 
     def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
 
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-
-        if password1 == password2:
-            return self.cleaned_data
-        else:
-            self.add_error('password2', "Password didn't match")
+        if password1 and password2 and password1 != password2:
+            self.add_error('password2', "Passwords don't match.")
+        return cleaned_data
 
     def save(self, commit=True):
         user = super().save(commit=False)

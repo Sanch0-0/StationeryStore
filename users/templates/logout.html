@@ -1,12 +1,103 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block content %}
+
 <div class="logout-block">
 
-    <h1 class="banner_taital form-title">Are you sure you want to logout?</h1>
-    <div class="row">
-        <div class="col">
-            <a href="{% url 'logout' %}">
-                <button type="button" class="btn btn-dark">Log out</button>
-            </a>
-        </div>
-    </div>
+    <h1 class="banner_taital">Are you sure you want to logout?</h1>
 
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="message {{ message.tags }}"{% endif %}>
+          {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <script>
+      // Check if there's a success message
+      const messages = document.querySelectorAll('.message.success');
+      if (messages.length > 0) {
+        // Delay the redirect by 2 seconds (2000 ms)
+        setTimeout(function() {
+          window.location.href = "{% url 'index' %}";
+        }, 2000);
+      }
+    </script>
+    {% endif %}
+
+    <hr>
+    <div class="buttons">
+          <a href="{% url 'logout_apply' %}" class="logout-btn">
+              <span class="glyphicon glyphicon-log-out"></span> Log out
+          </a>
+
+          <a href="{% url 'index' %}" class="logout-btn">
+            <span class="w3-logout"><i style="margin-top: 3px;" class="fa fa-home"></i> Home</span>
+          </a>
+    </div>
 </div>
+
+<style>
+.logout-block {
+  width: 100%;
+  max-width: 800px;
+  background-color: rgba(255, 255, 255, 0.521);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 10% auto; 
+}
+
+.messages {
+    text-align: center;
+    width: 100%; 
+    margin: 20px 0; 
+    padding: 10px; 
+    box-sizing: border-box;
+  }
+
+  .message {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .message.success {
+    color: #4CAF50;
+    background-color: #DFF2BF;
+  }
+
+  .message.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+  }
+
+h1.banner_taital {
+    text-align: center;
+    font-weight: bold;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+a.logout-btn {
+    background-color: #3b3b3b;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+}
+
+</style>
+
+{% endblock %}
