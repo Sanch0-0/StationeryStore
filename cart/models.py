@@ -9,6 +9,10 @@ class Cart(models.Model):
     def __str__(self):
         return f"Cart {self.id} for {self.user.username}"
 
+    @property
+    def products_count(self) -> int:
+        return self.products.count()
+
     def total_price(self):
         total = sum(
             item.product.price_with_discount * item.quantity for item in self.cart_items.all()

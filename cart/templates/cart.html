@@ -1,29 +1,22 @@
-{% extends 'index.html' %}
+{% extends 'index.html' %} 
 
-{% load static %}
+{% load static %} 
+{% load thumbnail %} 
 
 {% block content %}
-
 
 <!-- MAIN CONTENT -->
 <div id="main" role="main">
   <div class="container">
     <ul class="breadcrumb">
       <li class="firstItem">
-        <a
-          href="/"
-          class="homepage-link"
-          title="Back to the frontpage"
-          >Home</a
-        >
+        <a href="/" class="homepage-link" title="Back to the frontpage">Home</a>
       </li>
 
       <li class="lastItem">
         <span class="page-title">Your Shopping Cart</span>
       </li>
     </ul>
-
-
 
     <div class="row sidebar_left">
       <div class="column_center">
@@ -36,19 +29,16 @@
             <div class="controls">
               <!-- Checkbox and label -->
               <label class="custom-checkbox-label">
-                <input class="selection" type="checkbox"/>
+                <input class="selection" type="checkbox" />
                 <span class="custom-checkbox"></span>
-                <span style="font-weight: bold;">Select all</span>
+                <span style="font-weight: bold">Select all</span>
               </label>
 
-
               <!-- Delete button -->
-              <button style="background-color: #f91155;">
-                Delete selected
-              </button>
+              <button style="background-color: #f91155">Delete selected</button>
 
               <!-- Share button with icon -->
-              <button style="background-color: #3b3b3b;">
+              <button style="background-color: #3b3b3b">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -65,126 +55,208 @@
             </div>
 
             <div class="page_content">
-              <form
-                action="https://tm-shopify047-stationery.myshopify.com/cart"
-                method="post"
-                class=""
-              >
-                <div class="cart-list">
-                  <div class="row cart-item">
-                    <div class="col-lg-3 col-md-3 col-sm-3">
-                      <div class="item_image">
-                        <a
-                          href="https://tm-shopify047-stationery.myshopify.com/collections/all/products/2-hole-punch-0102"
-                        >
-                          <img
-                            src="./Cart_files/2-hole_punch_0102_1_medium.jpeg"
-                            alt="2-hole punch 0102"
-                          />
-                        </a>
-                      </div>
-                    </div>
+              {% for item in cart_items_with_total %}
 
-                    <div class="col-lg-9 col-md-9 col-sm-9">
-                      <div class="item_remove pull-right">
-                        <a
-                          href="https://tm-shopify047-stationery.myshopify.com/cart/change?line=1&amp;quantity=0"
-                          ><i class="fa fa-times"></i
-                        ></a>
-                      </div>
+                <div class="cart-product">
+                  <div class="checkbox">
+                    <label style="padding: 0;" class="custom-checkbox-label">
+                      <input class="selection" type="checkbox" />
+                      <span class="custom-checkbox"></span>
+                    </label>
+                  </div>
 
-                      <div class="product_name">
-                        <a
-                          href="https://tm-shopify047-stationery.myshopify.com/collections/all/products/2-hole-punch-0102"
-                        >
-                          2-hole punch 0102
-                        </a>
-                      </div>
-
-                      <h3 class="item_vendor">tm-shopify047-stationery</h3>
-
-                      <div class="item_price">
-                        <div class="row">
-                          <div class="col-sm-4">
-                            <div class="price">
-                              <span class="money" data-currency-usd="$39.00"
-                                >$39.00</span
-                              >
-                            </div>
-                          </div>
-                          <div class="col-sm-8">
-                            <div class="qty">
-                              <label for="updates[]"
-                                >Qty:
-                                <input
-                                  type="number"
-                                  name="updates[]"
-                                  id="updates_693763995"
-                                  value="1"
-                                  class="input-small form-control"
-                              /></label>
-                            </div>
-                          </div>
+                  <div class="cart-list">
+                    <div class="row cart-item">
+                      <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="product_img_link">
+                          <a
+                            href="{% url 'get_product_by_id' item.product.id %}"
+                          >
+                            <img
+                              src="{% thumbnail  item.product.image 'product_thumbnail' %}"
+                              alt="{{ item.product.name }}"
+                            />
+                          </a>
                         </div>
-                        <div class="row">
-                          <div class="total col-sm-12">
-                            <h3>
-                              Total:
-                              <span class="money" data-currency-usd="$39.00"
-                                >$39.00</span
-                              >
-                            </h3>
+                      </div>
+
+                      <div class="col-lg-9 col-md-9 col-sm-9">
+                        <div class="products_name">
+                          <a href="{% url 'get_product_by_id' item.product.id %}">
+                              {{ item.product.name }}
+                          </a>
+                      </div>
+
+                      
+
+                        <div class="item_price">
+                          <div class="row">
+
+                            <div class="col-sm-4">
+                              <div class="price">
+                              {% if item.product.discount == 0 %}
+                                <span class="original-price">${{ item.product.price }}</span>
+                              {% elif item.product.discount != 0 %}
+                                <div class="product-price">
+                                  <div class="old-price-wrapper">
+                                    <span class="price-striked">${{ item.product.price }}</span>
+                                    <span class="discount-percentage">- {{ item.product.discount }}%</span>
+                                  </div>
+                                  <span class="discounted-price">${{ item.product.price_with_discount }}</span>
+                                </div>
+                              {% endif %}
+                              </div>
+                            </div>
+
+                            <div class="quantity">
+                              <button class="minus" aria-label="Decrease">&minus;</button>
+                              <input style="font-weight: bold;" type="number" class="input-box" 
+                              data-product-id="{{ item.product.id }}" value="{{ item.quantity }}" min="1" max="100">
+                              <button class="plus" aria-label="Increase">&plus;</button>
+                            </div>
+
+                            <script>
+                              document.querySelectorAll('.quantity .input-box').forEach(function (inputBox) {
+                                  inputBox.addEventListener('change', function () {
+                                      const productId = this.dataset.productId;
+                                      const quantity = this.value;
+                                      
+                                      fetch(`/update-cart-item/${productId}/`, {
+                                          method: 'POST',
+                                          headers: {
+                                              'X-CSRFToken': '{{ csrf_token }}',
+                                              'Content-Type': 'application/x-www-form-urlencoded',
+                                          },
+                                          body: new URLSearchParams({
+                                              'quantity': quantity,
+                                          }),
+                                      })
+                                      .then(response => response.json())
+                                      .then(data => {
+                                          document.querySelector(`#item-total-${productId}`).innerText = `$${data.item_total}`;
+                                          document.querySelector('.total-product-price').innerText = `$${data.cart_total}`;
+                                      });
+                                  });
+                              });
+                          
+                              document.querySelectorAll('.quantity button').forEach(function (button) {
+                                  button.addEventListener('click', function () {
+                                      const inputBox = this.parentElement.querySelector('.input-box');
+                                      let quantity = parseInt(inputBox.value);
+                                      if (this.classList.contains('plus')) {
+                                          quantity++;
+                                      } else if (this.classList.contains('minus') && quantity > 1) {
+                                          quantity--;
+                                      }
+                                      inputBox.value = quantity;
+                                      inputBox.dispatchEvent(new Event('change'));
+                                  });
+                              });
+                            </script>
+                            
                           </div>
+
+                        
+
+                          <div class="row">
+                            <div class="total-col-sm-12">
+                              <p class="total-price">
+                                  Subtotal: 
+                                  <span class="total-product-price" id="item-total-{{ item.product.id }}">$ {{ item.total }}</span>
+                              </p>
+                          </div>
+
+                          <div class="btn-menu">
+                            <div
+                                favorite-test-id="add-and-delete-item-in-favorites"
+                                delete-button-test-id="cart-item-delete-btn"
+                                class="mb0_4_6"
+                                style="display: flex; gap: 20px;"
+                            >
+                                <!-- Existing button -->
+                                <button
+                                    class="m0b_4_6"
+                                    style="background: rgba(0, 48, 120, 0.039); color: rgba(0, 26, 52, 1)"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        class="ag013-b1"
+                                    >
+                                        <path
+                                            fill="currentColor"
+                                            d="M16 6.022C16 3.457 14.052 1.5 11.5 1.5c-1.432 0-2.665.799-3.5 1.926C7.165 2.299 5.932 1.5 4.5 1.5 1.948 1.5 0 3.457 0 6.022c0 2.457 1.66 4.415 3.241 5.743 1.617 1.358 3.387 2.258 4.062 2.577.444.21.95.21 1.394 0 .675-.32 2.445-1.219 4.062-2.577C14.339 10.437 16 8.479 16 6.022"
+                                        ></path>
+                                    </svg>
+                                    <div class="ag013-a" style="background-color: rgba(0, 26, 52, 1)"></div>
+                                </button>
+                        
+                                <!-- Delete button -->
+                                <form action="{% url 'delete_from_cart' item.product.id %}" method="post" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button
+                                        type="submit"
+                                        class="m0b_4_6 ag013-a0 ag013-a2"
+                                        style="background: rgba(0, 48, 120, 0.039); color: rgba(0, 26, 52, 1)"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="16"
+                                            height="16"
+                                            class="ag013-b1"
+                                        >
+                                            <path
+                                                fill="currentColor"
+                                                d="m4.888 3.035.275-.826A2.5 2.5 0 0 1 7.535.5h.93a2.5 2.5 0 0 1 2.372 1.71l.275.825c2.267.09 3.555.406 3.555 1.527 0 .938-.417.938-1.25.938H2.583c-.833 0-1.25 0-1.25-.937 0-1.122 1.288-1.438 3.555-1.528m1.856-.299-.088.266Q7.295 3 8 3t1.345.002l-.089-.266a.83.83 0 0 0-.79-.57h-.931a.83.83 0 0 0-.79.57M2.167 7.167c0-.6.416-.834.833-.834h10c.417 0 .833.235.833.834 0 6.666-.416 8.333-5.833 8.333s-5.833-1.667-5.833-8.333m4.166 1.666a.833.833 0 0 0-.833.834v1.666a.833.833 0 1 0 1.667 0V9.667a.833.833 0 0 0-.834-.834m4.167.834a.833.833 0 1 0-1.667 0v1.666a.833.833 0 1 0 1.667 0z"
+                                            ></path>
+                                        </svg>
+                                        <div class="ag013-a" style="background-color: rgba(0, 26, 52, 1)"></div>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+              {% empty %}
+              <p style="margin-top: 60px;" class="empty-cart">
+                It looks like your shopping cart is empty, which means it's time to</p>
+                <a href="/" class="empty-cart" title="Back to the frontpage">Go shopping</a>
+              {% endfor %}
 
-                <div class="cart_subtotal">
-                  <h3>
-                    Subtotal
-                    <span class="money" data-currency-usd="$39.00">$39.00</span>
-                  </h3>
-                </div>
-                <div class="cart_buttons">
-                  <a
-                    href="https://tm-shopify047-stationery.myshopify.com/collections/arts-crafts"
-                    >Continue shopping</a
-                  >
-                  <span class="or">or</span>
-                  <input
-                    type="submit"
-                    name="update"
-                    value="Update cart"
-                    class="btn btn-primary"
-                  />
-                  <span class="or">or</span>
-                  <input
-                    type="submit"
-                    name="checkout"
-                    value="Check out"
-                    class="btn btn-primary"
-                  />
-                </div>
 
-                <div class="cart_instructions">
-                  <label>Special instructions for seller</label>
-                  <textarea class="form-control" name="note"></textarea>
-                </div>
-              </form>
-            </div>
+              <div class="cart_instructions">
+                <label style="font-size: 18px; margin-top: 50px;">Special instructions for seller</label>
+                <textarea class="form-control" name="note"></textarea>
+              </div>
+          </div>
             <div id="payment-methods">
               <ul>
                 <li class="firstItem">
                   <img src="{% static 'payment/cc-amex.png' %}" alt="" />
                 </li>
-                <li><img src="{% static 'payment/cc-discover.png' %}" alt="" /></li>
+                <li>
+                  <img src="{% static 'payment/cc-discover.png' %}" alt="" />
+                </li>
                 <li><img src="{% static 'payment/cc-visa.png' %}" alt="" /></li>
-                <li><img src="{% static 'payment/cc-mastercard.png' %}" alt="" /></li>
-                <li><img src="{% static 'payment/cc-maestro.png' %}" alt="" /></li>
-                <li><img src="{% static 'payment/cc-cirrus.png' %}" alt="" /></li>
-                <li><img src="{% static 'payment/cc-paypal.png' %}" alt="" /></li>
+                <li>
+                  <img src="{% static 'payment/cc-mastercard.png' %}" alt="" />
+                </li>
+                <li>
+                  <img src="{% static 'payment/cc-maestro.png' %}" alt="" />
+                </li>
+                <li>
+                  <img src="{% static 'payment/cc-cirrus.png' %}" alt="" />
+                </li>
+                <li>
+                  <img src="{% static 'payment/cc-paypal.png' %}" alt="" />
+                </li>
                 <li class="lastItem">
                   <img src="{% static 'payment/cc-google.png' %}" alt="" />
                 </li>
@@ -198,98 +270,233 @@
   </div>
 </div>
 
-
 <style>
-.controls {
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    gap: 20px; /* Space between elements */
+    padding: 10px;
+    border: 2px solid #ece5e3;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+  }
+  
+  h3.page_head {
+    font-size: 30px;
+  }
+
+  .cart-product {
+    border-radius: 10px;
+    border-color: #3b3b3b;
+    border: 3px outset;
+    margin-top: 30px;
+
+  }  
+  
+  /* Hide the default checkbox */
+  .custom-checkbox-label input[type="checkbox"] {
+    display: none;
+  }
+  
+  /* Style the custom checkbox */
+  .custom-checkbox-label .custom-checkbox {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #f0f0f0; /* Default background color */
+    border: 2px solid #3b3b3b; /* Border color */
+    border-radius: 4px;
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-bottom: 2%;
+  }
+  
+  /* Style the custom checkbox when checked */
+  .custom-checkbox-label input[type="checkbox"]:checked + .custom-checkbox {
+    background-color: #3b3b3b; /* Background color when checked */
+    border-color: #3b3b3b;
+  }
+  
+  /* Checkmark styling */
+  .custom-checkbox-label .custom-checkbox::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  /* Display the checkmark when checked */
+  .custom-checkbox-label
+  input[type="checkbox"]:checked
+  + .custom-checkbox::after {
+    opacity: 1;
+  }
+
+  .checkbox {
+    display: flex;
+    float: left;
+    margin: 10% 10px 0px 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+  }
+  
+  .controls label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+  
+  .original-price {
   display: flex;
-  justify-content: space-between;
-  /* align-items: center; */
-  gap: 20px; /* Space between elements */
-  padding: 10px;
-  border: 2px solid #ece5e3;
-  background-color: #f9f9f9;
-  margin-top: 20px;
+  width: 100%;
+  font-size: 24px;
+  color: #3b3b3bd0;
+  font-weight: bold;
+  margin-top: 15%;
 }
 
-h3.page_head {
-  font-size: 30px;
+.old-price-wrapper {
+  display: flex;
 }
 
-/* Hide the default checkbox */
-.custom-checkbox-label input[type="checkbox"] {
-  display: none;
+.price-striked {
+  color: gray;
+  text-decoration: line-through;
+  font-size: 20px;
+  margin-right: 8px;
 }
 
-/* Style the custom checkbox */
-.custom-checkbox-label .custom-checkbox {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-color: #f0f0f0; /* Default background color */
-  border: 2px solid #3b3b3b; /* Border color */
+.discount-percentage {
+  color: rgb(255, 72, 103);
+  font-size: 20px;
+}
+
+span.discounted-price {
+  color: #3b3b3bd0;
+  font-size: 24px;
+  font-weight: bold;
+
+}
+
+  .controls button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+
+  .controls svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  .products_name {
+    font-size: 25px;
+  }
+
+  .quantity {
+  display: flex;
+  float: right;
+  margin-right: 50px;
+  border: 2px solid #3d3d3d;
   border-radius: 4px;
-  position: relative;
-  vertical-align: middle;
-  cursor: pointer;
-  margin-bottom: 2%;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100px;
+  margin-top: 35px;
+
 }
 
-/* Style the custom checkbox when checked */
-.custom-checkbox-label input[type="checkbox"]:checked + .custom-checkbox {
-  background-color: #3b3b3b; /* Background color when checked */
-  border-color: #3b3b3b;
-}
-
-/* Checkmark styling */
-.custom-checkbox-label .custom-checkbox::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 6px;
-  height: 12px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: translate(-50%, -50%) rotate(45deg);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-/* Display the checkmark when checked */
-.custom-checkbox-label input[type="checkbox"]:checked + .custom-checkbox::after {
-  opacity: 1;
-}
-
-.controls label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-}
-
-.controls button {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
+.quantity button {
+  background-color: #3d3d3d;
+  color: #fff;
   border: none;
-  color: white;
   cursor: pointer;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  border-radius: 4px;
+  font-size: 20px;
+  width: 30px;
+  height: auto;
+  text-align: center;
+  transition: background-color 0.2s;
 }
 
+.quantity button:hover {
+  background-color: #3d3d3d81;
+}
 
+.input-box {
+  width: 40px;
+  text-align: center;
+  padding: 8px 10px;
+  font-size: 16px;
+  
+}
 
-.controls svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
+/* Hide the number input spin buttons */
+.input-box::-webkit-inner-spin-button,
+.input-box::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.total-col-sm-12 {
+  float: left;
+  margin-left: 15px;
+  margin-top: 5%;
+}
+
+.btn-menu {
+  display: flex;
+  float:right;  
+  margin: 20px 50px 0 0;
+}
+
+button.m0b_4_6 {
+  height: 40px;
+  width: 40px;
+  border: 2px outset;
+  border-radius: 10px;
+}
+
+p.total-price {
+  padding: 0; 
+  margin: 0; 
+  font-size: 25px;
+  color: #3b3b3bd0;
+  font-weight: 500;
+}
+
+.total-product-price {
+  font-size: 25px;
+  color: #3b3b3b;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.empty-cart {
+  font-size: 25px;
+  color: #3b3b3b;
 }
 
 </style>
-
 
 {% endblock %}

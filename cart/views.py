@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Cart, CartItem
 from shop.models import Product
 
+
 @login_required
 def get_cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
@@ -26,6 +27,7 @@ def get_cart(request):
     }
     return render(request, "cart.html", context)
 
+
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -45,3 +47,33 @@ def add_to_cart(request, product_id):
     cart_item.save()
 
     return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+@login_required
+def update_cart_item(request, product_id):
+    cart = get_object_or_404(Cart, user=request.user)
+    product = get_object_or_404(Product, id=product_id)
+    cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+
+    if request.method == 'POST':
+        new_quantity = int(request.POST.get('quantity', 1))
+        cart_item.quantity = new_quantity
+        cart_item.save()
+
+        item_total = cart_item.quantity * cart_item.product.price_with_discount
+        cart_total = sum(item.quantity * item.product.price_with_discount for item in cart.cart_items.all())
+
+        return JsonResponse({
+            'item_total': item_total,
+            'cart_total': cart_total,
+        })
+
+
+@login_required
+def delete_from_cart(request, product_id):
+    cart = Cart.objects.get(user=request.user)
+    cart_item = get_object_or_404(CartItem, cart=cart, product_id=product_id)
+    cart_item.delete()
+    return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
