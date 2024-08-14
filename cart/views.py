@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, response
 from .models import Cart, CartItem
 from shop.models import Product
 
@@ -9,9 +10,10 @@ def get_cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
 
     cart_items_with_total = []
-    for item in cart.cart_items.all():
+    for item in cart.cart_items.order_by("-id"):
         total = item.quantity * item.product.price_with_discount
         cart_items_with_total.append({
+            'item_id': item.id,
             'product': item.product,
             'quantity': item.quantity,
             'price': item.product.price_with_discount,
@@ -51,22 +53,22 @@ def add_to_cart(request, product_id):
 
 @login_required
 def update_cart_item(request, product_id):
+
     cart = get_object_or_404(Cart, user=request.user)
-    product = get_object_or_404(Product, id=product_id)
-    cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+    cart_item = get_object_or_404(CartItem, cart=cart, id=product_id)
 
     if request.method == 'POST':
         new_quantity = int(request.POST.get('quantity', 1))
         cart_item.quantity = new_quantity
         cart_item.save()
 
-        item_total = cart_item.quantity * cart_item.product.price_with_discount
-        cart_total = sum(item.quantity * item.product.price_with_discount for item in cart.cart_items.all())
+    item_total = cart_item.quantity * cart_item.product.price_with_discount
+    cart_total = sum(item.quantity * item.product.price_with_discount for item in cart.cart_items.all())
 
-        return JsonResponse({
-            'item_total': item_total,
-            'cart_total': cart_total,
-        })
+    return JsonResponse({
+        'item_total': item_total,
+        'cart_total': cart_total,
+    })
 
 
 @login_required
@@ -77,3 +79,10 @@ def delete_from_cart(request, product_id):
     return redirect(request.META.get("HTTP_REFERER", "/"))
 
 
+@login_required
+def delete_cart_items(request):
+    print(request.POST)
+    if request.method == "POST":
+        item_ids= request.POST.get("item_ids").split(",")
+        CartItem.objects.filter(id__in=item_ids).delete()
+    return response.HttpResponse(status=200)
