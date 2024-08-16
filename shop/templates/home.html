@@ -46,10 +46,11 @@
                           </div>
                         {% endif %}
 
-                        <form method="post" action="{% url 'add_to_cart' product.id %}" class="button">
+                        <form id="add-to-cart-form-{{ product.id }}" method="post" action="{% url 'add_to_cart' product.id %}" class="button">
                           {% csrf_token %}
                           <button class="btn btn-cart" type="submit" style="font-size: 16px;">Add to cart</button>
                         </form>
+                        
 
                       </div>
                     </div>
@@ -70,9 +71,10 @@
 </div>
 
 
+<script src="{% static 'js/cart/dynamic_cart_icon.js' %}"></script>
+
+
 <style>
-
-
 .product_listing_main .row {
   display: flex;
   flex-wrap: wrap;

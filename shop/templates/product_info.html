@@ -49,8 +49,8 @@
                                 </div><!-- #product-photos -->
 
                                 <div class="col-sm-7">
-                                    <div itemprop="name" class="product_name">
-                                        <span style="font-size: 28px;">{{ product.name }}</span>
+                                    <div itemprop="name" class="custom_product_name">
+                                        <span>{{ product.name }}</span>
                                     </div>
 
                                     <div id="product_price">
@@ -68,7 +68,7 @@
 
                                     </div>
 
-                                    <form action="{% url 'add_to_cart' product.id %}" method="post" class='form-horizontal'>
+                                    <form class='form-horizontal'>
                                         {% csrf_token %}
                                         <div class="options clearfix">
                                             <div class="variants-wrapper clearfix visuallyhidden">
@@ -76,14 +76,33 @@
                                                     <option value="{{ product.id }}">{{ product.name }} - ${{ product.price_with_discount }}</option>
                                                 </select>
                                             </div>
-
+                                    
                                             <div id="purchase">
                                                 <label style="font-size: 14px;" for="quantity">Quantity: </label>
-                                                <input min="1" type="number" id="quantity" name="quantity" value="1" class="form-control input-small" />
-                                                <button class="btn btn-cart" type="submit" id="add-to-cart">Add to cart</button>
+                                                <input min="1" type="number" id="quantity-{{ product.id }}" name="quantity" value="1" class="form-control input-small" />
                                             </div>
                                         </div>
                                     </form>
+                                    
+                                    <!-- Separate form for the add to cart action -->
+                                    <form id="add-to-cart-form-{{ product.id }}" method="post" action="{% url 'add_to_cart' product.id %}" class="button">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" id="hidden-quantity-{{ product.id }}" value="1">
+                                        <button class="btn btn-cart" type="submit" style="font-size: 16px;">Add to cart</button>
+                                    </form>
+                                    
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const form = document.getElementById('add-to-cart-form-{{ product.id }}');
+                                            const quantityInput = document.getElementById('quantity-{{ product.id }}');
+                                            const hiddenQuantityInput = document.getElementById('hidden-quantity-{{ product.id }}');
+                                    
+                                            form.addEventListener('submit', function(event) {
+                                                hiddenQuantityInput.value = quantityInput.value;
+                                            });
+                                        });
+                                    </script>
+                                    
 
                                     <!-- Paste 'product_details' here! ----------------------------->
                                     <div class="product_details">
@@ -138,165 +157,19 @@
     </div>
 </div>
 
-<script>
-    jQuery(function($) {
-        $('.bxslider').bxSlider({
-            pagerCustom: '#bx-pager'
-        });
-
-        $("a.fancybox").fancybox({
-            'transitionIn': 'elastic',
-            'transitionOut': 'elastic',
-            'speedIn': 600,
-            'speedOut': 200,
-            'overlayShow': true
-        });
-    });
-</script>
-
-<script>
-    var selectCallback = function(variant, selector) {
-        if (variant && variant.available) {
-            jQuery('#add-to-cart').removeAttr('disabled').removeClass('disabled'); // remove unavailable class from add-to-cart button, and re-enable button
-            if (variant.price < variant.compare_at_price) {
-                jQuery('#product_price .price').html('<span class="money">' + Shopify.formatMoney(variant.price, "${{amount}}") + '</span><span class="money compare-at-price">' + Shopify.formatMoney(variant.compare_at_price, "${{amount}}") + '</span>');
-            } else {
-                jQuery('#product_price .price').html('<span class="money">' + Shopify.formatMoney(variant.price, "${{amount}}") + '</span>');
-            }
-        } else {
-            jQuery('#add-to-cart').addClass('disabled').attr('disabled', 'disabled'); // set add-to-cart button to unavailable class and disable button
-            var message = variant ? "Sold Out" : "Unavailable";
-            jQuery('#product_price .price').text(message);
-        }
-    };
-
-    jQuery(document).ready(function($) {
-        new Shopify.OptionSelectors("product-select", {
-            product: {
-                "id": 296885623,
-                "title": "2-D Ring File A4",
-                "handle": "2-d-ring-file-a4",
-                "description": "<p>We are glad to deliver you the premium products and first class services. You should know that as a customer you will get huge benefits while cooperating with our company. Our customer care policy helped us stay at the top of our business for over fifteen years because we know our business and do our job reliably every time. Our range of goods counts more than 5000 world famous brands and even own branded office products.</p>",
-                "published_at": "2014-05-16T08:36:18-04:00",
-                "created_at": "2014-05-16T08:36:21-04:00",
-                "vendor": "tm-shopify047-stationery",
-                "type": "Paper & Materials",
-                "tags": ["Lorem ipsum"],
-                "price": 2500,
-                "price_min": 2500,
-                "price_max": 2500,
-                "available": true,
-                "price_varies": false,
-                "compare_at_price": null,
-                "compare_at_price_min": 0,
-                "compare_at_price_max": 0,
-                "compare_at_price_varies": false,
-                "variants": [{
-                    "id": 693763971,
-                    "title": "Default",
-                    "option1": "Default",
-                    "option2": null,
-                    "option3": null,
-                    "sku": "",
-                    "requires_shipping": true,
-                    "taxable": true,
-                    "featured_image": null,
-                    "available": true,
-                    "name": "2-D Ring File A4",
-                    "public_title": null,
-                    "options": ["Default"],
-                    "price": 2500,
-                    "weight": 0,
-                    "compare_at_price": null,
-                    "inventory_quantity": 100,
-                    "inventory_management": "shopify",
-                    "inventory_policy": "deny",
-                    "barcode": null,
-                    "requires_selling_plan": false,
-                    "selling_plan_allocations": [],
-                    "quantity_rule": {
-                        "min": 1,
-                        "max": null,
-                        "increment": 1
-                    }
-                }],
-                "images": [
-                    "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_1.jpeg?v=1400243781",
-                    "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_2.jpeg?v=1400243781",
-                    "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_3.jpeg?v=1400243781"
-                ],
-                "featured_image": "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_1.jpeg?v=1400243781",
-                "options": ["Title"],
-                "media": [{
-                    "alt": null,
-                    "id": 14038827069,
-                    "position": 1,
-                    "preview_image": {
-                        "aspect_ratio": 1.0,
-                        "height": 400,
-                        "width": 400,
-                        "src": "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_1.jpeg?v=1400243781"
-                    },
-                    "aspect_ratio": 1.0,
-                    "height": 400,
-                    "media_type": "image",
-                    "src": "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_1.jpeg?v=1400243781",
-                    "width": 400
-                }, {
-                    "alt": null,
-                    "id": 14038859837,
-                    "position": 2,
-                    "preview_image": {
-                        "aspect_ratio": 1.0,
-                        "height": 400,
-                        "width": 400,
-                        "src": "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_2.jpeg?v=1400243781"
-                    },
-                    "aspect_ratio": 1.0,
-                    "height": 400,
-                    "media_type": "image",
-                    "src": "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_2.jpeg?v=1400243781",
-                    "width": 400
-                }, {
-                    "alt": null,
-                    "id": 14038892605,
-                    "position": 3,
-                    "preview_image": {
-                        "aspect_ratio": 1.0,
-                        "height": 500,
-                        "width": 500,
-                        "src": "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_3.jpeg?v=1400243781"
-                    },
-                    "aspect_ratio": 1.0,
-                    "height": 500,
-                    "media_type": "image",
-                    "src": "//tm-shopify047-stationery.myshopify.com/cdn/shop/products/2-d_ring_file_a4_3.jpeg?v=1400243781",
-                    "width": 500
-                }],
-                "requires_selling_plan": false,
-                "selling_plan_groups": [],
-                "content": "<p>We are glad to deliver you the premium products and first class services. You should know that as a customer you will get huge benefits while cooperating with our company. Our customer care policy helped us stay at the top of our business for over fifteen years because we know our business and do our job reliably every time. Our range of goods counts more than 5000 world famous brands and even own branded office products.</p>"
-            },
-            onVariantSelected: selectCallback
-        });
-
-        // Add label if only one product option and it isn't 'Title'.
-
-        // Auto-select first available variant on page load.
-
-        $('.single-option-selector:eq(0)').val("Default").trigger('change');
-
-    });
-</script>
-
-
-
+<script src="{% static 'js/cart/dynamic_cart_icon.js' %}"></script>
 
 <style>
 .product_details {
     padding: 10px;
     margin-top: 20px;
     border-radius: 5px;
+}
+
+.custom_product_name {
+    text-align: left;
+    color: #3b3b3b;
+    font-size: 30px;
 }
 
 .product_category,

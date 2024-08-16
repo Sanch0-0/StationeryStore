@@ -504,7 +504,6 @@
       inputBox.addEventListener("change", function () {
         const productId = this.dataset.productId;
         const quantity = this.value;
-        location.reload()
 
         console.log(productId);
         fetch(`http://127.0.0.1:8000/cart/update-cart-item/${productId}/`, {

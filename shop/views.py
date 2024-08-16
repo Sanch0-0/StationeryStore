@@ -82,3 +82,5 @@ def search_products(request):
     return render(request, "search_products.html", context)
 
 
+
+

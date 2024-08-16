@@ -14,6 +14,7 @@ def get_cart(request):
     for item in cart.cart_items.order_by("-id"):
         total = item.quantity * item.product.price_with_discount
         total_discounted_price = item.quantity * (item.product.price - item.product.price_with_discount)
+        
         cart_items_with_total.append({
             'item': item,
             'product': item.product,
@@ -33,7 +34,14 @@ def get_cart(request):
         'cart_total_quantity': total_quantity,
         'cart_total_price': total_price,
     }
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'total_quantity': total_quantity,
+            'cart_total_price': total_price
+        })
     return render(request, "cart.html", context)
+
 
 
 @login_required
@@ -54,7 +62,15 @@ def add_to_cart(request, product_id):
         cart_item.quantity += int(quantity)
     cart_item.save()
 
-    return redirect(request.META.get("HTTP_REFERER", "/"))
+    # Use get_cart to get the updated cart information
+    response = get_cart(request)
+    
+    if isinstance(response, JsonResponse):
+        return response
+
+    return JsonResponse({'success': False, 'message': 'Failed to update cart'})
+
+
 
 
 @login_required

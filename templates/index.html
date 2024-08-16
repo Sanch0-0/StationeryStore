@@ -509,12 +509,14 @@ for (var attr in meta) {
 <!-- CUSTOM HEADER BLOCK -->
 <div class="custom_header1">1 (800) 603 6035</div>
 <!-- HEADER SEARCH -->
+
 <div class="header_search">
-<form action="{% url 'search_products' %}" class="search-form" method="get" role="search">
-<input class="hint" id="search-field" placeholder="Search store..." type="text"/>
-<button id="search-submit" type="submit"><i class="fa fa-search"></i></button>
-</form>
+    <form action="{% url 'search_products' %}" class="search-form" method="get" role="search">
+        <input class="hint" id="search-field" name="name" placeholder="Search store..." type="text" value="{{ request.GET.name|default_if_none:'' }}"/>
+        <button id="search-submit" type="submit"><i class="fa fa-search"></i></button>
+    </form>
 </div>
+
 </div>
 </div>
 </div>
@@ -555,7 +557,7 @@ for (var attr in meta) {
     <a href="/cart/">
         <i class="fa fa-shopping-cart"></i>
         <span class="cart-total-items">
-            <span class="count">{{ cart_total_quantity }}</span>
+            <span class="count">{{ count_of_products }}</span>
         </span>
         <span>Product(s)</span>&nbsp;–&nbsp;
         <span class="money cart-total-price" data-currency-usd="${{ cart_total_price|floatformat:2 }}">{{ cart_total_price|floatformat:2 }}</span>

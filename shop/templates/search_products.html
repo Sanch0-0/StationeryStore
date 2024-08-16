@@ -60,7 +60,7 @@
                               </div>
                             {% endif %}
 
-                            <form method="post" action="{% url 'add_to_cart' product.id %}" class="button">
+                            <form id="add-to-cart-form-{{ product.id }}" method="post" action="{% url 'add_to_cart' product.id %}" class="button">
                               {% csrf_token %}
                               <button class="btn btn-cart" type="submit" style="font-size: 16px;">Add to cart</button>
                             </form>
@@ -74,9 +74,10 @@
                     </div>
                   </div>
                 </div>
-
-
-
+                
+                <script src="{% static 'js/cart/dynamic_cart_icon.js' %}"></script>
+                
+                
                 <div style="margin-left: 25px;" id="pagination">
                   {% if page_obj.has_previous %}
                       <span class="prev">
@@ -111,47 +112,59 @@
           </div>
         </div>
       </div>
+      
+      
 
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const filterInputs = document.querySelectorAll('.widget__collections select, .widget__types input, .widget__types select');
     const sorterLinks = document.querySelectorAll('.collection-scope a');
+    const searchField = document.getElementById('search-field');
 
     function updateSearchResults() {
-      const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new URLSearchParams(window.location.search);
 
-      filterInputs.forEach(input => {
-        if (input.value) {
-          urlParams.set(input.name, input.value);
+        if (searchField.value.trim()) {
+            urlParams.set('name', searchField.value.trim());
         } else {
-          urlParams.delete(input.name);
+            urlParams.delete('name');
         }
-      });
 
-      sorterLinks.forEach(link => {
-        if (link.classList.contains('active')) {
-          urlParams.set('sort_by', link.getAttribute('data-sort-by'));
-        }
-      });
+        // Add filters to the URL parameters
+        filterInputs.forEach(input => {
+            if (input.value) {
+                urlParams.set(input.name, input.value);
+            } else {
+                urlParams.delete(input.name);
+            }
+        });
 
-      window.location.href = `{% url 'search_products' %}?${urlParams.toString()}`;
+        // Add sorters to the URL parameters
+        sorterLinks.forEach(link => {
+            if (link.classList.contains('active')) {
+                urlParams.set('sort_by', link.getAttribute('data-sort-by'));
+            }
+        });
+
+        window.location.href = `{% url 'search_products' %}?${urlParams.toString()}`;
     }
 
     filterInputs.forEach(input => {
-      input.addEventListener('change', updateSearchResults);
+        input.addEventListener('change', updateSearchResults);
     });
 
     sorterLinks.forEach(link => {
-      link.addEventListener('click', function(event) {
-        event.preventDefault();
-        sorterLinks.forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
-        updateSearchResults();
-      });
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            sorterLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+            updateSearchResults();
+        });
     });
-  });
+});
 </script>
+
 
 <style>
 
