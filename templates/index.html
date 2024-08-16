@@ -510,8 +510,8 @@ for (var attr in meta) {
 <div class="custom_header1">1 (800) 603 6035</div>
 <!-- HEADER SEARCH -->
 <div class="header_search">
-<form action="" class="search-form" method="get" role="search">
-<input class="hint" id="search-field" name="name" placeholder="Search store..." type="text"/>
+<form action="{% url 'search_products' %}" class="search-form" method="get" role="search">
+<input class="hint" id="search-field" placeholder="Search store..." type="text"/>
 <button id="search-submit" type="submit"><i class="fa fa-search"></i></button>
 </form>
 </div>

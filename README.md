@@ -1,7 +1,7 @@
 
     Binders & Folders
 
-    Calculators 
+    Calculators
 
     Rulers & Measuring Supplies
 
@@ -14,8 +14,8 @@
     Pens & Pencils
 
     Markers & Highlighters
-  
-    Notebooks & Copybooks 
+
+    Notebooks & Copybooks
 
     Dictionaries & Journals
 
@@ -29,9 +29,12 @@
 
     Backpacks & Bags
 
-    Pencil Cases & Boxes 
+    Pencil Cases & Boxes
 
     Drawing & Painting
 
 
 
+name="?{% if request.GET.category %}category={{ request.GET.category|urlencode }}&{% endif %}{% if request.GET.sort_by %}sort_by={{ request.GET.sort_by|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}name"
+
+for search element in index.html

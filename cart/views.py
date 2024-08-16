@@ -13,12 +13,14 @@ def get_cart(request):
     total_quantity = 0
     for item in cart.cart_items.order_by("-id"):
         total = item.quantity * item.product.price_with_discount
+        total_discounted_price = item.quantity * (item.product.price - item.product.price_with_discount)
         cart_items_with_total.append({
-            'item_id': item.id,
+            'item': item,
             'product': item.product,
             'quantity': item.quantity,
             'price': item.product.price_with_discount,
             'total': total,
+            'total_discounted_price': total_discounted_price,
         })
         total_quantity += item.quantity
 

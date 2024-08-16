@@ -56,7 +56,7 @@
               <div class="cart-product">
                 <div class="checkbox">
                   <label style="padding: 0" class="custom-checkbox-label">
-                    <input class="selection" type="checkbox" data-item-id="{{ item.item_id }}" />
+                    <input class="selection" type="checkbox" data-item-id="{{ item.item.id }}" data-item-price="{{  item.product.price }}" data-item-quantity="{{ item.quantity }}" data-item-total-price="{{ item.total }}" data-item-discounted="{{ item.total_discounted_price }}"/>
                     <span class="custom-checkbox"></span>
                   </label>
                 </div>
@@ -115,7 +115,7 @@
                               style="font-weight: bold"
                               type="number"
                               class="input-box"
-                              data-product-id="{{ item.item_id }}"
+                              data-product-id="{{ item.item.id }}"
                               value="{{ item.quantity }}"
                               min="1"
                               max="100"
@@ -132,7 +132,7 @@
                               Subtotal:
                               <span
                                 class="total-product-price"
-                                id="item-total-{{ item.item_id }}"
+                                id="item-total-{{ item.item.id }}"
                                 >$ {{ item.total }}</span
                               >
                             </p>
@@ -216,7 +216,7 @@
                 to
               </p>
               <a href="/" class="empty-cart" title="Back to the frontpage"
-                >Go shopping</a
+                >Go shopping!</a
               >
               {% endfor %}
 
@@ -504,6 +504,7 @@
       inputBox.addEventListener("change", function () {
         const productId = this.dataset.productId;
         const quantity = this.value;
+        location.reload()
 
         console.log(productId);
         fetch(`http://127.0.0.1:8000/cart/update-cart-item/${productId}/`, {
@@ -521,9 +522,6 @@
             document.querySelector(
               `#item-total-${productId}`
             ).innerText = `$ ${data.item_total}`;
-            document.querySelector(
-              ".total-cart-price"
-            ).innerText = `$ ${data.cart_total}`;
           });
       });
     });
@@ -535,6 +533,7 @@
             checkboxes.forEach(function (checkbox) {
                 checkbox.checked = this.checked;
             }, this);
+            updateTotals();
         });
 
     document.getElementById("deleteSelected")
@@ -565,5 +564,57 @@
       );
       location.reload();
     })
+
+    const RUB = 88.9;
+    const EUR = 0.91;
+
+    function updateTotals() {
+      // Сбрасываем значения перед пересчетом
+      totalPrice = 0;
+      totalQuantity = 0;
+      totalPriceWithDiscount = 0;
+      totalDiscounted = 0;
+
+      selectedItems = 0;
+
+      // Получаем все выделенные checkbox'ы
+      let checkboxes = document.querySelectorAll('.selection:checked');
+
+      // Пересчитываем общие суммы на основе выделенных элементов
+      checkboxes.forEach(function (checkbox) {
+        totalPrice += parseFloat(checkbox.dataset.itemPrice * checkbox.dataset.itemQuantity);
+        totalQuantity += parseInt(checkbox.dataset.itemQuantity);
+        totalPriceWithDiscount += parseFloat(checkbox.dataset.itemTotalPrice);
+        totalDiscounted += parseFloat(checkbox.dataset.itemDiscounted);
+        selectedItems++;
+      });
+      document.querySelector(
+        ".total-cart-price"
+      ).innerText = `$ ${Number(totalPrice).toFixed(2)}`;
+      document.querySelector(
+        ".total-usd"
+      ).innerText = `$ ${Number(totalPriceWithDiscount).toFixed(2)}`
+      document.querySelector(
+        ".total-rub"
+      ).innerText = `${Number(totalPriceWithDiscount * RUB).toFixed(2)} ₱`
+      document.querySelector(
+        ".total-eur"
+      ).innerText = `€ ${Number(totalPriceWithDiscount * EUR).toFixed(2)}`
+      document.querySelector(
+        ".total-usd-total"
+      ).innerText = `$ ${Number(totalPriceWithDiscount).toFixed(2)}`
+      document.querySelector(
+        ".total-discounted"
+      ).innerText = `- $ ${Number(totalDiscounted).toFixed(2)}`
+      document.querySelector(
+        ".items-selected"
+      ).innerText = `${Number(selectedItems)} Product(s)`;
+    };
+
+    document.querySelectorAll('.selection').forEach(function (checkbox) {
+    checkbox.addEventListener("change", updateTotals);
+    });
+
+
 </script>
 {% endblock %}
