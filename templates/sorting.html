@@ -1,0 +1,27 @@
+<div class="collection-scope">
+    <div class="page_header">
+        <h1 class="page_heading">Sort by: </h1>
+    </div>
+    <div class="page_content">
+        <ul class="tags clearfix">
+            <!-- Default sorting option -->
+            <li class="{% if not request.GET.sort_by %}active{% endif %}">
+                <a href="#" data-sort-by="default">Default</a>
+            </li>
+            <li class="{% if request.GET.sort_by == 'random' %}active{% endif %}">
+                <a href="#" data-sort-by="random">Random</a>
+            </li>
+            <li class="{% if request.GET.sort_by == 'newest' %}active{% endif %}">
+                <a href="#" data-sort-by="newest">Newest</a>
+            </li>
+            <li class="{% if request.GET.sort_by == 'cheap_first' %}active{% endif %}">
+                <a href="#" data-sort-by="cheap_first">Cheap first</a>
+            </li>
+            <li class="{% if request.GET.sort_by == 'expensive_first' %}active{% endif %}">
+                <a href="#" data-sort-by="expensive_first">Expensive first</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+

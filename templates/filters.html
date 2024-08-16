@@ -1,54 +1,52 @@
 {% load static %}
 
 <div class="column_left column col-sm-3">
-  <form action="{% url 'search_products' %}" method="get">
-      <div class="widget widget__collections">
-          <h3 class="widget_header">Categories</h3>
-          <div class="widget_content">
-              <select name="category" id="id_category">
-                  <option value="">All Categories</option>
-                  {% for category in categories %}
-                      <option value="{{ category.id }}" {% if request.GET.category|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>
-                          {{ category.name }}
-                      </option>
-                  {% empty %}
-                  <option disabled>No categories available.</option>
-                  {% endfor %}
-              </select>
-          </div>
-      </div>
+    <form action="{% url 'search_products' %}" method="get">
+        <div class="widget widget__collections">
+            <h3 class="widget_header">Categories</h3>
+            <div class="widget_content">
+                <select name="category" id="id_category">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if request.GET.category|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% empty %}
+                    <option disabled>No categories available.</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
-      <div class="widget widget__types">
-          <h3 class="widget_header">Filters</h3>
-          <div class="widget_content">
-              <ul class="list">
-                  <li>
-                      <label for="id_name">Name</label>
-                      {{ products_filter.form.name }}
-                  </li>
-                  <li>
-                      <label for="id_price__gt">Price greater than</label>
-                      {{ products_filter.form.price__gt }}
-                  </li>
-                  <li>
-                      <label for="id_price__lt">Price less than</label>
-                      {{ products_filter.form.price__lt }}
-                  </li>
-                  <li>
-                      <label for="id_has_discount">Discount</label>
-                      <select name="has_discount" id="id_has_discount">
-                          <option value="">All</option>
-                          <option value="True" {% if request.GET.has_discount == 'True' %}selected{% endif %}>Yes</option>
-                          <option value="False" {% if request.GET.has_discount == 'False' %}selected{% endif %}>No</option>
-                      </select>
-                  </li>
-              </ul>
-              <div class="button">
-                <button class="btn btn-cart" type="submit" style="font-size: 16px; width: 100%;">Apply filters</button>
-              </div>
-          </div>
-      </div>
-  </form>
+        <div class="widget widget__types">
+            <h3 class="widget_header">Filters</h3>
+            <div class="widget_content">
+                <ul class="list">
+                    <li>
+                        <label for="id_name">Name</label>
+                        {{ products_filter.form.name }}
+                    </li>
+                    <li>
+                        <label for="id_price__gt">Price greater than</label>
+                        {{ products_filter.form.price__gt }}
+                    </li>
+                    <li>
+                        <label for="id_price__lt">Price less than</label>
+                        {{ products_filter.form.price__lt }}
+                    </li>
+                    <li>
+                        <label for="id_has_discount">Discount</label>
+                        <select name="has_discount" id="id_has_discount">
+                            <option value="">All</option>
+                            <option value="True" {% if request.GET.has_discount == 'True' %}selected{% endif %}>Yes</option>
+                            <option value="False" {% if request.GET.has_discount == 'False' %}selected{% endif %}>No</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+    {% include 'top_rated.html' %}
 </div>
 
 

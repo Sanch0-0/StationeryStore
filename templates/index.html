@@ -532,11 +532,9 @@ for (var attr in meta) {
 <li class="has-dropdown">
 <a href="{% url 'search_products' %}" title="">Products</a>
 <ul>
-<li class="first"><a class="first" href="collections/teaching.html">Teaching</a></li>
-<li class=""><a class="" href="collections/classroom.html">Classroom</a></li>
-<li class=""><a class="" href="collections/calculators.html">Calculators</a></li>
-<li class=""><a class="" href="collections/binders-folders.html">Binders &amp; Folders</a></li>
-<li class="last"><a class="last" href="collections/arts-crafts.html">Arts &amp; Сrafts</a></li>
+{% for category in categories %}
+<li><a href="{% url 'search_products' %}?category={{ category.id }}">{{ category.name }}</a></li>
+{% endfor %}
 </ul>
 </li>
 <li class="">
@@ -553,7 +551,17 @@ for (var attr in meta) {
 </li>
 </ul>
 <!-- HEADER CART -->
-<div class="header_cart"><a href="{% url 'get_cart' %}"><i class="fa fa-shopping-cart"></i><span class="cart-total-items"><span class="count">0</span></span><span>item(s)</span> – <span class="money cart-total-price">$0.00</span></a></div>
+<div class="header_cart">
+    <a href="/cart/">
+        <i class="fa fa-shopping-cart"></i>
+        <span class="cart-total-items">
+            <span class="count">{{ cart_total_quantity }}</span>
+        </span>
+        <span>Product(s)</span>&nbsp;–&nbsp;
+        <span class="money cart-total-price" data-currency-usd="${{ cart_total_price|floatformat:2 }}">{{ cart_total_price|floatformat:2 }}</span>
+    </a>
+</div>
+
 </nav>
 </div>
 </div>

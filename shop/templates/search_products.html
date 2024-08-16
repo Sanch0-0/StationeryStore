@@ -25,40 +25,13 @@
     <div class="row sidebar_left">
       <div class="column_center">
         <div id="main_content" class="col-sm-9">
-          <div class="collection-scope">
-            <div class="page_header">
-              <h1 class="page_heading">Sort by: </h1>
-            </div>
 
-            <div class="page_content">
-              <ul class="tags clearfix">
-
-                <li class="active">
-                  <a href="all.html">Default</a>
-                </li>
-
-                <li>
-                  <a href="all.html">Newest</a>
-                </li>
-
-                <li>
-                  <a href="all/dolor.html">Cheap first</a>
-                </li>
-
-                <li>
-                  <a href="all/lorem-ipsum.html">Expensive first</a>
-                <li>
-
-                <li>
-                  <a href="all/sit-amet.html">Rating</a>
-                </li>
-
-              </ul>
+          {% include 'sorting.html' %}
 
               <div class="product-listing__collection">
                 <div class="product_listing_main">
                     <div class="row">
-                      {% for product in products_filter.qs %}
+                      {% for product in page_obj.object_list %}
                       <div class="product col-sm-4">
                         <div>
                           <a class="product_img_link" href="{% url 'get_product_by_id' product.id %}">
@@ -74,9 +47,6 @@
                               <a href="{% url 'get_product_by_id' product.id %}">{{ product.name }}</a>
                             </div>
 
-                            <div class="product_desc">
-                                {{ product.description }}
-                            </div>
 
                             {% if product.discount == 0 %}
                               <span class="original-price">${{ product.price }}</span>
@@ -104,16 +74,86 @@
                     </div>
                   </div>
                 </div>
+                
+            
+
+                <div style="margin-left: 25px;" id="pagination">
+                  {% if page_obj.has_previous %}
+                      <span class="prev">
+                        <a href="?{% if request.GET.category %}category={{ request.GET.category|urlencode }}&{% endif %}{% if request.GET.sort_by %}sort_by={{ request.GET.sort_by|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+                      </span>
+                  {% endif %}
+                
+                  {% for page_num in page_obj.paginator.page_range %}
+                      {% if page_obj.number == page_num %}
+                          <span class="page current">{{ page_num }}</span>
+                      {% else %}
+                      <!-- <span class="page current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                      </span> -->
+
+                          <span class="page">
+                              <a href="?{% if request.GET.category %}category={{ request.GET.category|urlencode }}&{% endif %}
+                              {% if request.GET.sort_by %}sort_by={{ request.GET.sort_by|urlencode }}&{% endif %}
+                              page={{ page_num }}">{{ page_num }}</a>
+                          </span>
+                      {% endif %}
+                  {% endfor %}
+                
+                  {% if page_obj.has_next %}
+                      <span class="next">
+                        <a href="?{% if request.GET.category %}category={{ request.GET.category|urlencode }}&{% endif %}{% if request.GET.sort_by %}sort_by={{ request.GET.sort_by|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+                      </span>
+                  {% endif %}
+                </div>
+                
               </div>
+              {% include 'filters.html' %}
             </div>
           </div>
-
-          {% include 'filters.html' %}
         </div>
       </div>
-    </div>
-</div>
 
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterInputs = document.querySelectorAll('.widget__collections select, .widget__types input, .widget__types select');
+    const sorterLinks = document.querySelectorAll('.collection-scope a');
+
+    function updateSearchResults() {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      filterInputs.forEach(input => {
+        if (input.value) {
+          urlParams.set(input.name, input.value);
+        } else {
+          urlParams.delete(input.name);
+        }
+      });
+
+      sorterLinks.forEach(link => {
+        if (link.classList.contains('active')) {
+          urlParams.set('sort_by', link.getAttribute('data-sort-by'));
+        }
+      });
+
+      window.location.href = `{% url 'search_products' %}?${urlParams.toString()}`;
+    }
+
+    filterInputs.forEach(input => {
+      input.addEventListener('change', updateSearchResults);
+    });
+
+    sorterLinks.forEach(link => {
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        sorterLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        updateSearchResults();
+      });
+    });
+  });
+</script>
 
 <style>
 
@@ -195,18 +235,6 @@
   display: flex;
   justify-content: center;
   margin-top: 5px;
-}
-
-.product_desc {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 13px;
-  line-height: 1.5;
-  max-height: calc(2.0em * 3);
 }
 
 </style>

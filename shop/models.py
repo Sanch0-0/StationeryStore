@@ -1,5 +1,8 @@
 from django.db import models
+from django.utils import timezone
+
 from image_cropping import ImageRatioField
+
 
 class Category(models.Model):
     name = models.CharField(verbose_name="name", max_length=30)
@@ -11,7 +14,6 @@ class Category(models.Model):
         return self.name
 
 
-
 class Product(models.Model):
     image = models.ImageField(verbose_name="image", upload_to="products")
     cropping = ImageRatioField('image', '200x200', verbose_name="cropping")
@@ -20,6 +22,7 @@ class Product(models.Model):
     price = models.DecimalField(verbose_name="price", max_digits=7, decimal_places=2, default=1, blank=True)
     discount = models.SmallIntegerField(verbose_name="discount", default=0, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="products")
+    created_at = models.DateTimeField(verbose_name="Created at", default=timezone.now, blank=True)
 
     class Meta:
         verbose_name_plural = "Products"

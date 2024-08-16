@@ -10,6 +10,7 @@ def get_cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
 
     cart_items_with_total = []
+    total_quantity = 0
     for item in cart.cart_items.order_by("-id"):
         total = item.quantity * item.product.price_with_discount
         cart_items_with_total.append({
@@ -19,6 +20,7 @@ def get_cart(request):
             'price': item.product.price_with_discount,
             'total': total,
         })
+        total_quantity += item.quantity
 
     total_price = sum(item['total'] for item in cart_items_with_total)
 
@@ -26,6 +28,8 @@ def get_cart(request):
         'cart': cart,
         'cart_items_with_total': cart_items_with_total,
         'total_price': total_price,
+        'cart_total_quantity': total_quantity,
+        'cart_total_price': total_price,
     }
     return render(request, "cart.html", context)
 
