@@ -4,12 +4,10 @@
   <div class="widget widget__collections">
     <h3 class="widget_header">Categories</h3>
     <div class="widget_content">
-      <ul class="list">
+      <ul style="list-style: none;" class="list">
         {% for category in categories %}
         <li>
-          <a href="{% url 'search_products' %}?category={{ category.name }}" title="{{ category.name }}">
-            {{ category.name }}
-          </a>
+          <a href="{% url 'search_products' %}?category={{ category.id }}" title="{{ category.id }}">{{ category.name }}</a>
         </li>
         {% empty %}
         <li>No categories available.</li>

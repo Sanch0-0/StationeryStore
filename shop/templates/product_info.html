@@ -13,8 +13,9 @@
                 <a href="{% url 'index' %}" class="homepage-link" title="Back to the frontpage">Home</a>
             </li>
             <li>
-                <a href="{% url 'get_product_by_id' product.category.id %}" title="">{{ product.category.name }}</a>
+                <a href="{% url 'get_product_by_id' product.id %}" title="{{ product.name }}">{{ product.name }}</a>
             </li>
+            
             <li>
                 <span class="page-title">{{ product.name }}</span>
             </li>
@@ -68,7 +69,7 @@
 
                                     </div>
 
-                                    <form class='form-horizontal'>
+                                    <div class='form-horizontal'>
                                         {% csrf_token %}
                                         <div class="options clearfix">
                                             <div class="variants-wrapper clearfix visuallyhidden">
@@ -78,18 +79,23 @@
                                             </div>
                                     
                                             <div id="purchase">
-                                                <label style="font-size: 14px;" for="quantity">Quantity: </label>
-                                                <input min="1" type="number" id="quantity-{{ product.id }}" name="quantity" value="1" class="form-control input-small" />
+                                                <label style="font-size: 16px;" for="quantity">Quantity: </label>
+                                                <input style="max-width:60px;" min="1" type="number" id="quantity-{{ product.id }}" name="quantity" value="1" class="form-control input-small" />
+                                                <form id="add-to-cart-form-{{ product.id }}" method="post" action="{% url 'add_to_cart' product.id %}" class="button">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="quantity" id="hidden-quantity-{{ product.id }}" value="1">
+                                                    <button class="btn btn-cart" type="submit" style="font-size: 16px;">Add to cart</button>
+                                                </form>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                     
                                     <!-- Separate form for the add to cart action -->
-                                    <form id="add-to-cart-form-{{ product.id }}" method="post" action="{% url 'add_to_cart' product.id %}" class="button">
+                                    <!-- <form id="add-to-cart-form-{{ product.id }}" method="post" action="{% url 'add_to_cart' product.id %}" class="button">
                                         {% csrf_token %}
                                         <input type="hidden" name="quantity" id="hidden-quantity-{{ product.id }}" value="1">
                                         <button class="btn btn-cart" type="submit" style="font-size: 16px;">Add to cart</button>
-                                    </form>
+                                    </form> -->
                                     
                                     <script>
                                         document.addEventListener('DOMContentLoaded', function() {
@@ -108,7 +114,7 @@
                                     <div class="product_details">
                                         <div class="product_category">
                                             <span>Category:</span>
-                                            <a href="#" title="{{ product.category.name }}">{{ product.category.name }}</a>
+                                            <a href="{{ category.id }}" title="{{ product.category.name }}">{{ product.category.name }}</a>
                                         </div>
 
                                         <div class="product_rating">
@@ -172,6 +178,19 @@
     font-size: 30px;
 }
 
+#purchase {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#purchase label,
+#purchase input,
+#purchase button {
+    font-size: 16px;
+    text-align: center;
+}
+
 .product_category,
 .product_rating,
 #product_description {
@@ -179,8 +198,9 @@
     padding-bottom: 15px;
 }
 
-.product_category a {
-    font-size: 16px;
+.product_category {
+    font-size: 15px;
+    color: #3b3b3b;
 }
 
 .product_rating {
