@@ -3,24 +3,44 @@ from django.http import HttpResponseNotFound
 from django.core.paginator import Paginator
 from django.db.models import F
 
-from .models import Product, Category
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+from .models import Product, Category, Rating
 from .filters import ProductsFilter
 
 
 def index(request):
     newest_products = Product.objects.raw('SELECT * FROM shop_product ORDER BY created_at DESC LIMIT 9')
     categories = Category.objects.all()
+    top_rated_products = Product.top_rated_products()
 
     context = {
         "products": newest_products,
         "categories": categories,
+        "top_rated_products": top_rated_products,
     }
     return render(request, "home.html", context)
 
 
+@csrf_exempt
 def get_product_by_id(request, id):
     product = get_object_or_404(Product, id=id)
     categories = Category.objects.all()
+
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        rating_value = int(request.POST.get('rating'))
+        user = request.user
+
+        # Get or create the rating
+        rating, created = Rating.objects.get_or_create(product=product, user=user)
+        rating.value = rating_value
+        rating.save()
+
+        # Recalculate average rating
+        new_average = product.average_rating
+
+        return JsonResponse({'success': True, 'new_average': new_average})
 
     query = '''
         SELECT * FROM shop_product
@@ -80,7 +100,5 @@ def search_products(request):
         'page_num': page_num
     }
     return render(request, "search_products.html", context)
-
-
 
 

@@ -1,72 +1,37 @@
 {% load static %}
+{% load thumbnail %}
 
 <div class="widget widget_best_sellers">
     <h3 class="widget_header">Top Rated</h3>
     <div class="widget_content">
-      <div class="product_listing_sidebar">
-        <div class="product">
-          <div class="product_img">
-            <a href="collections/vendors/products/2-d-ring-file-a4.html">
-              <img
-                alt="2-D Ring File A4"
-                src="{% static 'cdn/shop/products/2-d_ring_file_a4_1_small.jpeg@v=1400243781' %}"
-              />
-            </a>
+        <div class="product_listing_sidebar">
+          {% for product in top_rated_products %}
+          <div class="product">
+              <div class="product_img">
+                  <a href="{% url 'get_product_by_id' product.id %}">
+                      <img src="{% thumbnail product.image 'product_thumbnail' %}" alt="{{ product.name }}" />
+                  </a>
+              </div>
+              <div class="product_info">
+                  <div class="product_name">
+                      <a href="{% url 'get_product_by_id' product.id %}">{{ product.name }}</a>
+                  </div>
+                  <div class="product_price">
+                      <span class="money">${{ product.price_with_discount }}</span>
+                  </div>
+                  <div class="product_rating">
+                      {% if product.avg_rating %}
+                          <span>Average Rating: {{ product.avg_rating }}</span>
+                      {% else %}
+                          <span>No ratings yet</span>
+                      {% endif %}
+                  </div>
+              </div>
           </div>
-          <div class="product_info">
-            <div class="product_name">
-              <a href="collections/vendors/products/2-d-ring-file-a4.html"
-                >2-D Ring File A4</a
-              >
-            </div>
-            <div class="product_price">
-              <span class="money">$25.00</span>
-            </div>
-          </div>
+          {% empty %}
+              <p>No top-rated products available.</p>
+          {% endfor %}
+      
         </div>
-        <div class="product">
-          <div class="product_img">
-            <a href="collections/vendors/products/2-hole-punch-0102.html">
-              <img
-                alt="2-hole punch 0102"
-                src="{% static 'cdn/shop/products/2-hole_punch_0102_1_small.jpeg@v=1400243785' %}"
-              />
-            </a>
-          </div>
-          <div class="product_info">
-            <div class="product_name">
-              <a href="collections/vendors/products/2-hole-punch-0102.html"
-                >2-hole punch 0102</a
-              >
-            </div>
-            <div class="product_price">
-              <span class="money">$39.00</span>
-            </div>
-          </div>
-        </div>
-        <div class="product">
-          <div class="product_img">
-            <a
-              href="collections/vendors/products/avery-clean-edge-inkjet-business-card.html"
-            >
-              <img
-                alt="Avery Clean Edge Inkjet Business Card"
-                src="{% static 'cdn/shop/products/avery_clean_edge_inkjet_business_card_1_small.jpeg@v=1400243790' %}"
-              />
-            </a>
-          </div>
-          <div class="product_info">
-            <div class="product_name">
-              <a
-                href="collections/vendors/products/avery-clean-edge-inkjet-business-card.html"
-                >Avery Clean Edge Inkjet Business Card</a
-              >
-            </div>
-            <div class="product_price">
-              <span class="money">$18.00</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 </div>

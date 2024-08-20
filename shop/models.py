@@ -1,6 +1,7 @@
 from django.db import models
+from django.conf import settings
+from django.db.models import Avg
 from django.utils import timezone
-
 from image_cropping import ImageRatioField
 
 
@@ -33,3 +34,30 @@ class Product(models.Model):
     @property
     def price_with_discount(self):
         return self.price - (self.price * self.discount / 100)
+
+    @property
+    def average_rating(self):
+        total_ratings = self.ratings.count()
+        if total_ratings > 0:
+            total_score = sum(rating.value for rating in self.ratings.all())
+            return round(total_score / total_ratings, 1)
+        return 0.0
+
+    @classmethod
+    def top_rated_products(cls, limit=4):
+        # Annotate products with their average rating and order by it
+        return cls.objects.annotate(avg_rating=Avg('ratings__value')).order_by('-avg_rating')[:limit]
+
+
+
+class Rating(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="ratings")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    value = models.PositiveSmallIntegerField(default=0)  # rating value from 1 to 5
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('product', 'user')  # ensures a user can only rate a product once
+
+    def __str__(self):
+        return f"{self.user.username} rated {self.product.name} {self.value} stars"

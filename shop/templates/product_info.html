@@ -89,13 +89,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    <!-- Separate form for the add to cart action -->
-                                    <!-- <form id="add-to-cart-form-{{ product.id }}" method="post" action="{% url 'add_to_cart' product.id %}" class="button">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="quantity" id="hidden-quantity-{{ product.id }}" value="1">
-                                        <button class="btn btn-cart" type="submit" style="font-size: 16px;">Add to cart</button>
-                                    </form> -->
+                                
                                     
                                     <script>
                                         document.addEventListener('DOMContentLoaded', function() {
@@ -113,23 +107,22 @@
                                     <!-- Paste 'product_details' here! ----------------------------->
                                     <div class="product_details">
                                         <div class="product_category">
-                                            <span>Category:</span>
-                                            <a href="{{ category.id }}" title="{{ product.category.name }}">{{ product.category.name }}</a>
+                                            <span style="padding-right: 6px;">Category:</span>
+                                            <a style="font-size: 18px;" href="{{ category.id }}" title="{{ product.category.name }}">{{ product.category.name }}</a>
                                         </div>
 
-                                        <div class="product_rating">
-                                            <div class="rate">
-                                                <a class="rating">Rating:   </a>
-                                                <input type="radio" id="star5" name="rate" value="5" />
-                                                <label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
-                                                <input type="radio" id="star4" name="rate" value="4" />
-                                                <label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
-                                                <input type="radio" id="star3" name="rate" value="3" />
-                                                <label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
-                                                <input type="radio" id="star2" name="rate" value="2" />
-                                                <label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
-                                                <input type="radio" id="star1" name="rate" value="1" />
-                                                <label for="star1" title="1 star"><i class="fas fa-star"></i></label>
+                                        <div class="product_rating" data-product-id="{{ product.id }}">
+                                            <span class="rate">Rating:</span>
+                                            <div class="rating">
+                                                <span class="avg-rating">{{ product.average_rating }}</span>
+                                                {% for i in "54321" %}
+                                                {% if product.average_rating >= i|add:"0.5" %}
+                                                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" checked>
+                                                {% else %}
+                                                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}">
+                                                {% endif %}
+                                                <label for="star{{ i }}">&#9733;</label>
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
@@ -140,10 +133,9 @@
                                             <p>{{ product.description }}</p>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
+                            
                             <div class="row-fluid">
                                 <div class="span12">
                                     <!-- Additional content if needed -->
@@ -154,6 +146,21 @@
 
                     {% include 'similar_products.html' %}
 
+                    <form class="feedback">
+                        <div class="pinfo">Write your feedback.</div>
+                        <div class="form-group">
+                            <div class="col-md-4 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                    <textarea style="height: 200px; width: 600px; font-size: 20px;" 
+                                    class="form-control" id="review" rows="3">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </form>
                 </div>
 
                 {% include 'sidebar.html' %}
@@ -164,6 +171,58 @@
 </div>
 
 <script src="{% static 'js/cart/dynamic_cart_icon.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the average rating from the server (from a hidden field or directly from the template)
+    const averageRating = parseFloat('{{ product.average_rating }}'); // Make sure this is correctly set in your template
+
+    // Set the star ratings based on the average rating
+    document.querySelectorAll('.rating input').forEach(input => {
+        if (parseFloat(input.value) <= averageRating) {
+            input.nextElementSibling.style.color = 'orange'; // Set star color to orange
+        } else {
+            input.nextElementSibling.style.color = 'grey'; // Set star color to grey
+        }
+    });
+
+    document.querySelectorAll('.rating input').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const rating = this.value;
+
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': '{{ csrf_token }}'  // Make sure to include the CSRF token
+                },
+                body: `rating=${rating}`
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Update the stars to reflect the new rating
+                    document.querySelectorAll('.rating input').forEach(input => {
+                        if (parseFloat(input.value) <= data.new_average) {
+                            input.nextElementSibling.style.color = 'orange'; // Set star color to orange
+                        } else {
+                            input.nextElementSibling.style.color = 'grey'; // Set star color to grey
+                        }
+                    });
+                    alert('Rating saved successfully!');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
+</script>
 
 <style>
 .product_details {
@@ -203,9 +262,6 @@
     color: #3b3b3b;
 }
 
-.product_rating {
-    margin-bottom: 20px;
-}
 
 .product_desc {
     border-bottom: 1px solid #ddd;
@@ -213,8 +269,12 @@
 
 .rate {
     display: flex;
-    align-items: center;
     float: left;
+    margin-top: 6px;
+    font-size: 15px;
+    color:#3b3b3b;
+    padding-right: 6px;
+
 }
 
 .rating {
@@ -226,36 +286,33 @@ label {
     align-items: center;
 }
 
-.rate:not(:checked) > input {
-    position: absolute;
-    top: -9999px;
+.rating {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: flex-end;
 }
 
-.rate:not(:checked) > label {
-    float: right;
-    width: 1em;
-    overflow: hidden;
-    white-space: nowrap;
-    cursor: pointer;
-    font-size: 20px;
-    color: #ccc;
+.rating input {
+	display: none;
 }
 
-.rate > input:checked ~ label i {
-    color: #ffc700;
+.rating label {
+	font-size: 24px;
+	cursor: pointer;
 }
 
-.rate:not(:checked) > label:hover i,
-.rate:not(:checked) > label:hover ~ label i {
-    color: #deb217;
+.rating label:hover,
+.rating label:hover ~ label {
+	color: orange;
 }
 
-.rate > input:checked + label:hover i,
-.rate > input:checked + label:hover ~ label i,
-.rate > input:checked ~ label:hover i,
-.rate > input:checked ~ label:hover ~ label i,
-.rate > label:hover ~ input:checked ~ label i {
-    color: #c59b08;
+.rating input:checked ~ label {
+	color: orange;
+}
+
+.avg-rating {
+    margin-left: 15px;
+    margin-top: 5px;
 }
 
 .original-price {
@@ -293,6 +350,36 @@ label {
 .rte {
     font-size: 14px;
 }
+
+.feedback {
+    display: flex; /* Use Flexbox for layout */
+    flex-direction: column; /* Arrange children in a column */
+    margin: 0 auto; /* Center the form horizontally */
+}
+
+.pinfo {
+    margin-left: 20px;
+    margin-top: 50px;
+    font-size: 20px;
+    color: #3b3b3b;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.submit-btn {
+    align-self: flex-start;
+    margin-left: 20px;
+    background-color: #3b3b3b;
+    font-size: 15px;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 90px;
+}
+
 </style>
 
 {% endblock %}
