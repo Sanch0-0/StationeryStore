@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
-from django.db.models import Avg
 from django.utils import timezone
+from django.db.models import Avg, Count
 from image_cropping import ImageRatioField
 
 
@@ -45,9 +45,14 @@ class Product(models.Model):
 
     @classmethod
     def top_rated_products(cls, limit=4):
-        # Annotate products with their average rating and order by it
-        return cls.objects.annotate(avg_rating=Avg('ratings__value')).order_by('-avg_rating')[:limit]
-
+        # Annotate products with their average rating and the number of ratings
+        return cls.objects.annotate(
+            avg_rating=Avg('ratings__value'),
+            rating_count=Count('ratings')
+        ).filter(
+            avg_rating__gt=4.5,  # Only include products with an average rating greater than 4.5
+            rating_count__gt=0    # Exclude products with no ratings
+        ).order_by('-avg_rating')[:limit]
 
 
 class Rating(models.Model):

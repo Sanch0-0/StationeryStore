@@ -89,8 +89,8 @@ def search_products(request):
     filtered_queryset = products_filter.qs
 
     # Paginate the filtered queryset
-    paginator = Paginator(filtered_queryset, 15) 
-    page_num = request.GET.get('page', 1) 
+    paginator = Paginator(filtered_queryset, 15)
+    page_num = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_num)
 
     context = {
@@ -102,3 +102,25 @@ def search_products(request):
     return render(request, "search_products.html", context)
 
 
+def delivery_policy(request):
+    return render(request, "delivery_policy.html")
+
+
+def terms(request):
+    return render(request, "terms.html")
+
+
+def privacy_policy(request):
+    return render(request, "privacy_policy.html")
+
+
+def refund(request):
+    return render(request, "refund.html")
+
+
+def about_us(request):
+    return render(request, "about_us.html")
+
+
+def contact_us(request):
+    return render(request, "contact_us.html")

@@ -540,16 +540,10 @@ for (var attr in meta) {
 </ul>
 </li>
 <li class="">
-<a href="blogs/blog.html" title="">Blog</a>
-</li>
-<li class="">
-<a href="pages/about-us.html" title="">About Us</a>
-</li>
-<li class="">
-<a href="pages/documentation.html" title="">Documentation</a>
+<a href="{% url 'about_us' %}" title="">About Us</a>
 </li>
 <li class="last">
-<a href="pages/contact-us.html" title="">Contact us</a>
+<a href="{% url 'contact_us' %}" title="">Contact us</a>
 </li>
 </ul>
 <!-- HEADER CART -->
@@ -560,7 +554,7 @@ for (var attr in meta) {
             <span class="count">{{ count_of_products }}</span>
         </span>
         <span>Product(s)</span>&nbsp;–&nbsp;
-        <span class="money cart-total-price" data-currency-usd="${{ cart_total_price|floatformat:2 }}">{{ cart_total_price|floatformat:2 }}</span>
+        <span class="money cart-total-price" data-currency-usd="{{ cart_total_price|floatformat:2 }}">$ {{ cart_total_price|floatformat:2 }}</span>
     </a>
 </div>
 
@@ -594,34 +588,41 @@ for (var attr in meta) {
 <footer id="footer">
 <div class="footer_shadow"></div>
 <div class="container">
-<div class="row">
+<div style="margin-left: 50px;" class="row">
 <div class="col-sm-3 custom_footer custom_footer1">
 <h3>Information</h3>
 <ul class="list">
-<li class="active"><a href="index.html" title="">Home</a></li>
-<li><a href="https://tm-shopify047-stationery.myshopify.com/search" title="">Search</a></li>
-<li><a href="blogs/blog.html" title="">Blog</a></li>
-<li><a href="pages/about-us.html" title="">About Us</a></li>
-<li><a href="pages/documentation.html" title="">Documentation</a></li>
-<li><a href="pages/contact-us.html" title="">Contact us</a></li>
+<li class="active"><a href="{% url 'index' %}" title="">Home</a></li>
+<li><a href="{% url 'search_products' %}" title="">Search</a></li>
+<li><a href="{% url 'about_us' %}" title="">About Us</a></li>
+<li><a href="{% url 'contact_us' %}" title="">Contact us</a></li>
 </ul>
 </div>
 <div class="col-sm-3 custom_footer custom_footer2">
-<h3>Products</h3>
+<h3>Customer Services</h3>
 <ul class="list">
-<li><a href="collections/teaching.html" title="">Teaching</a></li>
-<li><a href="collections/classroom.html" title="">Classroom</a></li>
-<li><a href="collections/calculators.html" title="">Calculators</a></li>
-<li><a href="collections/binders-folders.html" title="">Binders &amp; Folders</a></li>
-<li><a href="collections/arts-crafts.html" title="">Arts &amp; Сrafts</a></li>
+  <li class="">
+<a href=".{% url 'delivery_policy' %}" title="">Delivery</a>
+</li>
+<li class="">
+<a href=".{% url 'terms' %}" title="">Terms & Conditions</a>
+</li>
+<li class="">
+<a href=".{% url 'privacy_policy' %}" title="">Privacy Policy</a>
+</li>
+<li class="">
+<a href=".{% url 'refund' %}" title="">Refund Policy</a>
+</li>
 </ul>
 </div>
 <div class="col-sm-3 custom_footer custom_footer3">
-<h3>Customer service</h3>
+<h3>User Configuration</h3>
 <ul class="list">
-<li><a href="https://tm-shopify047-stationery.myshopify.com/account" title="">My account</a></li>
-<li><a href="https://tm-shopify047-stationery.myshopify.com/account/addresses" title="">My addresses</a></li>
-<li><a href="https://tm-shopify047-stationery.myshopify.com/cart" title="">My cart</a></li>
+<li><a href="/cart/" title="">My Cart</a></li>
+<li><a href="#" title="">Favourite</a></li>
+<li><a href="{% url 'login' %}" title="">Login</a></li>
+<li><a href="{% url 'logout' %}" title="">Logout</a></li>
+<li><a href="{% url 'registration' %}" title="">Create New Account</a></li>
 </ul>
 </div>
 <div class="col-sm-3 custom_footer custom_footer4">
