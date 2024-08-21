@@ -6,26 +6,28 @@
     <div class="widget_content">
         <div class="product_listing_sidebar">
           {% for product in top_rated_products %}
-          <div class="product">
-              <div class="product_img">
+          <div class="top-products">
+              <div class="top-product-img">
                   <a href="{% url 'get_product_by_id' product.id %}">
                       <img src="{% thumbnail product.image 'product_thumbnail' %}" alt="{{ product.name }}" />
                   </a>
               </div>
-              <div class="product_info">
-                  <div class="product_name">
+              <div class="top-product-info">
+                  <div class="top-product-name">
                       <a href="{% url 'get_product_by_id' product.id %}">{{ product.name }}</a>
                   </div>
-                  <div class="product_price">
+                  <div class="top-product-price">
                       <span class="money">${{ product.price_with_discount }}</span>
                   </div>
-                  <div class="product_rating">
-                      {% if product.avg_rating %}
-                          <span>Average Rating: {{ product.avg_rating }}</span>
-                      {% else %}
-                          <span>No ratings yet</span>
-                      {% endif %}
-                  </div>
+                  <div class="top-product-rating">
+                    <div class="rating-static" data-rating="{{ product.avg_rating }}">
+                        {% for i in "12345" %}
+                        <span class="star" data-value="{{ i }}">&#9733;</span>
+                        {% endfor %}
+                        <span class="avg-rating">{{ product.avg_rating }}</span>
+                    </div>
+                </div>
+                
               </div>
           </div>
           {% empty %}
@@ -35,3 +37,106 @@
         </div>
     </div>
 </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all rating containers
+    const ratingContainers = document.querySelectorAll('.rating-static');
+
+    // Loop through each rating container
+    ratingContainers.forEach(container => {
+        const averageRating = parseFloat(container.dataset.rating);
+
+        // Set the star ratings based on the average rating
+        container.querySelectorAll('.star').forEach(star => {
+            const starValue = parseFloat(star.dataset.value);
+
+            if (starValue <= averageRating) {
+                star.classList.add('filled');
+            } else if (starValue - 0.5 <= averageRating) {
+                star.style.position = 'relative';
+                star.innerHTML = '<span style="position: absolute; color: orange; width: 50%; overflow: hidden;">&#9733;</span><span>&#9733;</span>';
+            }
+        });
+    });
+});
+
+</script>
+
+
+<style>
+
+/* Container for each product */
+.top-products {
+    display: flex; /* Flexbox to align items horizontally */
+    gap: 15px; /* Space between image and info */
+    margin-bottom: 15px; /* Space between products */
+    padding-bottom: 15px; /* Bottom padding */
+    border-bottom: 1px solid #e0e0e0; /* Bottom border between products */
+}
+
+/* Image container */
+.top-product-img {
+    flex: 0 0 auto; /* Prevents image from stretching */
+    width: 80px; /* Fixed width for the image container */
+}
+
+/* Ensure image fills its container */
+.top-product-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Info container on the right side */
+.top-product-info {
+    flex: 1; /* Allows the info to take up the remaining space */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: space-between; /* Distribute space evenly */
+}
+
+/* Product name styling */
+.top-product-name a {
+    font-size: 18px;
+    color: #3b3b3b;
+    text-decoration: none;
+}
+
+/* Product price styling */
+.top-product-price {
+    font-size: 20px;
+}
+
+span.money {
+    font-weight:500;
+    color:#3b3b3b;
+}
+
+
+.rating-static {
+    display: flex;
+    align-items: center;
+}
+
+.rating-static .star {
+    font-size: 16px;
+    color: lightgray; /* Default color for stars */
+    margin-right: 2px;
+}
+
+.rating-static .star.filled {
+    color: orange; /* Filled star color */
+}
+
+.rating-static .avg-rating {
+    margin-left: 5px;
+    font-size: 16px;
+    color: #3b3b3b;
+}
+
+
+
+
+</style>

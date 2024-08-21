@@ -19,13 +19,14 @@
                 <div class="row">
                   {% for product in products %}
                   <div class="product col-sm-4">
-                    <div>
+                    <div style="border-radius: 10px;">
                       <div>
                         <a class="product_img_link" href="{% url 'get_product_by_id' product.id %}">
                           <img
                               alt="{{ product.name }}"
                               src="{% thumbnail product.image 'product_thumbnail' %}"
                               class="product_img"
+                              style="border-radius: 5px;"
                           />
                         </a>
                       </div>

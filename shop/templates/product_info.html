@@ -24,7 +24,7 @@
         <div class="row sidebar_left ">
             <div class="column_center">
                 <div id="main_content" class="col-sm-9">
-                    <div itemscope itemtype="http://schema.org/Product" class="product-scope">
+                    <div style="margin-bottom: 50px;" itemscope itemtype="http://schema.org/Product" class="product-scope">
 
                         <meta itemprop="url" content="{{ request.build_absolute_uri }}" />
                         <meta itemprop="image" content="{{ product.image.url }}" />
@@ -35,7 +35,7 @@
                                     <div class="product_image">
                                         <ul class="bxslider">
                                             <a rel="product_images" class="fancybox" href="{{ image.url }}" title="{{ product.name }}">
-                                                <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+                                                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="border-radius: 10px; margin-top: 50px;"/>
                                             </a>
                                         </ul>
                                     </div>
@@ -153,7 +153,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
                                     <textarea style="height: 200px; width: 600px; font-size: 20px;" 
-                                    class="form-control" id="review" rows="3">
+                                    class="form-control" id="review">
                                     </textarea>
                                 </div>
                             </div>
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             input.nextElementSibling.style.color = 'grey'; // Set star color to grey
                         }
                     });
-                    alert('Rating saved successfully!');
+                    location.reload()
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-top: 6px;
     font-size: 15px;
     color:#3b3b3b;
-    padding-right: 6px;
+    padding-right: 10px;
 
 }
 
@@ -311,8 +311,9 @@ label {
 }
 
 .avg-rating {
-    margin-left: 15px;
+    margin-left: 10px;
     margin-top: 5px;
+    color:#3b3b3b;
 }
 
 .original-price {
