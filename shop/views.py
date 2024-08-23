@@ -114,8 +114,8 @@ def privacy_policy(request):
     return render(request, "privacy_policy.html")
 
 
-def refund(request):
-    return render(request, "refund.html")
+def refund_policy(request):
+    return render(request, "refund_policy.html")
 
 
 def about_us(request):

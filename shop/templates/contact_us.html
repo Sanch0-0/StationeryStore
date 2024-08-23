@@ -1,0 +1,179 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
+<main id="main-content">
+  <div class="shopify-policy__container">
+    <div class="shopify-policy__title">
+      <h1 class="title-name">Contact Us</h1>
+    </div>
+    <div class="shopify-policy__body">
+      <div class="rte">
+        <div
+          class="text-overlay text-start md-down:text-center cc-animate-init cc-animate-in"
+          data-cc-animate=""
+        >
+          <div class="text-overlay__block reading-width rte">
+            <p>
+              Got a question? We're here to help. Pop your message into the
+              contact form below and we'll be in touch shortly.
+            </p>
+            <p>
+              Alternatively, during business hours click the 'Need Advice'
+              button to talk with our support team.
+            </p>
+          </div>
+        </div>
+
+        <div class="css-ekyqmx e1qubwr112">
+          <div class="form-group">
+            <label class="css-epbja2 ei7wizm0"
+              >Full name<span class="css-1tdvbp0 e1qubwr110">*</span></label
+            ><input
+              role="textbox"
+              name="name"
+              required=""
+              aria-label="Name"
+              type="text"
+              class="css-pryn3j e1ydo8cp0 form-control"
+              aria-invalid="false"
+              value=""
+            />
+          </div>
+          <div class="form-group">
+            <label class="css-epbja2 ei7wizm0"
+              >Email<span class="css-1tdvbp0 e1qubwr110">*</span></label
+            ><input
+              role="textbox"
+              name="email"
+              placeholder="your@email.com"
+              required=""
+              aria-label="Email"
+              type="email"
+              class="css-pryn3j e1ydo8cp0 form-control"
+              aria-invalid="false"
+              value=""
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="css-epbja2 ei7wizm0"
+              >Message<span class="css-1tdvbp0 e1qubwr110">*</span></label
+            ><textarea
+              role="textbox"
+              name="message"
+              placeholder="Write your message"
+              rows="5"
+              class="css-1hdw779 e1ydo8cp0 form-control"
+              aria-invalid="false"
+            ></textarea>
+          </div>
+          <label for="attachFiles" class="ghc-file-upload-label">
+            <div class="ghc-file-upload-button">
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="#161616"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M13.75 5.62496V14.4416C13.75 16.1833 12.475 17.7333 10.7416 17.9C8.74998 18.0916 7.08331 16.5333 7.08331 14.5833V4.28329C7.08331 3.19163 7.86665 2.19996 8.94998 2.09163C10.2 1.96663 11.25 2.94163 11.25 4.16663V12.9166C11.25 13.375 10.875 13.75 10.4166 13.75C9.95831 13.75 9.58331 13.375 9.58331 12.9166V5.62496C9.58331 5.28329 9.29998 4.99996 8.95831 4.99996C8.61665 4.99996 8.33331 5.28329 8.33331 5.62496V12.8C8.33331 13.8916 9.11665 14.8833 10.2 14.9916C11.45 15.1166 12.5 14.1416 12.5 12.9166V4.30829C12.5 2.56663 11.225 1.01663 9.49165 0.849959C7.50831 0.658292 5.83331 2.21663 5.83331 4.16663V14.3916C5.83331 16.7833 7.58331 18.925 9.96665 19.15C12.7083 19.4 15 17.2666 15 14.5833V5.62496C15 5.28329 14.7166 4.99996 14.375 4.99996C14.0333 4.99996 13.75 5.28329 13.75 5.62496Z"></path>
+                </svg>
+                <span>Attach Files</span>
+            </div>
+            <div class="ghc-file-upload-info">
+                Attach up to 10 files. Max file size: 20 MB.
+            </div>
+        </label>
+        
+
+          <button
+            type="submit"
+            class="btn-classic"
+          >
+            Send
+          </button>
+          <div class="css-khlnvf e1qubwr113">
+            This site is protected by reCAPTCHA Enterprise and the Google
+            <a target="_blank" href="{% url 'privacy_policy' %}"
+              >Privacy Policy</a
+            >
+            and
+            <a target="_blank" href="{% url 'terms' %}"
+              >Terms of Service</a
+            >
+            apply.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<style>
+.shopify-policy__container {
+    margin: 0 25%;
+    padding: 70px 30px;
+}
+
+.title-name {
+    font-size: 60px;
+    color: #3b3b3b;
+    font-weight: 600;
+}
+
+.rte {
+    font-size: 20px;
+    color: #3b3b3b;
+}
+
+strong {
+    font-size: 35px;
+    color: #000000;
+    font-weight: 600;
+}
+
+.ghc-file-upload-label {
+display: block;
+width: 100%;
+max-width: 850px; /* Adjust the max-width as necessary */
+margin: 30px 0 0px ;
+text-align: center;
+}
+
+.ghc-file-upload-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f3f3; /* Button background color */
+    border: 1px solid #ccc; /* Button border color */
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.ghc-file-upload-button svg {
+    margin-right: 10px; /* Space between icon and text */
+}
+
+.ghc-file-upload-button span {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.ghc-file-upload-info {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.btn-classic {
+    background-color: #3b3b3b;
+    color: white;
+    padding: 10px 20px;
+    margin: 25px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+</style>
+{% endblock %}

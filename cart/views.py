@@ -72,7 +72,6 @@ def add_to_cart(request, product_id):
 
 
 
-
 @login_required
 def update_cart_item(request, product_id):
 
@@ -108,3 +107,7 @@ def delete_cart_items(request):
         item_ids= request.POST.get("item_ids").split(",")
         CartItem.objects.filter(id__in=item_ids).delete()
     return response.HttpResponse(status=200)
+
+
+
+

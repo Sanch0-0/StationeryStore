@@ -1,0 +1,102 @@
+{% load static %}
+
+<div class="column_left column col-sm-3" style="padding-top: 70px;">
+    <div class="widget widget__collections">
+        <div class="widget_content">
+        <div class="cart-header">
+          <h3 style="margin-bottom: 10px;" class="widget_header">List info</h3>
+            <div class="p6b_4_6 rb_4_6">
+              <!---->
+              <button
+                class=""
+                style="background: rgb(131, 131, 131); color: #ffffff"
+              >
+                <div class="b2111-a1">
+                    <a href="/cart/"> 
+                    <button class="checkout-btn" type="submit">Go To Cart</button>
+                    </a>
+                </div>
+                <div class="b2111-a" style="background-color: #ffffff"></div>
+              </button>
+            </div>
+
+            <hr>
+
+            <div class="cart-info">
+              <div class="ebjd_7_1">
+                <span>In the list:</span>
+                <span style="color: #3b3b3bbd; font-weight: bold;">{{ count_of_favourite_products }} Products</span>
+              </div>
+
+              <div class="ebjd_7_1">
+                <span >Overall: </span>
+                <span style="color: #3b3b3bbd; font-weight: bold;">{{ favourite_total_quantity }} Items</span>
+              </div>
+
+              <hr>
+
+                <div class="d4711-b">
+                    <span style="font-weight: 500;">Total price: </span>
+                    <span class="total-favourite-price" style="font-weight: bold;">$ 0</span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+
+div.widget_content {
+    background-color: rgba(255, 255, 255, 0.521);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h3.widget_header {
+    text-align: center;
+}
+
+.checkout-btn {
+  border-radius: 10px;
+  background-color: #3b3b3b;
+  color: white;
+  font-size: 15px;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+.cart-info {
+  font-size: 16px;
+}
+
+.ebjd_7_1 {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.b9p_4_6 {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.d4711-b {
+  display: flex;
+  justify-content: space-between;
+  font-size: 25px;
+  color: #3b3b3bd0;
+}
+
+</style>

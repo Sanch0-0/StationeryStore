@@ -548,6 +548,16 @@ for (var attr in meta) {
 </ul>
 <!-- HEADER CART -->
 <div class="header_cart">
+    <a href="" style="margin-right: 40px;">
+      <i class="fa-solid fa-user"></i>
+      <span>My Account</span>
+    </a>
+
+    <a href="/favourite/" style="margin-right: 40px;">
+      <i class="fa fa-heart"></i>
+      <span>Favourite</span>
+    </a>
+
     <a href="/cart/">
         <i class="fa fa-shopping-cart"></i>
         <span class="cart-total-items">
@@ -594,35 +604,36 @@ for (var attr in meta) {
 <ul class="list">
 <li class="active"><a href="{% url 'index' %}" title="">Home</a></li>
 <li><a href="{% url 'search_products' %}" title="">Search</a></li>
-<li><a href="{% url 'about_us' %}" title="">About Us</a></li>
-<li><a href="{% url 'contact_us' %}" title="">Contact us</a></li>
+<li><a href="{% url 'login' %}" title="">Login</a></li>
+<li><a href="{% url 'logout' %}" title="">Logout</a></li>
+<li><a href="{% url 'registration' %}" title="">Create An Account</a></li>
 </ul>
 </div>
 <div class="col-sm-3 custom_footer custom_footer2">
 <h3>Customer Services</h3>
 <ul class="list">
   <li class="">
-<a href=".{% url 'delivery_policy' %}" title="">Delivery</a>
+<a href="{% url 'delivery_policy' %}" title="">Delivery</a>
 </li>
 <li class="">
-<a href=".{% url 'terms' %}" title="">Terms & Conditions</a>
+<a href="{% url 'terms' %}" title="">Terms & Conditions</a>
 </li>
 <li class="">
-<a href=".{% url 'privacy_policy' %}" title="">Privacy Policy</a>
+<a href="{% url 'privacy_policy' %}" title="">Privacy Policy</a>
 </li>
 <li class="">
-<a href=".{% url 'refund' %}" title="">Refund Policy</a>
+<a href="{% url 'refund_policy' %}" title="">Refund Policy</a>
 </li>
+<li><a href="{% url 'about_us' %}" title="">About Us</a></li>
+<li><a href="{% url 'contact_us' %}" title="">Contact Us</a></li>
 </ul>
 </div>
 <div class="col-sm-3 custom_footer custom_footer3">
 <h3>User Configuration</h3>
 <ul class="list">
+<li><a href="#" title="">My Account</a></li>
 <li><a href="/cart/" title="">My Cart</a></li>
 <li><a href="#" title="">Favourite</a></li>
-<li><a href="{% url 'login' %}" title="">Login</a></li>
-<li><a href="{% url 'logout' %}" title="">Logout</a></li>
-<li><a href="{% url 'registration' %}" title="">Create New Account</a></li>
 </ul>
 </div>
 <div class="col-sm-3 custom_footer custom_footer4">
@@ -630,7 +641,7 @@ for (var attr in meta) {
 <ul>
 <li><a href="https://twitter.com/templatemonster">Twitter</a></li>
 <li><a href="https://www.facebook.com/TemplateMonster">Facebook</a></li>
-<li><a href="https://google.com/+templatemonster">Google+</a></li>
+<li><a href="https://instagram.com/+templatemonster">Instagram</a></li>
 </ul>
 </div>
 </div>

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'shop',
     'users',
     'cart',
+    'favourite',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +79,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart_info',
                 'shop.context_processors.top_rated_products',
+                'favourite.context_processors.favourite_info',
             ],
         },
     },

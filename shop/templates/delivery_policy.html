@@ -6,12 +6,12 @@
 <main id="main-content">
   <div class="shopify-policy__container">
     <div class="shopify-policy__title">
-      <h1>Shipping policy</h1>
+      <h1 class="title-name">Shipping policy</h1>
     </div>
 
     <div class="shopify-policy__body">
       <div class="rte">
-        <h4><strong>How much is delivery?</strong></h4>
+        <h4><strong class="bold-text-info">How much is delivery?</strong></h4>
         <p>
           We offer FREE delivery on all orders over £25. Otherwise, we charge a
           low flat rate shipping fee of £4.95 per delivery.<br />
@@ -19,7 +19,7 @@
         <p>
           At the moment we are not able to offer expedited delivery options.
         </p>
-        <h4><strong>When can I expect my order to be dispatched?</strong></h4>
+        <h4><strong class="bold-text-info">When can I expect my order to be dispatched?</strong></h4>
         <p>
           We always aim to dispatch orders within 24-hours between Monday to
           Thursday. Orders placed Friday evening will dispatch on Monday
@@ -45,7 +45,7 @@
           ></a
           ><br />
         </p>
-        <h4><strong>When will my order arrive?</strong></h4>
+        <h4><strong class="bold-text-info">When will my order arrive?</strong></h4>
         <p>
           Delivery takes around 3 business days from dispatch. In rare cases,
           orders might be delayed by factors beyond our control. Although we aim
@@ -58,7 +58,7 @@
           will be delivered to your house.
         </p>
         <h4>
-          <strong
+          <strong class="bold-text-info"
             >My order is urgent and I need it delivered before a specific day.
             What can I do?</strong
           >
@@ -86,7 +86,7 @@
             answer emails also outside our chat and telephone hours.</span
           >
         </p>
-        <p><strong>Where do you deliver to?</strong></p>
+        <p><strong class="bold-text-info">Where do you deliver to?</strong></p>
         <p>
           StationeryShop.co.uk delivers to all mainland UK address, Northern
           Ireland and Wales for free on orders over £25 or for a low shipping
@@ -103,7 +103,7 @@
           ><span> </span>to find out if we are able to deliver to your address
           if you are unsure.
         </p>
-        <h4><strong>Can I speak with someone about my order?</strong></h4>
+        <p class="bold-text-info"><strong>Can I speak with someone about my order?</strong></p>
         <p>
           Of course! We are here to help. Do not hesitate to contact us about
           any questions regarding your order. Simply write to us us via our
@@ -118,6 +118,23 @@
 .shopify-policy__container {
     margin: 0 25%;
     padding: 70px 30px;
+}
+
+.title-name {
+  font-size: 60px;
+  color:#3b3b3b; 
+  font-weight: 600;
+}
+
+.rte {
+  font-size: 20px;
+  color: #3b3b3b;
+}
+
+.bold-text-info {
+  font-size: 30px;
+  color:#000000;
+  font-weight: 600;
 }
 </style>
 {% endblock %}

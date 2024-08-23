@@ -10,7 +10,7 @@
       </li>
 
       <li class="lastItem">
-        <span class="page-title">Your Shopping Cart</span>
+        <span class="page-title">Your Favourite Products</span>
       </li>
     </ul>
 
@@ -19,7 +19,7 @@
         <div id="main_content" class="col-sm-9">
           <div class="cart-scope">
             <div class="page_header">
-              <h3 class="page_head">Shopping Cart</h3>
+              <h3 class="page_head">Favourite Products</h3>
             </div>
 
             <div class="controls">
@@ -32,26 +32,10 @@
 
               <!-- Delete button -->
               <button style="background-color: #f91155" id="deleteSelected">Delete selected</button>
-
-              <!-- Share button with icon -->
-              <button style="background-color: #3b3b3b">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M7.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1-1.414 1.414L9 4.414V9a1 1 0 1 1-2 0V4.414l-.293.293a1 1 0 0 1-1.414-1.414zM2 9a3 3 0 0 1 3-3 1 1 0 0 1 0 2 1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1 1 1 0 1 1 0-2 3 3 0 0 1 3 3v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3z"
-                  ></path>
-                </svg>
-                Share
-              </button>
             </div>
 
             <div class="page_content">
-              {% for item in cart_items_with_total %}
+              {% for item in favourite_items_with_total %}
 
               <div class="cart-product">
                 <div class="checkbox">
@@ -78,102 +62,20 @@
                     <div class="col-lg-9 col-md-9 col-sm-9">
                       <div class="products_name">
                         <a href="{% url 'get_product_by_id' item.product.id %}">
-                          {{ item.product.name }}
-                        </a>
-                      </div>
+                            {{ item.product.name }}
+                          </a>
 
-                      <div class="item_price">
-                        <div class="row">
-                          <div class="col-sm-4">
-                            <div class="price">
-                              {% if item.product.discount == 0 %}
-                              <span class="original-price"
-                                >${{ item.product.price }}</span
-                              >
-                              {% elif item.product.discount != 0 %}
-                              <div class="product-price">
-                                <div class="old-price-wrapper">
-                                  <span class="price-striked"
-                                    >${{ item.product.price }}</span
-                                  >
-                                  <span class="discount-percentage"
-                                    >- {{ item.product.discount }}%</span
-                                  >
-                                </div>
-                                <span class="discounted-price"
-                                  >${{ item.product.price_with_discount }}</span
-                                >
-                              </div>
-                              {% endif %}
-                            </div>
-                          </div>
-
-                          <div class="quantity">
-                            <button class="minus" aria-label="Decrease">
-                              &minus;
-                            </button>
-                            <input
-                              style="font-weight: bold"
-                              type="number"
-                              class="input-box"
-                              data-product-id="{{ item.item.id }}"
-                              value="{{ item.quantity }}"
-                              min="1"
-                              max="100"
-                            />
-                            <button class="plus" aria-label="Increase">
-                              &plus;
-                            </button>
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <div class="total-col-sm-12">
-                            <p class="total-price">
-                              Subtotal:
-                              <span
-                                class="total-product-price"
-                                id="item-total-{{ item.item.id }}"
-                                >$ {{ item.total }}</span
-                              >
-                            </p>
-                          </div>
-
-                          <div class="btn-menu">
+                        <div class="btn-menu">
                             <div
                               favorite-test-id="add-and-delete-item-in-favorites"
                               delete-button-test-id="cart-item-delete-btn"
                               class="mb0_4_6"
                               style="display: flex; gap: 20px"
                             >
-                              <!-- Existing button -->
-                              <button
-                                class="m0b_4_6"
-                                style="
-                                  background: rgba(0, 48, 120, 0.039);
-                                  color: rgba(0, 26, 52, 1);
-                                "
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  class="ag013-b1"
-                                >
-                                  <path
-                                    fill="currentColor"
-                                    d="M16 6.022C16 3.457 14.052 1.5 11.5 1.5c-1.432 0-2.665.799-3.5 1.926C7.165 2.299 5.932 1.5 4.5 1.5 1.948 1.5 0 3.457 0 6.022c0 2.457 1.66 4.415 3.241 5.743 1.617 1.358 3.387 2.258 4.062 2.577.444.21.95.21 1.394 0 .675-.32 2.445-1.219 4.062-2.577C14.339 10.437 16 8.479 16 6.022"
-                                  ></path>
-                                </svg>
-                                <div
-                                  class="ag013-a"
-                                  style="background-color: rgba(0, 26, 52, 1)"
-                                ></div>
-                              </button>
 
                               <!-- Delete button -->
                               <form
-                                action="{% url 'delete_from_cart' item.product.id %}"
+                                action="{% url 'delete_from_favourite' item.product.id %}"
                                 method="post"
                                 style="display: inline"
                               >
@@ -204,6 +106,88 @@
                                 </button>
                               </form>
                             </div>
+
+                        <div class="share-btn">
+                            <!-- Share button with icon -->
+                            <button style="background-color: #3b3b3b">
+                                <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                >
+                                <path
+                                    fill="currentColor"
+                                    d="M7.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1-1.414 1.414L9 4.414V9a1 1 0 1 1-2 0V4.414l-.293.293a1 1 0 0 1-1.414-1.414zM2 9a3 3 0 0 1 3-3 1 1 0 0 1 0 2 1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1 1 1 0 1 1 0-2 3 3 0 0 1 3 3v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3z"
+                                ></path>
+                                </svg>
+                                Share
+                            </button>
+                        </div>
+                      </div>
+
+                      <div class="item_price">
+                        <div class="row">
+                            <div class="col-sm-4">
+                              <div class="price">
+                                {% if item.product.discount == 0 %}
+                                <span class="original-price"
+                                  >${{ item.product.price }}</span
+                                >
+                                {% elif item.product.discount != 0 %}
+                                <div class="product-price">
+                                  <div class="old-price-wrapper">
+                                    <span class="price-striked"
+                                      >${{ item.product.price }}</span
+                                    >
+                                    <span class="discount-percentage"
+                                      >- {{ item.product.discount }}%</span
+                                    >
+                                  </div>
+                                  <span class="discounted-price"
+                                    >${{ item.product.price_with_discount }}</span
+                                  >
+                                </div>
+                                {% endif %}
+                              </div>
+                            </div>
+  
+                            <div class="quantity">
+                              <button class="minus" aria-label="Decrease">
+                                &minus;
+                              </button>
+                              <input
+                                style="font-weight: bold"
+                                type="number"
+                                class="input-box"
+                                data-product-id="{{ item.item.id }}"
+                                value="{{ item.quantity }}"
+                                min="1"
+                                max="100"
+                              />
+                              <button class="plus" aria-label="Increase">
+                                &plus;
+                              </button>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="total-col-sm-12">
+                                <p class="total-price">
+                                Subtotal:
+                                <span
+                                    class="total-product-price"
+                                    id="item-total-{{ item.item.id }}"
+                                    >$ {{ item.total }}</span
+                                >
+                                </p>
+                            </div>
+
+                            <form id="add-to-cart-form-{{ item.product.id }}" method="post" action="{% url 'add_to_cart' item.product.id %}" class="button-add-to-cart">
+                                {% csrf_token %}
+                                <button class="btn btn-cart" type="submit" style="font-size: 16px;">Add to cart</button>
+                            </form>                            
+
                           </div>
                         </div>
                       </div>
@@ -213,51 +197,19 @@
               </div>
               {% empty %}
               <p style="margin-top: 60px" class="empty-cart">
-                It looks like your shopping cart is empty, which means it's time
+                It looks like your favourite list is empty, which means it's time
                 to
               </p>
               <a href="/" class="empty-cart" title="Back to the frontpage"
                 >Go shopping!</a
               >
               {% endfor %}
+            </div>
 
-              <div class="cart_instructions">
-                <label style="font-size: 18px; margin-top: 50px"
-                  >Special instructions for seller</label
-                >
-                <textarea class="form-control" name="note"></textarea>
-              </div>
-            </div>
-            <div id="payment-methods">
-              <ul>
-                <li class="firstItem">
-                  <img src="{% static 'payment/cc-amex.png' %}" alt="" />
-                </li>
-                <li>
-                  <img src="{% static 'payment/cc-discover.png' %}" alt="" />
-                </li>
-                <li><img src="{% static 'payment/cc-visa.png' %}" alt="" /></li>
-                <li>
-                  <img src="{% static 'payment/cc-mastercard.png' %}" alt="" />
-                </li>
-                <li>
-                  <img src="{% static 'payment/cc-maestro.png' %}" alt="" />
-                </li>
-                <li>
-                  <img src="{% static 'payment/cc-cirrus.png' %}" alt="" />
-                </li>
-                <li>
-                  <img src="{% static 'payment/cc-paypal.png' %}" alt="" />
-                </li>
-                <li class="lastItem">
-                  <img src="{% static 'payment/cc-google.png' %}" alt="" />
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>
-      {% include 'cart_menu.html' %}
+      {% include 'favourite_menu.html' %}
     </div>
   </div>
 </div>
@@ -393,10 +345,21 @@
     border-radius: 4px;
   }
 
-  .controls svg {
-    width: 16px;
-    height: 16px;
-    fill: currentColor;
+  .share-btn button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+
+  .share-btn {
+    padding-top: 5px;
   }
 
   .products_name {
@@ -406,13 +369,13 @@
   .quantity {
     display: flex;
     float: right;
-    margin-right: 50px;
+    margin-right: -120px;
     border: 2px solid #3d3d3d;
     border-radius: 4px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100px;
-    margin-top: 35px;
+    margin-top: 25px;
   }
 
   .quantity button {
@@ -454,7 +417,7 @@
   .btn-menu {
     display: flex;
     float: right;
-    margin: 20px 50px 0 0;
+    margin: 10px 40px 0 0;
   }
 
   button.m0b_4_6 {
@@ -462,6 +425,7 @@
     width: 40px;
     border: 2px outset;
     border-radius: 10px;
+    margin-right: 20px;
   }
 
   p.total-price {
@@ -479,12 +443,22 @@
     font-weight: bold;
   }
 
+  .button-add-to-cart button {
+    margin: 15px 50px 0;
+    float: right;
+    border: 3px outset;
+    border-radius: 10px;
+  }
+
   .empty-cart {
     font-size: 25px;
     color: #3b3b3b;
   }
 </style>
+
+
 <script>
+// Handle quantity changes in the favourites list
 document.querySelectorAll(".quantity button").forEach(function (button) {
   button.addEventListener("click", function () {
     const inputBox = this.parentElement.querySelector(".input-box");
@@ -499,81 +473,77 @@ document.querySelectorAll(".quantity button").forEach(function (button) {
   });
 });
 
+// Update the quantity of a favourite item
 document.querySelectorAll(".quantity .input-box")
-  .forEach(function (inputBox) {
-    inputBox.addEventListener("change", function () {
-      const productId = this.dataset.productId;
-      const quantity = this.value;
+    .forEach(function (inputBox) {
+      inputBox.addEventListener("change", function () {
+        const productId = this.dataset.productId;
+        const quantity = this.value;
 
-      console.log(productId);
-      fetch(`http://127.0.0.1:8000/cart/update-cart-item/${productId}/`, {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": "{{ csrf_token }}",
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          quantity: quantity,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          document.querySelector(
-            `#item-total-${productId}`
-          ).innerText = `$ ${data.item_total}`;
-        });
+        console.log(productId);
+        fetch(`http://127.0.0.1:8000/favourite/update-favourite-item/${productId}/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            quantity: quantity,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.querySelector(
+              `#item-total-${productId}`
+            ).innerText = `$ ${data.item_total}`;
+          });
+      });
     });
-  });
 
-  document.getElementById('selectAllCheckbox')
-                .addEventListener('change', function () {
-          let checkboxes =
-              document.querySelectorAll('.selection');
-          checkboxes.forEach(function (checkbox) {
-              checkbox.checked = this.checked;
-          }, this);
-          updateTotals();
+// Select all favourites
+document.getElementById('selectAllCheckbox').addEventListener('change', function () {
+  let checkboxes = document.querySelectorAll('.selection');
+  checkboxes.forEach(function (checkbox) {
+    checkbox.checked = this.checked;
+  }, this);
+  updateTotals();
+});
+
+// Delete selected favourites
+document.getElementById("deleteSelected")
+    .addEventListener("click", function () {
+      let itemIds = [];
+      let checkboxes = document.querySelectorAll('.selection:checked');
+
+      checkboxes.forEach(function (checkbox) {
+        let itemId = checkbox.dataset.itemId;
+        console.log(itemId);
+        itemIds.push(itemId);
       });
 
-  document.getElementById("deleteSelected")
-  .addEventListener("click", function () {
-    let itemIds = [];
-    let checkboxes = document.querySelectorAll('.selection:checked');
+      console.log(itemIds);
 
-    checkboxes.forEach(function (checkbox) {
-      let itemId = checkbox.dataset.itemId;
-      console.log(itemId);
-      itemIds.push(itemId);
-    });
+      fetch("http://127.0.0.1:8000/cart/delete-items/",
+      {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        body: new URLSearchParams({
+          item_ids: itemIds
+        })
+      }
+      );
+      location.reload();
+    })
 
-
-    console.log(itemIds);
-
-    fetch("http://127.0.0.1:8000/cart/delete-items/",
-    {
-      method: "POST",
-      headers: {
-          "X-CSRFToken": "{{ csrf_token }}",
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      body: new URLSearchParams({
-        item_ids: itemIds
-      })
-    }
-    );
-    location.reload();
-  })
-
-  const RUB = 88.9;
-  const EUR = 0.91;
+    const RUB = 88.9;
+    const EUR = 0.91;
 
   function updateTotals() {
     // Сбрасываем значения перед пересчетом
-    totalPrice = 0;
-    totalQuantity = 0;
     totalPriceWithDiscount = 0;
-    totalDiscounted = 0;
-
     selectedItems = 0;
 
     // Получаем все выделенные checkbox'ы
@@ -581,39 +551,16 @@ document.querySelectorAll(".quantity .input-box")
 
     // Пересчитываем общие суммы на основе выделенных элементов
     checkboxes.forEach(function (checkbox) {
-      totalPrice += parseFloat(checkbox.dataset.itemPrice * checkbox.dataset.itemQuantity);
-      totalQuantity += parseInt(checkbox.dataset.itemQuantity);
       totalPriceWithDiscount += parseFloat(checkbox.dataset.itemTotalPrice);
-      totalDiscounted += parseFloat(checkbox.dataset.itemDiscounted);
       selectedItems++;
     });
-    document.querySelector(
-      ".total-cart-price"
-    ).innerText = `$ ${Number(totalPrice).toFixed(2)}`;
-    document.querySelector(
-      ".total-usd"
-    ).innerText = `$ ${Number(totalPriceWithDiscount).toFixed(2)}`
-    document.querySelector(
-      ".total-rub"
-    ).innerText = `${Number(totalPriceWithDiscount * RUB).toFixed(2)} ₱`
-    document.querySelector(
-      ".total-eur"
-    ).innerText = `€ ${Number(totalPriceWithDiscount * EUR).toFixed(2)}`
-    document.querySelector(
-      ".total-usd-total"
-    ).innerText = `$ ${Number(totalPriceWithDiscount).toFixed(2)}`
-    document.querySelector(
-      ".total-discounted"
-    ).innerText = `- $ ${Number(totalDiscounted).toFixed(2)}`
-    document.querySelector(
-      ".items-selected"
-    ).innerText = `${Number(selectedItems)} Product(s)`;
+    document.querySelector(".total-favourite-price").innerText = `$ ${Number(totalPriceWithDiscount).toFixed(2)}`;
+    document.querySelector(".items-selected").innerText = `${Number(selectedItems)} Product(s)`;
   };
 
   document.querySelectorAll('.selection').forEach(function (checkbox) {
   checkbox.addEventListener("change", updateTotals);
   });
-
 
 </script>
 {% endblock %}

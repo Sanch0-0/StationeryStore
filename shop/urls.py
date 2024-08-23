@@ -7,7 +7,7 @@ from .views import (
     delivery_policy,
     terms,
     privacy_policy,
-    refund,
+    refund_policy,
     about_us,
     contact_us
 )
@@ -19,7 +19,7 @@ urlpatterns = [
     path('delivery_policy/', delivery_policy, name='delivery_policy'),
     path('terms_conditions/', terms, name='terms'),
     path('privacy_policy/', privacy_policy, name='privacy_policy'),
-    path('refund_return/', refund, name='refund'),
+    path('refund_policy/', refund_policy, name='refund_policy'),
     path('about_us', about_us, name='about_us'),
     path('contact_us', contact_us, name='contact_us')
 ]
