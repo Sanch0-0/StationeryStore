@@ -62,13 +62,18 @@ def add_to_cart(request, product_id):
         cart_item.quantity += int(quantity)
     cart_item.save()
 
-    # Use get_cart to get the updated cart information
-    response = get_cart(request)
-    
-    if isinstance(response, JsonResponse):
-        return response
+    # Check if the request is an AJAX request to return JSON
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Updated cart info
+        cart_data = get_cart(request).context_data
+        return JsonResponse({
+            'success': True,
+            'total_quantity': cart_data['cart_total_quantity'],
+            'cart_total_price': cart_data['cart_total_price']
+        })
 
-    return JsonResponse({'success': False, 'message': 'Failed to update cart'})
+    # If it's a regular POST request, redirect to the cart page or another relevant page
+    return redirect('cart')  # Use the appropriate redirect here
 
 
 

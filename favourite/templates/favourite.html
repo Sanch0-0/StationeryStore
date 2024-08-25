@@ -153,9 +153,7 @@
                             </div>
   
                             <div class="quantity">
-                              <button class="minus" aria-label="Decrease">
-                                &minus;
-                              </button>
+                              <button class="minus" aria-label="Decrease">&minus;</button>
                               <input
                                 style="font-weight: bold"
                                 type="number"
@@ -165,9 +163,7 @@
                                 min="1"
                                 max="100"
                               />
-                              <button class="plus" aria-label="Increase">
-                                &plus;
-                              </button>
+                              <button class="plus" aria-label="Increase">&plus;</button>
                             </div>
                           </div>
 
@@ -184,9 +180,11 @@
                             </div>
 
                             <form id="add-to-cart-form-{{ item.product.id }}" method="post" action="{% url 'add_to_cart' item.product.id %}" class="button-add-to-cart">
-                                {% csrf_token %}
-                                <button class="btn btn-cart" type="submit" style="font-size: 16px;">Add to cart</button>
-                            </form>                            
+                              {% csrf_token %}
+                              <!-- Hidden input for actual form submission -->
+                              <input type="number" name="quantity" data-product-id="{{ item.product.id }}" value="{{ item.quantity }}" min="1" class="hidden-input" style="display: none;"/>
+                              <button class="btn btn-cart" type="button" style="font-size: 16px;" onclick="addToCart({{ item.product.id }})">Add to cart</button>
+                            </form>
 
                           </div>
                         </div>
@@ -458,47 +456,114 @@
 
 
 <script>
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + "=")) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+// Function to add a product to the cart
+function addToCart(productId) {
+  const form = document.getElementById(`add-to-cart-form-${productId}`);
+  const quantityInput = document.querySelector(`input[data-product-id='${productId}']`);
+  
+  // Check if the quantity input exists
+  if (!quantityInput) {
+    console.error(`Quantity input not found for product ID: ${productId}`);
+    return;
+  }
+
+  const quantity = quantityInput.value;
+
+  fetch(form.action, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      quantity: quantity,
+    }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Handle successful response (e.g., update cart UI, show message)
+      console.log('Item added to cart successfully');
+    } else {
+      console.error('Error:', data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Unexpected error:', error);
+  });
+}
+
 // Handle quantity changes in the favourites list
 document.querySelectorAll(".quantity button").forEach(function (button) {
   button.addEventListener("click", function () {
     const inputBox = this.parentElement.querySelector(".input-box");
+    const productId = inputBox.dataset.productId; // Get the product ID from the visible input
+    const hiddenInput = document.querySelector(`input.hidden-input[data-product-id='${productId}']`);
+
     let quantity = parseInt(inputBox.value);
+    
     if (this.classList.contains("plus")) {
       quantity++;
     } else if (this.classList.contains("minus") && quantity > 1) {
       quantity--;
     }
+    
+    // Update both the visible input and the hidden input
     inputBox.value = quantity;
+    if (hiddenInput) { // Ensure hidden input exists
+      hiddenInput.value = quantity;
+    }
+    
+    // Trigger the change event for the visible input to handle further actions
     inputBox.dispatchEvent(new Event("change"));
   });
 });
 
-// Update the quantity of a favourite item
+// Update the quantity of a favourite item and synchronize the hidden input
 document.querySelectorAll(".quantity .input-box")
-    .forEach(function (inputBox) {
-      inputBox.addEventListener("change", function () {
-        const productId = this.dataset.productId;
-        const quantity = this.value;
+  .forEach(function (inputBox) {
+    inputBox.addEventListener("change", function () {
+      const productId = this.dataset.productId;
+      const quantity = this.value;
+      
+      // Synchronize the hidden input
+      const hiddenInput = document.querySelector(`input.hidden-input[data-product-id='${productId}']`);
+      if (hiddenInput) {
+        hiddenInput.value = quantity; // Update hidden input dynamically
+      }
 
-        console.log(productId);
-        fetch(`http://127.0.0.1:8000/favourite/update-favourite-item/${productId}/`, {
-          method: "POST",
-          headers: {
-            "X-CSRFToken": "{{ csrf_token }}",
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            quantity: quantity,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            document.querySelector(
-              `#item-total-${productId}`
-            ).innerText = `$ ${data.item_total}`;
-          });
+      console.log(productId);
+      fetch(`http://127.0.0.1:8000/favourite/update-favourite-item/${productId}/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          quantity: quantity,
+        }),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        document.querySelector(`#item-total-${productId}`).innerText = `$ ${data.item_total}`;
       });
     });
+  });
 
 // Select all favourites
 document.getElementById('selectAllCheckbox').addEventListener('change', function () {
@@ -523,7 +588,7 @@ document.getElementById("deleteSelected")
 
       console.log(itemIds);
 
-      fetch("http://127.0.0.1:8000/cart/delete-items/",
+      fetch("http://127.0.0.1:8000/favourite/delete-items/",
       {
         method: "POST",
         headers: {
