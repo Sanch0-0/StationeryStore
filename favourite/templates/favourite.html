@@ -151,7 +151,7 @@
                                 {% endif %}
                               </div>
                             </div>
-  
+
                             <div class="quantity">
                               <button class="minus" aria-label="Decrease">&minus;</button>
                               <input
@@ -475,7 +475,7 @@ function getCookie(name) {
 function addToCart(productId) {
   const form = document.getElementById(`add-to-cart-form-${productId}`);
   const quantityInput = document.querySelector(`input[data-product-id='${productId}']`);
-  
+
   // Check if the quantity input exists
   if (!quantityInput) {
     console.error(`Quantity input not found for product ID: ${productId}`);
@@ -498,9 +498,9 @@ function addToCart(productId) {
   .then(data => {
     if (data.success) {
       // Handle successful response (e.g., update cart UI, show message)
-      console.log('Item added to cart successfully');
+      alert('Item added to cart successfully');
     } else {
-      console.error('Error:', data.message);
+      alert('Error:', data.message);
     }
   })
   .catch(error => {
@@ -516,19 +516,19 @@ document.querySelectorAll(".quantity button").forEach(function (button) {
     const hiddenInput = document.querySelector(`input.hidden-input[data-product-id='${productId}']`);
 
     let quantity = parseInt(inputBox.value);
-    
+
     if (this.classList.contains("plus")) {
       quantity++;
     } else if (this.classList.contains("minus") && quantity > 1) {
       quantity--;
     }
-    
+
     // Update both the visible input and the hidden input
     inputBox.value = quantity;
     if (hiddenInput) { // Ensure hidden input exists
       hiddenInput.value = quantity;
     }
-    
+
     // Trigger the change event for the visible input to handle further actions
     inputBox.dispatchEvent(new Event("change"));
   });
@@ -540,7 +540,7 @@ document.querySelectorAll(".quantity .input-box")
     inputBox.addEventListener("change", function () {
       const productId = this.dataset.productId;
       const quantity = this.value;
-      
+
       // Synchronize the hidden input
       const hiddenInput = document.querySelector(`input.hidden-input[data-product-id='${productId}']`);
       if (hiddenInput) {

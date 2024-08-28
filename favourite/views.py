@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, response
-from django.contrib.auth.decorators import login_required
 from .models import Favourite, FavouriteProduct
 from shop.models import Product
 
@@ -9,7 +8,7 @@ def get_favourite(request):
     favourite, created = Favourite.objects.get_or_create(user=request.user)
 
     favourite_items_with_total = []
-    total_quantity = 0 
+    total_quantity = 0
 
     for item in favourite.favourite_items.order_by("-id"):
         total = item.quantity * item.product.price_with_discount
@@ -42,39 +41,38 @@ def get_favourite(request):
         })
 
     return render(request, "favourite.html", context)
-        
+
 
 
 def add_to_favourite(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    quantity = request.POST.get("quantity", 1)
+    if request.method == 'POST':
+        product = get_object_or_404(Product, id=product_id)
+        quantity = request.POST.get("quantity", 1)
 
-    favourite, created = Favourite.objects.get_or_create(user=request.user)
+        favourite, created = Favourite.objects.get_or_create(user=request.user)
 
-    favourite_item, created = FavouriteProduct.objects.get_or_create(
-        favourite=favourite,
-        product=product,
-    )
+        favourite_item, created = FavouriteProduct.objects.get_or_create(
+            favourite=favourite,
+            product=product,
+        )
 
-    if created:
-        favourite_item.quantity = int(quantity)
-    else:
-        favourite_item.quantity += int(quantity)
-    favourite_item.save()
+        if created:
+            favourite_item.quantity = int(quantity)
+        else:
+            favourite_item.quantity += int(quantity)
+        favourite_item.save()
 
-    response = get_favourite(request)
+        return JsonResponse({'success': True, 'message': 'Product added to favourites!'})
 
-    if isinstance(response, JsonResponse):
-        return response
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
-    return JsonResponse({'success': False, 'message': 'Failed to update favourites'})
 
 
 def update_favourite_item(request, product_id):
 
     favourite = get_object_or_404(Favourite, user=request.user)
     favourite_item = get_object_or_404(FavouriteProduct, favourite=favourite, id=product_id)
-            
+
     if request.method == 'POST':
         new_quantity = int(request.POST.get('quantity', 1))
         favourite_item.quantity = new_quantity

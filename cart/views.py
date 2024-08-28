@@ -14,7 +14,7 @@ def get_cart(request):
     for item in cart.cart_items.order_by("-id"):
         total = item.quantity * item.product.price_with_discount
         total_discounted_price = item.quantity * (item.product.price - item.product.price_with_discount)
-        
+
         cart_items_with_total.append({
             'item': item,
             'product': item.product,
@@ -46,34 +46,26 @@ def get_cart(request):
 
 @login_required
 def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    quantity = request.POST.get("quantity", 1)
+    if request.method == 'POST':
+        product = get_object_or_404(Product, id=product_id)
+        quantity = request.POST.get("quantity", 1)
 
-    cart, created = Cart.objects.get_or_create(user=request.user)
+        cart, created = Cart.objects.get_or_create(user=request.user)
 
-    cart_item, created = CartItem.objects.get_or_create(
-        cart=cart,
-        product=product,
-    )
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product,
+        )
 
-    if created:
-        cart_item.quantity = int(quantity)
-    else:
-        cart_item.quantity += int(quantity)
-    cart_item.save()
+        if created:
+            cart_item.quantity = int(quantity)
+        else:
+            cart_item.quantity += int(quantity)
+        cart_item.save()
 
-    # Check if the request is an AJAX request to return JSON
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        # Updated cart info
-        cart_data = get_cart(request).context_data
-        return JsonResponse({
-            'success': True,
-            'total_quantity': cart_data['cart_total_quantity'],
-            'cart_total_price': cart_data['cart_total_price']
-        })
+        return JsonResponse({'success': True, 'message': 'Product added to favourites!'})
 
-    # If it's a regular POST request, redirect to the cart page or another relevant page
-    return redirect('cart')  # Use the appropriate redirect here
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 
 
@@ -112,7 +104,3 @@ def delete_cart_items(request):
         item_ids= request.POST.get("item_ids").split(",")
         CartItem.objects.filter(id__in=item_ids).delete()
     return response.HttpResponse(status=200)
-
-
-
-

@@ -25,7 +25,7 @@
             <div class="controls">
               <!-- Checkbox and label -->
               <label class="custom-checkbox-label">
-                <input id="selectAllCheckbox" type="checkbox" />
+                <input id="selectAllCheckbox" type="checkbox"/>
                 <span class="custom-checkbox"></span>
                 <span style="font-weight: bold">Select all</span>
               </label>
@@ -147,29 +147,18 @@
                               style="display: flex; gap: 20px"
                             >
                               <!-- Existing button -->
-                              <button
-                                class="m0b_4_6"
-                                style="
-                                  background: rgba(0, 48, 120, 0.039);
-                                  color: rgba(0, 26, 52, 1);
-                                "
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  class="ag013-b1"
-                                >
-                                  <path
-                                    fill="currentColor"
-                                    d="M16 6.022C16 3.457 14.052 1.5 11.5 1.5c-1.432 0-2.665.799-3.5 1.926C7.165 2.299 5.932 1.5 4.5 1.5 1.948 1.5 0 3.457 0 6.022c0 2.457 1.66 4.415 3.241 5.743 1.617 1.358 3.387 2.258 4.062 2.577.444.21.95.21 1.394 0 .675-.32 2.445-1.219 4.062-2.577C14.339 10.437 16 8.479 16 6.022"
-                                  ></path>
-                                </svg>
-                                <div
-                                  class="ag013-a"
-                                  style="background-color: rgba(0, 26, 52, 1)"
-                                ></div>
-                              </button>
+                              <form id="add-to-favourite-form-{{ item.product.id }}" action="{% url 'add_to_favourite' item.product.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="m0b_4_6"
+                                        style="background: rgba(0, 48, 120, 0.039); color: rgb(255, 0, 0);"
+                                        type="button"
+                                        onclick="addToFavourite({{ item.product.id }})">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="ag013-b1">
+                                        <path fill="currentColor"
+                                              d="M16 6.022C16 3.457 14.052 1.5 11.5 1.5c-1.432 0-2.665.799-3.5 1.926C7.165 2.299 5.932 1.5 4.5 1.5 1.948 1.5 0 3.457 0 6.022c0 2.457 1.66 4.415 3.241 5.743 1.617 1.358 3.387 2.258 4.062 2.577.444.21.95.21 1.394 0 .675-.32 2.445-1.219 4.062-2.577C14.339 10.437 16 8.479 16 6.022"></path>
+                                    </svg>
+                                </button>
+                              </form>
 
                               <!-- Delete button -->
                               <form
@@ -579,6 +568,32 @@ document.querySelectorAll(".quantity .input-box")
     );
     location.reload();
   })
+
+  function addToFavourite(productId) {
+    const form = document.getElementById(`add-to-favourite-form-${productId}`);
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Optionally update the UI to indicate the product was added to favourites
+            alert('Product added to favourites!');
+        } else {
+            alert('Failed to add product to favourites.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
   const RUB = 88.9;
   const EUR = 0.91;
