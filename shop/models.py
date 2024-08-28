@@ -66,3 +66,17 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.user.username} rated {self.product.name} {self.value} stars"
+
+
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    review = models.TextField(max_length=500, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('product', 'user')
+
+    def __str__(self):
+        return f"{self.user.username} reviewed a product: {self.product.name}"
+
