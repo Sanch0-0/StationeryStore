@@ -10,30 +10,30 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('cart', '0001_initial'),
+        ('favourite', '0001_initial'),
         ('shop', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cart',
+            model_name='favourite',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='carts', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='favourite', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='cartitem',
-            name='cart',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cart_items', to='cart.cart'),
+            model_name='favouriteproduct',
+            name='favourite',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='favourite_items', to='favourite.favourite'),
         ),
         migrations.AddField(
-            model_name='cartitem',
+            model_name='favouriteproduct',
             name='product',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='shop.product'),
         ),
         migrations.AddField(
-            model_name='cart',
+            model_name='favourite',
             name='products',
-            field=models.ManyToManyField(through='cart.CartItem', to='shop.product'),
+            field=models.ManyToManyField(through='favourite.FavouriteProduct', to='shop.product'),
         ),
     ]

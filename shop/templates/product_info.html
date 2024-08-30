@@ -117,19 +117,11 @@
                                             <a style="font-size: 18px;" href="{{ category.id }}" title="{{ product.category.name }}">{{ product.category.name }}</a>
                                         </div>
 
-                                        <div class="product_rating" data-product-id="{{ product.id }}">
-                                            <span class="rate">Rating:</span>
-                                            <div class="rating">
-                                                <span class="avg-rating">{{ product.average_rating }}</span>
-                                                {% for i in "54321" %}
-                                                {% if product.average_rating >= i|add:"0.5" %}
-                                                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" checked>
-                                                {% else %}
-                                                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}">
-                                                {% endif %}
-                                                <label for="star{{ i }}">&#9733;</label>
-                                                {% endfor %}
-                                            </div>
+                                        <div class="rating-static" data-rating="{{ product.average_rating }}">
+                                            {% for i in "12345" %}
+                                                <span class="star static-star" style="font-size: 23px;" data-value="{{ i }}">&#9733;</span>
+                                            {% endfor %}
+                                            <span class="avg-rating">{{ product.average_rating }}</span>
                                         </div>
                                     </div>
 
@@ -152,59 +144,66 @@
 
                     {% include 'similar_products.html' %}
 
-                    <form class="feedback">
+                    <form class="feedback" method="post">
+                        {% csrf_token %}
                         <div class="pinfo">Write your feedback.</div>
                         <div class="form-group">
                             <div class="col-md-4 inputGroupContainer">
                                 <div class="input-group">
-                                    <textarea style="height: 200px; width: 600px; font-size: 18px; margin-top: 20px;"
-                                    class="form-control" id="review">
-                                    </textarea>
+                                    <textarea name="review" style="height: 200px; width: 600px;" class="form-controling" id="review"></textarea>
                                 </div>
                             </div>
                         </div>
-
-                        <button type="submit" class="submit-btn">Submit</button>
+                    
+                        <div class="custom-container">
+                            <div class="card">
+                                <div class="pinfo" style="margin-top: 0;">How do you rate the product?</div>
+                                <div class="rating-form" style="justify-content: center;">
+                                    {% for i in "54321" %}
+                                    <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}">
+                                    <label for="star{{ i }}">&#9733;</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <button type="submit" class="submit-btn">Submit</button>
+                        </div>
                     </form>
 
                     <p style="font-size: 20px; color:#3b3b3b; margin-top: 60px;">Customer reviews: </p>
 
                     <div class="testimonial-box-container">
-                        <div class="testimonial-box">
-                            <div class="box-top">
-                                <div class="profile">
-                                    <div class="profile-img">
-                                        <img src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png" />
+                        {% if reviews %}
+                            {% for review in reviews %}
+                            <div class="testimonial-box">
+                                <div class="box-top">
+                                    <div class="profile">
+                                        <div class="profile-img">
+                                            <img src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png" />
+                                        </div>
+                                        <div class="name-user">
+                                            <strong>{{ review.user.username }}</strong>
+                                        </div>
                                     </div>
-                                    <div class="name-user">
-                                        <strong>Liam mendes</strong>
-                                        <span>@liammendes</span>
+                                    <div class="rating">
+                                        <!-- Display the average rating of the product using your model's property -->
+                                        {% for i in "54321" %}
+                                            {% if review.product.average_rating >= i %}
+                                                <label for="star{{ i }}">&#9733;</label>
+                                            {% else %}
+                                                <label for="star{{ i }}">&#9734;</label>
+                                            {% endif %}
+                                        {% endfor %}
                                     </div>
                                 </div>
-                                <div class="rating">
-                                    {% for i in "54321" %}
-                                    {% if product.average_rating >= i|add:"0.5" %}
-                                    <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" checked>
-                                    {% else %}
-                                    <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}">
-                                    {% endif %}
-                                    <label for="star{{ i }}">&#9733;</label>
-                                    {% endfor %}
+                                <div class="client-comment">
+                                    <p>{{ review.review }}</p>
                                 </div>
                             </div>
-                            <div class="client-comment">
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, 
-                                    quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a.
-                                     Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.
-                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, 
-                                     quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a.
-                                      Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.
-                                </p>
-                            </div>
-                        </div>
+                            {% endfor %}
+                        {% else %}
+                            <p style="font-size: 18px; color: #3b3b3b;">No reviews yet. Be the first to write a review!</p>
+                        {% endif %}
                     </div>
-
-
 
                 </div>
                 {% include 'sidebar.html' %}
@@ -217,54 +216,81 @@
 <script src="{% static 'js/cart/dynamic_cart_icon.js' %}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Get the average rating from the server (from a hidden field or directly from the template)
-    const averageRating = parseFloat('{{ product.average_rating }}'); // Make sure this is correctly set in your template
+    // Handle Static Rating Display
+    const ratingStaticDiv = document.querySelector('.rating-static');
+    if (ratingStaticDiv) {
+        const averageRating = parseFloat(ratingStaticDiv.getAttribute('data-rating')); // Get the average rating from the data attribute
 
-    // Set the star ratings based on the average rating
-    document.querySelectorAll('.rating input').forEach(input => {
-        if (parseFloat(input.value) <= averageRating) {
-            input.nextElementSibling.style.color = 'orange'; // Set star color to orange
-        } else {
-            input.nextElementSibling.style.color = 'grey'; // Set star color to grey
-        }
-    });
+        // Set star colors based on average rating
+        ratingStaticDiv.querySelectorAll('.static-star').forEach(star => {
+            const starValue = parseInt(star.getAttribute('data-value'));
 
-    document.querySelectorAll('.rating input').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const rating = this.value;
-
-            fetch(window.location.href, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRFToken': '{{ csrf_token }}'  // Make sure to include the CSRF token
-                },
-                body: `rating=${rating}`
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Update the stars to reflect the new rating
-                    document.querySelectorAll('.rating input').forEach(input => {
-                        if (parseFloat(input.value) <= data.new_average) {
-                            input.nextElementSibling.style.color = 'orange'; // Set star color to orange
-                        } else {
-                            input.nextElementSibling.style.color = 'grey'; // Set star color to grey
-                        }
-                    });
-                    location.reload()
-                }
-            })
-            .catch(error => console.error('Error:', error));
+            if (starValue <= Math.floor(averageRating)) {
+                star.style.color = 'orange'; // Full star
+            } else if (starValue - averageRating <= 0.5) {
+                star.style.color = 'orange'; // Half star logic
+                star.style.background = `linear-gradient(90deg, orange 50%, grey 50%)`;
+                star.style.webkitBackgroundClip = 'text'; // Makes sure the gradient text works in all browsers
+                star.style.color = 'transparent'; // Makes sure the gradient text works in all browsers
+            } else {
+                star.style.color = 'grey'; // Empty star
+            }
         });
-    });
+    }
+
+    // Handle Form Rating Input
+    const ratingFormDiv = document.querySelector('.rating-form');
+    if (ratingFormDiv) {
+        // Get the average rating from the server (from a hidden field or directly from the template)
+        const averageRatingForm = parseFloat('{{ product.average_rating }}'); // Ensure this is correctly set in your template
+
+        // Set the star ratings based on the average rating
+        ratingFormDiv.querySelectorAll('input').forEach(input => {
+            if (parseFloat(input.value) <= averageRatingForm) {
+                input.nextElementSibling.style.color = 'orange'; // Set star color to orange
+            } else {
+                input.nextElementSibling.style.color = 'grey'; // Set star color to grey
+            }
+        });
+
+        ratingFormDiv.querySelectorAll('input').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const rating = this.value;
+
+                fetch(window.location.href, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': '{{ csrf_token }}'  // Ensure to include the CSRF token
+                    },
+                    body: `rating=${rating}`
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Update the stars to reflect the new rating
+                        ratingFormDiv.querySelectorAll('input').forEach(input => {
+                            if (parseFloat(input.value) <= data.new_average) {
+                                input.nextElementSibling.style.color = 'orange'; // Set star color to orange
+                            } else {
+                                input.nextElementSibling.style.color = 'grey'; // Set star color to grey
+                            }
+                        });
+                        location.reload();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    }
 });
+
 
 function addToFavourite(productId) {
     const form = document.getElementById(`add-to-favourite-form-${productId}`);
@@ -375,7 +401,7 @@ function addToCart(productId) {
 
 }
 
-.rating {
+.rating-form {
     font-size: 16px;
 }
 
@@ -384,34 +410,19 @@ label {
     align-items: center;
 }
 
-.rating {
+.rating-form {
 	display: flex;
 	flex-direction: row-reverse;
 	justify-content: flex-end;
 }
 
-.rating input {
+.rating-form input {
 	display: none;
 }
 
-.rating label {
+.rating-form label {
 	font-size: 24px;
 	cursor: pointer;
-}
-
-.rating label:hover,
-.rating label:hover ~ label {
-	color: orange;
-}
-
-.rating input:checked ~ label {
-	color: orange;
-}
-
-.avg-rating {
-    margin-left: 10px;
-    margin-top: 5px;
-    color:#3b3b3b;
 }
 
 .original-price {
@@ -463,6 +474,16 @@ button.m0b_4_6 {
     margin: 0 auto; /* Center the form horizontally */
 }
 
+.form-controling {
+    font-size: 18px; 
+    background: #fff;
+    margin: 0 -7px;
+    padding: 1rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    border-radius: 0.5rem;
+}
+
 .pinfo {
     margin-top: 100px;
     font-size: 20px;
@@ -473,16 +494,32 @@ button.m0b_4_6 {
     margin-bottom: 20px;
 }
 
+.custom-container {
+    display: flex;
+}
+
+.card {
+  max-width: 33rem;
+  background: #fff;
+  margin: 0 1rem 20px;
+  padding: 1rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  border-radius: 0.5rem;
+  justify-self: center;
+}
+
 .submit-btn {
-    align-self: flex-start;
-    margin-left: 20px;
+    margin-left: 40px;
+    margin-top: 13px;
     background-color: #3b3b3b;
-    font-size: 15px;
+    font-size: 25px;
     color: white;
     padding: 10px 16px;
     border-radius: 8px;
     cursor: pointer;
-    width: 90px;
+    width: 150px;
+    height: 60px;
 }
 
 
