@@ -174,31 +174,26 @@
                     <div class="testimonial-box-container">
                         {% if reviews %}
                             {% for review in reviews %}
-                            <div class="testimonial-box">
-                                <div class="box-top">
-                                    <div class="profile">
-                                        <div class="profile-img">
-                                            <img src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png" />
+                                <div class="testimonial-box">
+                                    <div class="box-top">
+                                        <div class="profile">
+                                            <div class="profile-img">
+                                                <img src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png" />
+                                            </div>
+                                            <div class="name-user">
+                                                <strong>{{ review.user.email }}</strong>
+                                            </div>
                                         </div>
-                                        <div class="name-user">
-                                            <strong>{{ review.user.username }}</strong>
+                                        <div class="user-rating" data-rating="{{ review.rating }}">
+                                            {% for i in "12345" %}
+                                                <span class="star user-star" style="font-size: 23px;" data-value="{{ i }}">&#9733;</span>
+                                            {% endfor %}
                                         </div>
                                     </div>
-                                    <div class="rating">
-                                        <!-- Display the average rating of the product using your model's property -->
-                                        {% for i in "54321" %}
-                                            {% if review.product.average_rating >= i %}
-                                                <label for="star{{ i }}">&#9733;</label>
-                                            {% else %}
-                                                <label for="star{{ i }}">&#9734;</label>
-                                            {% endif %}
-                                        {% endfor %}
+                                    <div class="client-comment">
+                                        <p>{{ review.review }}</p>
                                     </div>
                                 </div>
-                                <div class="client-comment">
-                                    <p>{{ review.review }}</p>
-                                </div>
-                            </div>
                             {% endfor %}
                         {% else %}
                             <p style="font-size: 18px; color: #3b3b3b;">No reviews yet. Be the first to write a review!</p>
@@ -214,6 +209,7 @@
 </div>
 
 <script src="{% static 'js/cart/dynamic_cart_icon.js' %}"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Handle Static Rating Display
@@ -227,11 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (starValue <= Math.floor(averageRating)) {
                 star.style.color = 'orange'; // Full star
-            } else if (starValue - averageRating <= 0.5) {
-                star.style.color = 'orange'; // Half star logic
-                star.style.background = `linear-gradient(90deg, orange 50%, grey 50%)`;
-                star.style.webkitBackgroundClip = 'text'; // Makes sure the gradient text works in all browsers
-                star.style.color = 'transparent'; // Makes sure the gradient text works in all browsers
             } else {
                 star.style.color = 'grey'; // Empty star
             }
@@ -241,22 +232,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle Form Rating Input
     const ratingFormDiv = document.querySelector('.rating-form');
     if (ratingFormDiv) {
-        // Get the average rating from the server (from a hidden field or directly from the template)
-        const averageRatingForm = parseFloat('{{ product.average_rating }}'); // Ensure this is correctly set in your template
+        ratingFormDiv.addEventListener('click', function(event) {
+            if (event.target.tagName === 'INPUT') {
+                event.preventDefault(); // Prevent the default form submission
 
-        // Set the star ratings based on the average rating
-        ratingFormDiv.querySelectorAll('input').forEach(input => {
-            if (parseFloat(input.value) <= averageRatingForm) {
-                input.nextElementSibling.style.color = 'orange'; // Set star color to orange
-            } else {
-                input.nextElementSibling.style.color = 'grey'; // Set star color to grey
-            }
-        });
+                const rating = event.target.value;
 
-        ratingFormDiv.querySelectorAll('input').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const rating = this.value;
+                // Reset star colors
+                ratingFormDiv.querySelectorAll('label').forEach(label => {
+                    label.style.color = 'grey';
+                });
 
+                // Set star colors up to the selected rating
+                ratingFormDiv.querySelectorAll('input').forEach(input => {
+                    if (parseFloat(input.value) <= parseFloat(rating)) {
+                        input.nextElementSibling.style.color = 'orange';
+                    }
+                });
+
+                // Perform AJAX request to submit rating
                 fetch(window.location.href, {
                     method: 'POST',
                     headers: {
@@ -274,21 +268,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(data => {
                     if (data.success) {
-                        // Update the stars to reflect the new rating
-                        ratingFormDiv.querySelectorAll('input').forEach(input => {
-                            if (parseFloat(input.value) <= data.new_average) {
-                                input.nextElementSibling.style.color = 'orange'; // Set star color to orange
-                            } else {
-                                input.nextElementSibling.style.color = 'grey'; // Set star color to grey
-                            }
-                        });
-                        location.reload();
+                        // Optionally update the average rating display or take other actions
+                        // e.g., update the review section or display a success message
+                        console.log('Rating submitted successfully');
                     }
                 })
                 .catch(error => console.error('Error:', error));
-            });
+            }
         });
     }
+
+    // Handle User Reviews Ratings Display
+    document.querySelectorAll('.testimonial-box .user-rating').forEach(function(reviewRatingDiv) {
+        const userRating = parseInt(reviewRatingDiv.getAttribute('data-rating')); // Get the user rating as an integer
+
+        // Set star colors based on user rating
+        reviewRatingDiv.querySelectorAll('.user-star').forEach(star => {
+            const starValue = parseInt(star.getAttribute('data-value'));
+
+            if (starValue <= userRating) {
+                star.style.color = 'orange'; // Full star
+            } else {
+                star.style.color = 'grey'; // Empty star
+            }
+        });
+    });
 });
 
 

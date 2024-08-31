@@ -1,12 +1,13 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseNotFound
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseNotFound, JsonResponse
 from django.core.paginator import Paginator
-from django.db.models import F
+from django.db.models import F, Avg
+from django.db import models, transaction
 
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
 
-from .models import Product, Category, Rating
+from .models import Product, Category, Rating, Review
 from .filters import ProductsFilter
 
 
@@ -28,33 +29,59 @@ def get_product_by_id(request, id):
     product = get_object_or_404(Product, id=id)
     categories = Category.objects.all()
 
-    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        rating_value = int(request.POST.get('rating'))
+    if request.method == 'POST':
         user = request.user
 
-        # Get or create the rating
-        rating, created = Rating.objects.get_or_create(product=product, user=user)
-        rating.value = rating_value
-        rating.save()
+        # Handle AJAX request for rating
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            try:
+                rating_value = int(request.POST.get('rating'))
+                if rating_value < 1 or rating_value > 5:
+                    return JsonResponse({'error': 'Invalid rating value.'}, status=400)
 
-        # Recalculate average rating
-        new_average = product.average_rating
+                # Get or create the rating
+                rating, created = Rating.objects.get_or_create(product=product, user=user)
+                rating.value = rating_value
+                rating.save()
 
-        return JsonResponse({'success': True, 'new_average': new_average})
+                # Recalculate average rating
+                new_average = product.ratings.aggregate(average_rating=models.Avg('value'))['average_rating']
 
-    query = '''
-        SELECT * FROM shop_product
-        WHERE category_id = %s AND id != %s
-        ORDER BY RANDOM()
-        LIMIT 8
-    '''
-    related_products = Product.objects.raw(query, [product.category_id, product.id])
+                return JsonResponse({'success': True, 'new_average': new_average})
+            except (ValueError, TypeError):
+                return JsonResponse({'error': 'Invalid rating input.'}, status=400)
+
+        # Handle review form submission (standard POST request)
+        else:
+            review_text = request.POST.get('review')
+            rating_value = int(request.POST.get('rating', 0))
+            if review_text or rating_value:
+                # Create or update the review
+                review, created = Review.objects.update_or_create(
+                    product=product,
+                    user=user,
+                    defaults={'review': review_text, 'rating': rating_value}
+                )
+                # Redirect to avoid resubmission
+                return redirect(reverse('get_product_by_id', args=[product.id]))
+            else:
+                return JsonResponse({'error': 'Review text cannot be empty.'}, status=400)
+
+    # Retrieve all reviews for the product
+    reviews = product.reviews.all()
+
+    # ORM query to get related products
+    related_products = Product.objects.filter(
+        category=product.category
+    ).exclude(id=product.id).order_by('?')[:8]
 
     context = {
         "product": product,
         "related_products": related_products,
         "categories": categories,
+        "reviews": reviews,
     }
+
     return render(request, "product_info.html", context)
 
 

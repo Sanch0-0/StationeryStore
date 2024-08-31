@@ -58,11 +58,11 @@ class Product(models.Model):
 class Rating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="ratings")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    value = models.PositiveSmallIntegerField(default=0)  # rating value from 1 to 5
+    value = models.PositiveSmallIntegerField(default=0)  # Rating value from 1 to 5
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('product', 'user')  # ensures a user can only rate a product once
+        unique_together = ('product', 'user')
 
     def __str__(self):
         return f"{self.user.username} rated {self.product.name} {self.value} stars"
@@ -72,10 +72,11 @@ class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     review = models.TextField(max_length=500, blank=True)
+    rating = models.PositiveSmallIntegerField(default=0)  # Store rating as an integer
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('product', 'user')
 
     def __str__(self):
-        return f"{self.user.username} reviewed a product: {self.product.name}"
+        return f"{self.user.username} reviewed {self.product.name} with {self.rating} stars"
