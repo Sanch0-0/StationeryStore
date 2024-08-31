@@ -7,7 +7,7 @@ from django.db import models, transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
-from .models import Product, Category, Rating, Review
+from .models import Product, Category, ReviewRating
 from .filters import ProductsFilter
 
 
@@ -30,50 +30,37 @@ def get_product_by_id(request, id):
     categories = Category.objects.all()
 
     if request.method == 'POST':
-        user = request.user
-
-        # Handle AJAX request for rating
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             try:
+                print("POST Data:", request.POST)  # Log POST data
                 rating_value = int(request.POST.get('rating'))
                 if rating_value < 1 or rating_value > 5:
                     return JsonResponse({'error': 'Invalid rating value.'}, status=400)
 
-                # Get or create the rating
-                rating, created = Rating.objects.get_or_create(product=product, user=user)
-                rating.value = rating_value
-                rating.save()
+                review_rating, created = ReviewRating.objects.get_or_create(product=product, user=request.user)
+                review_rating.rating = rating_value
+                review_rating.save()
 
-                # Recalculate average rating
-                new_average = product.ratings.aggregate(average_rating=models.Avg('value'))['average_rating']
+                new_average = product.review_ratings.aggregate(average_rating=models.Avg('rating'))['average_rating']
 
                 return JsonResponse({'success': True, 'new_average': new_average})
             except (ValueError, TypeError):
                 return JsonResponse({'error': 'Invalid rating input.'}, status=400)
-
-        # Handle review form submission (standard POST request)
         else:
             review_text = request.POST.get('review')
             rating_value = int(request.POST.get('rating', 0))
             if review_text or rating_value:
-                # Create or update the review
-                review, created = Review.objects.update_or_create(
+                review_rating, created = ReviewRating.objects.update_or_create(
                     product=product,
-                    user=user,
+                    user=request.user,
                     defaults={'review': review_text, 'rating': rating_value}
                 )
-                # Redirect to avoid resubmission
                 return redirect(reverse('get_product_by_id', args=[product.id]))
             else:
                 return JsonResponse({'error': 'Review text cannot be empty.'}, status=400)
 
-    # Retrieve all reviews for the product
-    reviews = product.reviews.all()
-
-    # ORM query to get related products
-    related_products = Product.objects.filter(
-        category=product.category
-    ).exclude(id=product.id).order_by('?')[:8]
+    reviews = product.review_ratings.all()
+    related_products = Product.objects.filter(category=product.category).exclude(id=product.id).order_by('?')[:8]
 
     context = {
         "product": product,
