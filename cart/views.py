@@ -104,3 +104,8 @@ def delete_cart_items(request):
         item_ids= request.POST.get("item_ids").split(",")
         CartItem.objects.filter(id__in=item_ids).delete()
     return response.HttpResponse(status=200)
+
+
+@login_required
+def checkout(request):
+    return render(request, "checkout.html")

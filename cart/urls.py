@@ -6,6 +6,7 @@ from .views import (
     update_cart_item,
     delete_from_cart,
     delete_cart_items,
+    checkout,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path('update-cart-item/<int:product_id>/', update_cart_item, name='update_cart_item'),
     path('delete-from-cart/<int:product_id>/', delete_from_cart, name='delete_from_cart'),
     path('delete-items/', delete_cart_items, name="delete_cart_items"),
+    path('checkout/', checkout, name="checkout")
 ]

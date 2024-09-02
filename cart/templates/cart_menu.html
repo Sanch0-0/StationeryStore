@@ -12,7 +12,10 @@
                 style="background: rgb(131, 131, 131); color: #ffffff"
               >
                 <div class="b2111-a1">
+                  <form action="{% url 'checkout' %}" method="POST">
+                    {% csrf_token %}
                   <button class="checkout-btn" type="submit">Check out</button>
+                  </form>
                 </div>
                 <div class="b2111-a" style="background-color: #ffffff"></div>
               </button>
