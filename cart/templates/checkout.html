@@ -1,43 +1,65 @@
-{% extends 'index.html' %} {% load static %} {% load thumbnail %}
+{% extends 'index.html' %}
+{% load static %}
+{% load thumbnail %}
 {% block content %}
 
 <div class="checkout-container">
   <div class="checkout-details">
     <div class="checkout-details-inner">
       <div class="checkout-lists">
+        {% for item in cart_items_with_total %}
         <div class="card">
-          <div class="card-image"><img src="https://rvs-checkout-page.onrender.com/photo1.png" alt=""></div>
+          <div class="card-image">
+            <a href="{% url 'get_product_by_id' item.product.id %}">
+              <img
+                src="{% thumbnail  item.product.image 'product_thumbnail' %}"
+                alt="{{ item.product.name }}"
+                style="border-radius: 10px;"
+              />
+            </a>
+          </div>
           <div class="card-details">
-            <div class="card-name">Vintage Backbag</div>
-            <div class="card-price">$54.99 <span>$94.99</span></div>
-            <div class="card-wheel">
-              <button>-</button>
-              <span>1</span>
-              <button>+</button>
+            <div class="card-name">
+              <a href="{% url 'get_product_by_id' item.product.id %}">
+                {{ item.product.name }}
+              </a>
+            </div>
+
+            <div class="price">
+              {% if item.product.discount == 0 %}
+              <span class="original-price"
+                >${{ item.product.price }}</span
+              >
+              {% elif item.product.discount != 0 %}
+              <div class="product-price">
+                <div class="old-price-wrapper">
+                  <span class="price-striked"
+                    >${{ item.product.price }}</span
+                  >
+                  <span class="discount-percentage"
+                    >- {{ item.product.discount }}%</span
+                  >
+                </div>
+                <span class="discounted-price"
+                  >${{ item.product.price_with_discount }}</span
+                >
+              </div>
+              {% endif %}
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-image"><img src="https://rvs-checkout-page.onrender.com/photo2.png" alt=""></div>
-          <div class="card-details">
-            <div class="card-name">Levi Shoes</div>
-            <div class="card-price">$74.99 <span>$124.99</span></div>
-            <div class="card-wheel">
-              <button>-</button>
-              <span>1</span>
-              <button>+</button>
-            </div>
-          </div>
-        </div>
-        <!-- More .card elements -->
+        <hr style="border: solid 0.5px #707070">
+        {% endfor %}
       </div>
-      <div class="checkout-shipping">
-        <h6>Shipping</h6>
-        <p>$19</p>
+
+
+      <div style="color: #3b3b3b;">
+        <span>Total selected:</span>
+        <span style="font-weight: bold; float:right;">{{ count_of_products }} Products</span>
       </div>
-      <div class="checkout-total">
-        <h6>Total</h6>
-        <p>$148.98</p>
+      <div style="color: #3b3b3b;">
+        <span >Overall: </span>
+        <span style="font-weight: bold; float:right;">{{ cart_total_quantity }} Items</span>
       </div>
     </div>
   </div>
@@ -66,7 +88,7 @@
           </tr>
           <tr class="total">
             <td>Total</td>
-            <td class="price">546.41 USD</td>
+            <td class="price">{{ total_price }}</td>
           </tr>
         </table>
       </div>
@@ -210,6 +232,39 @@ hr {
 }
 
 
+.original-price {
+    display: flex;
+    width: 100%;
+    font-size: 15px;
+    color: #3b3b3bd0;
+    font-weight: bold;
+  }
+
+  .old-price-wrapper {
+    display: flex;
+  }
+
+  .price-striked {
+    color: gray;
+    text-decoration: line-through;
+    font-size: 15px;
+  }
+
+  .discount-percentage {
+    display: flex;
+    color: rgb(255, 72, 103);
+    font-size: 15px;
+    margin-left: 8px;
+  }
+
+  span.discounted-price {
+    color: #3b3b3bd0;
+    font-size: 15px;
+    font-weight: bold;
+    float: left;
+  }
+
+
 
 /* Right Side of container */
 
@@ -346,7 +401,7 @@ hr {
                     flex-direction: column;
                     row-gap: 15px;
                     margin-bottom: 40px;
-                    max-height: 500px; /* Set the maximum height of the container */
+                    max-height: 200px; /* Set the maximum height of the container */
                     overflow-y: auto;
                     margin-right: -10px;
 
@@ -370,7 +425,8 @@ hr {
                             flex-direction: column;
 
                             .card-name {
-                                font-weight: 500;
+                                font-weight: bold;
+                                font-size: 20px;
                             }
                             .card-price {
                                 font-weight: 500;

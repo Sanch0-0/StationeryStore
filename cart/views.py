@@ -106,6 +106,42 @@ def delete_cart_items(request):
     return response.HttpResponse(status=200)
 
 
+def get_cart_items(user):
+    try:
+        cart = Cart.objects.get(user=user)  # This assumes a OneToOneField or ForeignKey from Cart to User
+        return cart.cart_items.all()  # Correctly using the related name 'cart_items' to get CartItems
+    except Cart.DoesNotExist:
+        return []  # If no cart is found, return an empty list
+
+
 @login_required
 def checkout(request):
-    return render(request, "checkout.html")
+    cart, created = Cart.objects.get_or_create(user=request.user)
+
+    cart_items_with_total = []
+    total_quantity = 0
+
+    for item in cart.cart_items.order_by("-id"):
+        total = item.quantity * item.product.price_with_discount
+        total_discounted_price = item.quantity * (item.product.price - item.product.price_with_discount)
+
+        cart_items_with_total.append({
+            'item': item,
+            'product': item.product,
+            'quantity': item.quantity,
+            'price': item.product.price_with_discount,
+            'total': total,
+            'total_discounted_price': total_discounted_price,
+        })
+
+        total_quantity += item.quantity
+
+    total_price = sum(item['total'] for item in cart_items_with_total)
+
+    context = {
+        'cart_items_with_total': cart_items_with_total,
+        'total_price': total_price,
+        'cart_total_quantity': total_quantity,
+    }
+
+    return render(request, "checkout.html", context)
