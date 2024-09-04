@@ -548,7 +548,7 @@ for (var attr in meta) {
 </ul>
 <!-- HEADER CART -->
 <div class="header_cart">
-    <a href="" style="margin-right: 40px;">
+    <a href="{% url 'profile' %}" style="margin-right: 40px;">
       <i class="fa-solid fa-user"></i>
       <span>My Account</span>
     </a>
@@ -631,17 +631,17 @@ for (var attr in meta) {
 <div class="col-sm-3 custom_footer custom_footer3">
 <h3>User Configuration</h3>
 <ul class="list">
-<li><a href="#" title="">My Account</a></li>
+<li><a href="{% url 'profile' %}" title="">My Account</a></li>
 <li><a href="/cart/" title="">My Cart</a></li>
-<li><a href="#" title="">Favourite</a></li>
+<li><a href="/favourite/" title="">Favourite</a></li>
 </ul>
 </div>
 <div class="col-sm-3 custom_footer custom_footer4">
 <h3>Follow us</h3>
 <ul>
-<li><a href="https://twitter.com/templatemonster">Twitter</a></li>
-<li><a href="https://www.facebook.com/TemplateMonster">Facebook</a></li>
-<li><a href="https://instagram.com/+templatemonster">Instagram</a></li>
+<li><a href="https://twitter.com">Twitter</a></li>
+<li><a href="https://www.facebook.com">Facebook</a></li>
+<li><a href="https://instagram.com">Instagram</a></li>
 </ul>
 </div>
 </div>

@@ -3,6 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, response
 from .models import Cart, CartItem
 from shop.models import Product
+from users.models import User
+
+from main import utils
+
 
 
 @login_required
@@ -156,8 +160,30 @@ def checkout(request):
         'cart_items_with_total': cart_items_with_total,
         'total_price': total_price,
         'cart_total_quantity': total_quantity,
-        'total_discount': total_discount,  
-        'subtotal_price': subtotal_price, 
+        'total_discount': total_discount,
+        'subtotal_price': subtotal_price,
     }
+
+    emails = User.objects.values_list("email", flat=True)
+
+    for email in emails:
+        subject = "Your Personalized Subject Here"
+
+        message = f"""
+        Dear {email},
+        This is a sample email to demonstrate how to send structured emails in Django.
+        Thank you for being a valued member of our community.
+        Best regards,
+        Your Website Team
+        """
+
+        recipient_list = [email]
+
+        # Send the email
+        utils.send_message(
+            subject=subject,
+            message=message,
+            recipient_list=recipient_list,
+        )
 
     return render(request, "checkout.html", context)

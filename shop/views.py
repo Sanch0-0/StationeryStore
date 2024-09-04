@@ -21,6 +21,7 @@ def index(request):
         "categories": categories,
         "top_rated_products": top_rated_products,
     }
+
     return render(request, "home.html", context)
 
 

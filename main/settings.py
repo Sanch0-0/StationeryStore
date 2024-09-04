@@ -182,3 +182,12 @@ MEDIA_ROOT = 'media/'
 
 AUTH_USER_MODEL = "users.User"
 LOGIN_URL =  reverse_lazy("login")
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'fff.alex.er1317.fff@mail.ru'
+EMAIL_HOST_PASSWORD = 'FiP9e1Ltx9mcR9PubcZC'
+    

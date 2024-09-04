@@ -120,7 +120,7 @@
             type="text"
             required
           />
-          <a class="cvv-info" href="#">What is CVV?</a>
+          <a class="cvv-info" href="https://en.wikipedia.org/wiki/Card_security_code">What is CVV?</a>
         </div>
 
         <button class="btn">
@@ -179,12 +179,12 @@
               {% endif %}
             </div>
 
-            <div class="selected-items">
-              <span>{{ item.quantity }} Items</span>
-            </div>
           </div>
         </div>
-        <hr style="border: solid 0.5px #707070">
+        <div style="display: flex; position: relative; font-size: 15px;">
+          <span class="selected-items">{{ item.quantity }}</span>
+        </div>
+        <hr style="border: 2px solid rgba(0, 0, 0, 0.700); transform: scaleY(0.1);">
         {% endfor %}
       </div>
 
@@ -211,13 +211,13 @@ hr {
   margin-bottom: 1.2rem;
 }
 
-
 .original-price {
     display: flex;
     width: 100%;
     font-size: 15px;
     color: #3b3b3bd0;
     font-weight: bold;
+    margin-top: 20px;
   }
 
   .old-price-wrapper {
@@ -251,7 +251,7 @@ hr {
 .right-side {
   background-color: #fff;
   padding: 1.8rem 3.2rem;
-  max-width: 600px;
+  max-width: 550px;
 }
 
 .receipt {
@@ -384,7 +384,7 @@ hr {
                     display: flex;
                     flex-direction: column;
                     margin-bottom: 40px;
-                    max-height: 200px; /* Set the maximum height of the container */
+                    max-height: 300px; /* Set the maximum height of the container */
                     overflow-y: auto;
                     margin-right: -10px;
 
@@ -405,6 +405,8 @@ hr {
 
                         .card-details {
                             display: flex;
+                            width: 55%;
+                            height: 100%;
                             flex-direction: column;
 
                             .card-name {
@@ -414,6 +416,23 @@ hr {
                             }
                         }
                     }
+                }
+
+                .selected-items {
+                  color: white;
+                  display: flex;
+                  border: solid #64645f 1px;
+                  border-radius: 20px;
+                  background-color: #3b3b3b;
+                  align-items: center;
+                  justify-content: center;
+                  width: 20px;
+                  height: 20px;
+                  margin-left: auto;
+
+                  position: absolute;
+                  right: 10px;
+                  bottom: 0px;
                 }
 
                 .checkout-shipping, .checkout-total {
