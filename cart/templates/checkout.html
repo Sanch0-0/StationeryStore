@@ -4,91 +4,22 @@
 {% block content %}
 
 <div class="checkout-container">
-  <div class="checkout-details">
-    <div class="checkout-details-inner">
-      <div class="checkout-lists">
-        {% for item in cart_items_with_total %}
-        <div class="card">
-          <div class="card-image">
-            <a href="{% url 'get_product_by_id' item.product.id %}">
-              <img
-                src="{% thumbnail  item.product.image 'product_thumbnail' %}"
-                alt="{{ item.product.name }}"
-                style="border-radius: 10px;"
-              />
-            </a>
-          </div>
-          <div class="card-details">
-            <div class="card-name">
-              <a href="{% url 'get_product_by_id' item.product.id %}">
-                {{ item.product.name }}
-              </a>
-            </div>
-
-            <div class="price">
-              {% if item.product.discount == 0 %}
-              <span class="original-price"
-                >${{ item.product.price }}</span
-              >
-              {% elif item.product.discount != 0 %}
-              <div class="product-price">
-                <div class="old-price-wrapper">
-                  <span class="price-striked"
-                    >${{ item.product.price }}</span
-                  >
-                  <span class="discount-percentage"
-                    >- {{ item.product.discount }}%</span
-                  >
-                </div>
-                <span class="discounted-price"
-                  >${{ item.product.price_with_discount }}</span
-                >
-              </div>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-        <hr style="border: solid 0.5px #707070">
-        {% endfor %}
-      </div>
-
-
-      <div style="color: #3b3b3b;">
-        <span>Total selected:</span>
-        <span style="font-weight: bold; float:right;">{{ count_of_products }} Products</span>
-      </div>
-      <div style="color: #3b3b3b;">
-        <span >Overall: </span>
-        <span style="font-weight: bold; float:right;">{{ cart_total_quantity }} Items</span>
-      </div>
-    </div>
-  </div>
-
-
   <div class="right-side">
     <div class="receipt">
       <h2 class="receipt-heading">Receipt Summary</h2>
       <div>
         <table class="table">
           <tr>
-            <td>249.50 x 2 nights</td>
-            <td class="price">499.00 USD</td>
+            <td>Subtotal price:</td>
+            <td class="price">$ {{ subtotal_price }}</td>
           </tr>
           <tr>
-            <td>Discount</td>
-            <td class="price">0.00 USD</td>
-          </tr>
-          <tr>
-            <td>Subtotal</td>
-            <td class="price">499.00 USD</td>
-          </tr>
-          <tr>
-            <td>Tax</td>
-            <td class="price">47.41 USD</td>
+            <td>Discount:</td>
+            <td class="price" style="color: rgb(255, 72, 103);">$ - {{ total_discount }}</td>
           </tr>
           <tr class="total">
             <td>Total</td>
-            <td class="price">{{ total_price }}</td>
+            <td class="price">$ {{ total_price }}</td>
           </tr>
         </table>
       </div>
@@ -150,9 +81,9 @@
         </div>
 
         <div>
-          <p class="expires">Expires on:</p>
+          <p class="expires" style="font-size: 15px;">Expires on:</p>
           <div class="card-experation">
-            <label for="expiration-month">Month</label>
+            <label for="expiration-month" style="font-size: 15px; margin: 6px 5px 0 0;">Month</label>
             <select id="expiration-month" name="expiration-month" required>
               <option value="">Month:</option>
               <option value="">January</option>
@@ -169,7 +100,7 @@
               <option value="">Decemeber</option>
             </select>
 
-            <label class="expiration-year">Year</label>
+            <label class="expiration-year" style="font-size: 15px; margin: 6px 5px 0 15px;">Year</label>
             <select id="experation-year" name="experation-year" required>
               <option value="">Year</option>
               <option value="">2023</option>
@@ -203,24 +134,73 @@
       </p>
     </div>
   </div>
+
+
+  <div class="checkout-details">
+    <div class="checkout-details-inner">
+      <div class="checkout-lists">
+        {% for item in cart_items_with_total %}
+        <div class="card">
+          <div class="card-image">
+            <a href="{% url 'get_product_by_id' item.product.id %}">
+              <img
+                src="{% thumbnail  item.product.image 'product_thumbnail' %}"
+                alt="{{ item.product.name }}"
+                style="border-radius: 10px;"
+              />
+            </a>
+          </div>
+          <div class="card-details">
+            <div class="card-name">
+              <a href="{% url 'get_product_by_id' item.product.id %}">
+                {{ item.product.name }}
+              </a>
+            </div>
+
+            <div class="price">
+              {% if item.product.discount == 0 %}
+              <span class="original-price"
+                >${{ item.product.price }}</span
+              >
+              {% elif item.product.discount != 0 %}
+              <div class="product-price">
+                <div class="old-price-wrapper">
+                  <span class="price-striked"
+                    >${{ item.product.price }}</span
+                  >
+                  <span class="discount-percentage"
+                    >- {{ item.product.discount }}%</span
+                  >
+                </div>
+                <span class="discounted-price"
+                  >${{ item.product.price_with_discount }}</span
+                >
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="selected-items">
+              <span>{{ item.quantity }} Items</span>
+            </div>
+          </div>
+        </div>
+        <hr style="border: solid 0.5px #707070">
+        {% endfor %}
+      </div>
+
+      <div style="color: #3b3b3b;">
+        <span>Total selected:</span>
+        <span style="font-weight: bold; float:right;">{{ count_of_products }} Products</span>
+      </div>
+      <div style="color: #3b3b3b;">
+        <span >Overall: </span>
+        <span style="font-weight: bold; float:right;">{{ cart_total_quantity }} Items</span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
-  .checkout-container {
-  /* background-color: red; */
-  max-width: 110rem;
-  height: 90rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-content: center;
-  margin: 100px 0px 200px -20px;
-
-  font-size: 18px;
-
-
-  /* margin-bottom: 10rem; */
-}
-
 em {
   font-style: normal;
   font-weight: 700;
@@ -271,6 +251,7 @@ hr {
 .right-side {
   background-color: #fff;
   padding: 1.8rem 3.2rem;
+  max-width: 600px;
 }
 
 .receipt {
@@ -372,8 +353,8 @@ hr {
 
 .form-box *:focus {
   outline: none;
-  box-shadow: 0 0 0 0.8rem rgba(139, 139, 107, 0.5);
-  border-radius: 8px;
+  box-shadow: 0 0 0 0.2rem #3b3b3b;
+  border-radius: 10px;
 }
 
 .payment-info {
@@ -381,14 +362,17 @@ hr {
   color: #64645f;
 }
 
-
+.checkout-container {
+  display: flex;
+  justify-content: center;
+  margin: 100px 0px 200px -20px;
+  font-size: 18px;
+}
 
 
 .checkout-details {
-            width: 55%;
-            margin-left: 40%;
-            position: relative;
             color:#4E5150;
+            margin-left: 20px;
 
             .checkout-details-inner {
                 background: rgba(255, 255, 255, 0.521);
@@ -399,7 +383,6 @@ hr {
                 .checkout-lists {
                     display: flex;
                     flex-direction: column;
-                    row-gap: 15px;
                     margin-bottom: 40px;
                     max-height: 200px; /* Set the maximum height of the container */
                     overflow-y: auto;
@@ -428,40 +411,6 @@ hr {
                                 font-weight: bold;
                                 font-size: 20px;
                             }
-                            .card-price {
-                                font-weight: 500;
-                                color: #F2994A;
-                                margin-top: 5px;
-
-                                span {
-                                    color: #4E5150;
-                                    text-decoration: line-through;
-                                    margin-left: 10px;
-                                }
-                            }
-                            .card-wheel {
-                                margin-top: 17px;
-                                border: .2px solid #4e515085;
-                                width: 90px;
-                                padding: 8px 8px;
-                                border-radius: 10px;
-                                font-size: 12px;
-                                display: flex;
-                                justify-content: space-between;
-
-                                button {
-                                    background: #E0E0E0;
-                                    color: #828282;
-                                    width: 15px;
-                                    height: 15px;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    border: 0;
-                                    cursor: pointer;
-                                    border-radius: 3px;
-                                    font-weight: 500;
-                                }
                             }
                         }
                     }
@@ -480,10 +429,6 @@ hr {
                     }
                 }
             }
-        }
-
-
-
 </style>
 
 

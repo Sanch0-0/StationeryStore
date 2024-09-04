@@ -120,18 +120,32 @@ def checkout(request):
 
     cart_items_with_total = []
     total_quantity = 0
+    total_discount = 0  # Initialize total discount
+    subtotal_price = 0  # Initialize subtotal price (price without discount)
 
     for item in cart.cart_items.order_by("-id"):
-        total = item.quantity * item.product.price_with_discount
-        total_discounted_price = item.quantity * (item.product.price - item.product.price_with_discount)
+        product = item.product
+        price = product.price
+        price_with_discount = product.price_with_discount
+        total = item.quantity * price_with_discount
+
+        # Calculate the discount for each product and sum it up
+        item_discount = item.quantity * (price - price_with_discount)
+        total_discount += item_discount
+
+        # Calculate the subtotal price (price without discount)
+        if product.discount > 0:
+            subtotal_price += item.quantity * price
+        else:
+            subtotal_price += total  # No discount, use total directly
 
         cart_items_with_total.append({
             'item': item,
-            'product': item.product,
+            'product': product,
             'quantity': item.quantity,
-            'price': item.product.price_with_discount,
+            'price': price_with_discount,
             'total': total,
-            'total_discounted_price': total_discounted_price,
+            'total_discounted_price': item_discount,
         })
 
         total_quantity += item.quantity
@@ -142,6 +156,8 @@ def checkout(request):
         'cart_items_with_total': cart_items_with_total,
         'total_price': total_price,
         'cart_total_quantity': total_quantity,
+        'total_discount': total_discount,  
+        'subtotal_price': subtotal_price, 
     }
 
     return render(request, "checkout.html", context)
