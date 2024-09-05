@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html>
-  {% load static %}
   <body style="background-color:#f9f9f9; padding:20px;">
     <div style="max-width:600px; margin:0 auto; background:white; padding:20px; border-radius:10px; text-align:center; align-items: center;">
-      <h2 style="color:#333; font-family:Arial, sans-serif;">Hello, {{ email }}!</h2>
+      <h2 style="color:#333; font-family:Arial, sans-serif;">Hello, {{ email }} !</h2>
 
       <div class="receipt">
-        <h2 class="receipt-heading">Receipt Summary</h2>
-        <div class="receipt">
-        <p>Price: 200</p>
-        <p>Discount: 50</p>
-        <span>Total price: 150</span>
+        <p style="font-size: 20px; font-weight: bolder; color:#333; font-family:Arial, sans-serif;">Receipt Summary: </p>
+          <h3>Bought: {{ count_of_products }} Products</h3>
+          <h3>Overall: {{ cart_total_quantity }} Items</h3>
+          <h3>Discount: $ - {{ total_discount }}</h3>
+          <h3>Subtotal price: $ {{ subtotal_price }}</h3>
+          <p style="font-size:18px; font-weight: bold; margin-bottom: 30px;">Total price: $ {{ total_price }}</p>
       </div>
-      </div>
-      
-      <h1>Scan the QR Code</h1> 
-      <img src="{% static 'payment/qr.png' %}" alt="QR Code"> 
-      <p style="font-size:16px; color:#555; line-height:1.5; font-family:Arial, sans-serif;">
-        Best regards,<br>
-        Your Website Team
+
+      <h2 style="color: #333;">Your order number: </h2>
+      <p style="font-size: 16px; color:#333333;">{{ personal_number }}</p>
+      <p>You can make a refund using this number.</p>
+
+      <h2 style="color: #333; margin-top: 30px;">The date of the order: </h2>
+      <h3 style="color:#333333d0;">{{ order_date|date:"F j, Y, g:i a" }}</h3>
+
+      <p style="margin-top: 40px; font-size:16px; color:#555; line-height:1.5; font-family:Arial, sans-serif;">
+        Thank you for shopping!
       </p>
+    </div>
   </body>
 </html>

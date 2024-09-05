@@ -2,11 +2,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string 
 from django.http import JsonResponse, response
+from django.utils import timezone
+
 from .models import Cart, CartItem
 from shop.models import Product
 from users.models import User
 
 from main import utils
+import secrets
+import string
 
 
 
@@ -126,7 +130,9 @@ def checkout(request):
     cart_items_with_total = []
     total_quantity = 0
     total_discount = 0  
-    subtotal_price = 0  
+    subtotal_price = 0 
+    count_of_products = 0
+    order_date = timezone.now()
 
     for item in cart.cart_items.order_by("-id"):
         product = item.product
@@ -154,6 +160,7 @@ def checkout(request):
         total_quantity += item.quantity
 
     total_price = sum(item['total'] for item in cart_items_with_total)
+    count_of_products = cart.products.count()  
 
     context = {
         'cart_items_with_total': cart_items_with_total,
@@ -163,12 +170,29 @@ def checkout(request):
         'subtotal_price': subtotal_price,
     }
 
+
+
     emails = User.objects.values_list("email", flat=True)
+
+    def generate_personal_code(length=16):
+        characters = string.ascii_letters + string.digits
+        return ''.join(secrets.choice(characters) for _ in range(length))
+
+    personal_number = generate_personal_code()
 
     for email in emails:
         subject = "Checkout Receipt"
 
-        html_message = render_to_string('checkout_message.html', {'email': email})
+        html_message = render_to_string('checkout_message.html', {
+            'email': email,
+            'subtotal_price': subtotal_price,
+            'total_discount': total_discount,
+            'total_price': total_price,
+            'cart_total_quantity': total_quantity,
+            'count_of_products': count_of_products,
+            'order_date': order_date,
+            'personal_number': personal_number
+        })
 
     utils.send_message(
         subject=subject,
