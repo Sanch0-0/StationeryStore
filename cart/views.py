@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string 
 from django.http import JsonResponse, response
 from .models import Cart, CartItem
 from shop.models import Product
@@ -124,8 +125,8 @@ def checkout(request):
 
     cart_items_with_total = []
     total_quantity = 0
-    total_discount = 0  # Initialize total discount
-    subtotal_price = 0  # Initialize subtotal price (price without discount)
+    total_discount = 0  
+    subtotal_price = 0  
 
     for item in cart.cart_items.order_by("-id"):
         product = item.product
@@ -133,15 +134,13 @@ def checkout(request):
         price_with_discount = product.price_with_discount
         total = item.quantity * price_with_discount
 
-        # Calculate the discount for each product and sum it up
         item_discount = item.quantity * (price - price_with_discount)
         total_discount += item_discount
 
-        # Calculate the subtotal price (price without discount)
         if product.discount > 0:
             subtotal_price += item.quantity * price
         else:
-            subtotal_price += total  # No discount, use total directly
+            subtotal_price += total  
 
         cart_items_with_total.append({
             'item': item,
@@ -167,23 +166,15 @@ def checkout(request):
     emails = User.objects.values_list("email", flat=True)
 
     for email in emails:
-        subject = "Your Personalized Subject Here"
+        subject = "Checkout Receipt"
 
-        message = f"""
-        Dear {email},
-        This is a sample email to demonstrate how to send structured emails in Django.
-        Thank you for being a valued member of our community.
-        Best regards,
-        Your Website Team
-        """
+        html_message = render_to_string('checkout_message.html', {'email': email})
 
-        recipient_list = [email]
-
-        # Send the email
-        utils.send_message(
-            subject=subject,
-            message=message,
-            recipient_list=recipient_list,
-        )
+    utils.send_message(
+        subject=subject,
+        message=None, 
+        recipient_list=[email],  
+        html_message=html_message 
+    )
 
     return render(request, "checkout.html", context)

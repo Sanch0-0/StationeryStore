@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+  <body style="background-color:#f9f9f9; padding:20px;">
+    <div style="max-width:600px; margin:0 auto; background:white; padding:20px; border-radius:10px; text-align:center; align-items: center;">
+      <h2 style="color:#333; font-family:Arial, sans-serif;">Hello, {{ email }}!</h2>
+
+      <div class="receipt">
+        <h2 class="receipt-heading">Receipt Summary</h2>
+        <div class="receipt">
+        <p>Price: 200</p>
+        <p>Discount: 50</p>
+        <span>Total price: 150</span>
+      </div>
+      </div>
+      
+      <h1>Scan the QR Code</h1> 
+      <img src="{% static 'payment/qr.png' %}" alt="QR Code"> 
+      <p style="font-size:16px; color:#555; line-height:1.5; font-family:Arial, sans-serif;">
+        Best regards,<br>
+        Your Website Team
+      </p>
+  </body>
+</html>
