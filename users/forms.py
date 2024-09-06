@@ -1,10 +1,13 @@
 from django import forms
 from .models import User
+from django_recaptcha.fields import ReCaptchaField
+
 
 class UserCreationForm(forms.ModelForm):
 
     password1 = forms.CharField(label='First password', min_length=8, widget=forms.PasswordInput)
     password2 = forms.CharField(label='Second password', min_length=8, widget=forms.PasswordInput)
+    captcha = ReCaptchaField()
 
     class Meta:
         model = User
@@ -37,7 +40,7 @@ class LoginForm(forms.Form):
 
     email = forms.EmailField(max_length=50)
     password = forms.CharField(max_length=100, widget=forms.PasswordInput)
-
+    captcha = ReCaptchaField()
 
 class ProfileUpdateForm(forms.ModelForm):
 

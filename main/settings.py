@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_recaptcha',
     'easy_thumbnails',
     'image_cropping',
     'shop',
@@ -190,4 +191,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'fff.alex.er1317.fff@mail.ru'
 EMAIL_HOST_PASSWORD = 'FiP9e1Ltx9mcR9PubcZC'
-    
+
+
+RECAPTCHA_PUBLIC_KEY = '6LemUzgqAAAAAGOcdb2DcLyThy8716EF3v7hpPw5'
+RECAPTCHA_PRIVATE_KEY = '6LemUzgqAAAAAJfYSMT6YbpiHqnFnSYBeGNUi1Hw'

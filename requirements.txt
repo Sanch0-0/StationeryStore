@@ -4,6 +4,7 @@ django-appconf==1.0.6
 django-countries==7.6.1
 django-filter==24.3
 django-image-cropping==1.7
+django-recaptcha==4.0.0
 easy-thumbnails==2.9
 pillow==10.4.0
 psycopg2-binary==2.9.9
