@@ -6,7 +6,7 @@ from .views import (
     update_cart_item,
     delete_from_cart,
     delete_cart_items,
-    checkout,
+    checkout
 )
 
 urlpatterns = [

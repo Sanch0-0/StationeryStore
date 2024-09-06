@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string 
 from django.http import JsonResponse, response
+from django.contrib import messages
 from django.utils import timezone
 
 from .models import Cart, CartItem
@@ -117,10 +118,10 @@ def delete_cart_items(request):
 
 def get_cart_items(user):
     try:
-        cart = Cart.objects.get(user=user)  # This assumes a OneToOneField or ForeignKey from Cart to User
-        return cart.cart_items.all()  # Correctly using the related name 'cart_items' to get CartItems
+        cart = Cart.objects.get(user=user)  #ForeignKey from Cart to User
+        return cart.cart_items.all()  
     except Cart.DoesNotExist:
-        return []  # If no cart is found, return an empty list
+        return []  
 
 
 @login_required
@@ -171,34 +172,44 @@ def checkout(request):
     }
 
 
+    if request.method == 'POST':
+        full_name = request.POST.get('full-name')
+        credit_card_num = request.POST.get('credit-card-num')
+        cvv = request.POST.get('cvv')
 
-    emails = User.objects.values_list("email", flat=True)
+        if full_name and credit_card_num and cvv:
+            emails = User.objects.values_list("email", flat=True)
 
-    def generate_personal_code(length=16):
-        characters = string.ascii_letters + string.digits
-        return ''.join(secrets.choice(characters) for _ in range(length))
+            def generate_personal_code(length=16):
+                characters = string.ascii_letters + string.digits
+                return ''.join(secrets.choice(characters) for _ in range(length))
 
-    personal_number = generate_personal_code()
+            messages.success(request, "The payment was successful!")
+            personal_number = generate_personal_code()
 
-    for email in emails:
-        subject = "Checkout Receipt"
+            for email in emails:
+                subject = "Checkout Receipt"
 
-        html_message = render_to_string('checkout_message.html', {
-            'email': email,
-            'subtotal_price': subtotal_price,
-            'total_discount': total_discount,
-            'total_price': total_price,
-            'cart_total_quantity': total_quantity,
-            'count_of_products': count_of_products,
-            'order_date': order_date,
-            'personal_number': personal_number
-        })
+                html_message = render_to_string('checkout_message.html', {
+                    'email': email,
+                    'subtotal_price': subtotal_price,
+                    'total_discount': total_discount,
+                    'total_price': total_price,
+                    'cart_total_quantity': total_quantity,
+                    'count_of_products': count_of_products,
+                    'order_date': order_date,
+                    'personal_number': personal_number
+                })
 
-    utils.send_message(
-        subject=subject,
-        message=None, 
-        recipient_list=[email],  
-        html_message=html_message 
-    )
+                utils.send_message(
+                    subject=subject,
+                    message=None,
+                    recipient_list=[email],
+                    html_message=html_message
+                )
+
+        else:
+            print("Error: Incorrect data!")
 
     return render(request, "checkout.html", context)
+
