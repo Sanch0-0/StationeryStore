@@ -18,11 +18,12 @@ class Category(models.Model):
 class Product(models.Model):
     image = models.ImageField(verbose_name="image", upload_to="products")
     cropping = ImageRatioField('image', '200x200', verbose_name="cropping")
-    name = models.CharField(verbose_name="name", max_length=50)
+    name = models.CharField(verbose_name="name", max_length=30)
     description = models.TextField(verbose_name="description")
     price = models.DecimalField(verbose_name="price", max_digits=7, decimal_places=2, default=1, blank=True)
     discount = models.SmallIntegerField(verbose_name="discount", default=0, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="products")
+    brand = models.CharField(verbose_name='brand', max_length=20,)
     created_at = models.DateTimeField(verbose_name="Created at", default=timezone.now, blank=True)
 
     class Meta:
@@ -45,13 +46,12 @@ class Product(models.Model):
 
     @classmethod
     def top_rated_products(cls, limit=4):
-        # Annotate products with their average rating and the number of ratings
         return cls.objects.annotate(
             avg_rating=Avg('review_ratings__rating'),
             rating_count=Count('review_ratings')
         ).filter(
-            avg_rating__gt=4.5,  # Only include products with an average rating greater than 4.5
-            rating_count__gt=0    # Exclude products with no ratings
+            avg_rating__gt=4.5,  
+            rating_count__gt=0   
         ).order_by('-avg_rating')[:limit]
 
 
@@ -59,7 +59,7 @@ class ReviewRating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="review_ratings")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     review = models.TextField(max_length=500, blank=True)
-    rating = models.PositiveSmallIntegerField(default=0)  # Ensure this default is intentional
+    rating = models.PositiveSmallIntegerField(default=0) 
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

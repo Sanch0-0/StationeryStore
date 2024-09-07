@@ -20,20 +20,24 @@
     </ul>
 
     <script>
-      // Check if there's a success message
-      const messages = document.querySelectorAll('.message.success');
-      if (messages.length > 0) {
-        // Delay the redirect by 2 seconds (2000 ms)
+      const successMessages = document.querySelectorAll('.message.success');
+      const errorMessages = document.querySelectorAll('.message.error');
+    
+      if (successMessages.length > 0) {
         setTimeout(function() {
-          window.location.href = "{% url 'index' %}";
+          window.location.href = "{% url 'index' %}"; 
+        }, 2000);
+      } else if (errorMessages.length > 0) {
+        setTimeout(function() {
+          window.location.href = window.location.pathname; // Redirect back to the current page
         }, 2000);
       }
     </script>
     {% endif %}
 
     <div class="container-login">
-      <label for="email"><b>Email</b></label>
-      <input type="text" name="email" placeholder="Enter Email" required />
+      <label for="email"><b>Email or Username</b></label>
+      <input type="text" name="username_or_email" placeholder="Enter Email or Username" required />
 
       <label for="password"><b>Password</b></label>
       <input type="password" name="password" placeholder="Enter Password" required />

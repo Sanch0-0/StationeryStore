@@ -117,6 +117,11 @@
                                             <a style="font-size: 18px;" href="{{ category.id }}" title="{{ product.category.name }}">{{ product.category.name }}</a>
                                         </div>
 
+                                        <div class="product_category">
+                                            <span style="padding-right: 6px;">Brand:</span>
+                                            <a style="font-size: 18px;" title="{{ product.brand }}">{{ product.brand }}</a>
+                                        </div>
+
                                         <div class="rating-static" data-rating="{{ product.average_rating }}">
                                             {% for i in "12345" %}
                                                 <span class="star static-star" style="font-size: 23px;" data-value="{{ i }}">&#9733;</span>
@@ -127,8 +132,8 @@
 
                                     <div class="product_desc">
                                         <div id="product_description" class="rte" itemprop="description">
-                                            <h4 style="font-size: 16px;">Description:</h4>
-                                            <p>{{ product.description }}</p>
+                                            <h4 style="font-size: 18px;">Description:</h4>
+                                            <p style="font-size: 16px;">{{ product.description }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -406,6 +411,7 @@ function addToCart(productId) {
 .product_desc {
     border-bottom: 1px solid #ddd;
 }
+
 
 .rate {
     display: flex;

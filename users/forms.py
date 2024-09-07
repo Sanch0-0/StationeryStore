@@ -1,23 +1,31 @@
+import re
 from django import forms
 from .models import User
 from django_recaptcha.fields import ReCaptchaField
-
+from django.core.exceptions import ValidationError
+from django_countries.fields import CountryField
+from django.contrib.auth import authenticate
 
 class UserCreationForm(forms.ModelForm):
-
     password1 = forms.CharField(label='First password', min_length=8, widget=forms.PasswordInput)
     password2 = forms.CharField(label='Second password', min_length=8, widget=forms.PasswordInput)
     captcha = ReCaptchaField()
 
     class Meta:
         model = User
-        fields = ['email']
+        fields = ['email', 'username', 'mobile_phone', 'full_name', 'place_of_delivery', 'postal_code', 'country', 'avatar']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise ValidationError("A user with that email already exists.")
         return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("A user with that username already exists.")
+        return username
 
     def clean(self):
         cleaned_data = super().clean()
@@ -37,18 +45,22 @@ class UserCreationForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-
-    email = forms.EmailField(max_length=50)
+    username_or_email = forms.CharField(max_length=100, label="Username or Email")
     password = forms.CharField(max_length=100, widget=forms.PasswordInput)
     captcha = ReCaptchaField()
 
-class ProfileUpdateForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+        username_or_email = cleaned_data.get("username_or_email")
+        password = cleaned_data.get("password")
 
-    class Meta:
-        model = User
-        fields = [
-            "full_name",
-            "mobile_phone",
-            "country",
-            "image"
-        ]
+        # Attempt to authenticate user with either email or username
+        user = authenticate(username=username_or_email, password=password)
+
+        if user is None:
+            raise ValidationError("Invalid credentials. Please try again.")
+        
+        cleaned_data['user'] = user
+        return cleaned_data
+
+

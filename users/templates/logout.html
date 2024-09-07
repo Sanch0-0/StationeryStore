@@ -18,12 +18,16 @@
     </ul>
 
     <script>
-      // Check if there's a success message
-      const messages = document.querySelectorAll('.message.success');
-      if (messages.length > 0) {
-        // Delay the redirect by 2 seconds (2000 ms)
+      const successMessages = document.querySelectorAll('.message.success');
+      const errorMessages = document.querySelectorAll('.message.error');
+    
+      if (successMessages.length > 0) {
         setTimeout(function() {
-          window.location.href = "{% url 'index' %}";
+          window.location.href = "{% url 'index' %}"; 
+        }, 2000);
+      } else if (errorMessages.length > 0) {
+        setTimeout(function() {
+          window.location.href = window.location.pathname; // Redirect back to the current page
         }, 2000);
       }
     </script>

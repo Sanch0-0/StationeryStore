@@ -37,35 +37,20 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-
     email = models.EmailField("Email", unique=True, null=False, blank=False)
-    full_name = models.CharField(
-        "Full name", 
-        max_length=100, 
-        null=True, 
-        blank=True
-        )
-    mobile_phone = models.CharField(
-        "Phone number", 
-        max_length=20, 
-        null=True, 
-        blank=False
-        )
-    image = models.ImageField(
-        "Avatar", 
-        upload_to='users/avatar',
-        default='users/default/Default_avatar.jpg', 
-        blank=True
-        )
-    favorites = models.ManyToManyField(Product, related_name="users")
-    country = CountryField("Country", null=True, blank=False)
+    full_name = models.CharField("Full name", max_length=100, null=True, blank=True)
+    mobile_phone = models.IntegerField("Phone number", null=True, blank=True)
+    avatar = models.ImageField("Avatar", upload_to='users/avatar', default='users/default/user-avatar.png', blank=True)
+    place_of_delivery = models.CharField("Place of Delivery", max_length=100, null=True, blank=True)
+    postal_code = models.PositiveIntegerField("Postal Code", null=True, blank=True)
+    country = CountryField("Country", null=True, blank=True)
+    username = models.CharField("Username", max_length=100, unique=True, null=True, blank=True)
 
-    username = None
     first_name = None
     last_name = None
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["username"]
 
     objects = CustomUserManager()
 
