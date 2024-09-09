@@ -1,10 +1,8 @@
-import re
 from django import forms
+from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate
 from .models import User
 from django_recaptcha.fields import ReCaptchaField
-from django.core.exceptions import ValidationError
-from django_countries.fields import CountryField
-from django.contrib.auth import authenticate
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='First password', min_length=8, widget=forms.PasswordInput)
@@ -38,10 +36,11 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data["password2"])
+        user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
         return user
+
 
 
 class LoginForm(forms.Form):

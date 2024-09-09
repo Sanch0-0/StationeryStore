@@ -45,19 +45,19 @@
             <input type="text" placeholder="Mike1256" name="username" id="username" required>
 
             <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="mcMike@gmail.com" name="email" id="email" required>
+            <input type="email" placeholder="mcMike@gmail.com" name="email" id="email" required>
 
             <label for="full_name"><b>Full name</b></label>
             <input type="text" placeholder="Jordan Holland" name="full_name" id="full_name" required>
-            
+
             <label for="mobile_phone"><b>Phone number</b></label>
-            <input type="text" placeholder="0335271186" name="mobile_phone" id="mobile_phone" required>
+            <input type="text" placeholder="0335271186" name="mobile_phone" id="mobile_phone"  required>
             
             <label for="place_of_delivery"><b>Place of delivery</b></label>
             <input type="text" placeholder="Baker-Street avenu" name="place_of_delivery" id="place_of_delivery" required>
             
             <label for="postal_code"><b>Postal code</b></label>
-            <input type="text" placeholder="60653" name="postal_code" id="postal_code" maxlength="5" required>
+            <input type="text" placeholder="60653" name="postal_code" id="postal_code"  maxlength="5" required>
             
             <label for="country"><b>Country</b></label>
             <select class="form-control" name="country" id="country" required>
@@ -324,12 +324,8 @@
     </div>
 </div>
 
-<script>
-  document.getElementById("country").addEventListener("input", function(event) {
-      // Allow only letters and spaces
-      event.target.value = event.target.value.replace(/[^A-Za-z\s]/g, '');
-  });
 
+<script>
   document.getElementById("mobile_phone").addEventListener("input", function(event) {
       // Allow only numbers
       event.target.value = event.target.value.replace(/\D/g, '');
@@ -339,7 +335,22 @@
       // Allow only numbers
       event.target.value = event.target.value.replace(/\D/g, '');
   });
-</script>
+
+  document.getElementById('profileForm').addEventListener('submit', function(event) {
+      var mobilePhone = document.getElementById('mobile_phone').value;
+      var postalCode = document.getElementById('postal_code').value;
+  
+      if (isNaN(mobilePhone) || mobilePhone <= 0) {
+          alert("Please enter a valid phone number.");
+          event.preventDefault();
+      }
+  
+      if (isNaN(postalCode) || postalCode <= 0 || postalCode.length !== 5) {
+          alert("Please enter a valid postal code.");
+          event.preventDefault();
+      }
+  });
+  </script>
 
 <style>
 .register-wraper {

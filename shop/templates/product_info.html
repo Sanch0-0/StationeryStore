@@ -183,7 +183,9 @@
                                     <div class="box-top">
                                         <div class="profile">
                                             <div class="profile-img">
-                                                <img src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png" />
+                                                {% if review.user.avatar %}
+                                                <img src="{{ review.user.avatar.url }}" alt="Avatar" id="avatar-img"/>
+                                                {% endif %}
                                             </div>
                                             <div class="name-user">
                                                 <strong>{{ review.user.email }}</strong>

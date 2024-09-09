@@ -2,7 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth import login as auth_login
 from django.contrib import messages
+
 from django.shortcuts import render, redirect
 
 from .models import User
@@ -10,15 +12,13 @@ from .forms import UserCreationForm, LoginForm
 
 
 def register_view(request):
-    form = UserCreationForm()
-
     if request.method == "POST":
-        form = UserCreationForm(data=request.POST)
+        form = UserCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save()
             messages.success(request, "Registration successful!")
+            auth_login(request, user)  # Log in the user immediately
         else:
-            # Capture form errors and add to messages
             for field, errors in form.errors.items():
                 for error in errors:
                     if field == 'non_field_errors':
@@ -30,6 +30,8 @@ def register_view(request):
                             messages.error(request, "Username: " + error)
                         else:
                             messages.error(request, f"{field.capitalize()}: {error}")
+    else:
+        form = UserCreationForm()
 
     context = {
         'form': form,
@@ -69,9 +71,24 @@ def login_view(request):
 @login_required
 def profile_view(request):
     user = request.user
+    context = {
+        'username': user.username,
+        'email': user.email,
+        'full_name': user.full_name,
+        'mobile_phone': user.mobile_phone,
+        'country': user.country,
+        'place_of_delivery': user.place_of_delivery,
+        'postal_code': user.postal_code,
+        'avatar': user.avatar.url if user.avatar else '',
+    }
+    return render(request, "profile.html", context)
+
+
+@login_required
+def update_profile(request):
+    user = request.user
 
     if request.method == "POST":
-        # Manually handle profile updates
         full_name = request.POST.get('full_name')
         mobile_phone = request.POST.get('mobile_phone')
         country = request.POST.get('country')
@@ -80,7 +97,6 @@ def profile_view(request):
         avatar = request.FILES.get('avatar')  # Handle file uploads
         username = request.POST.get('username')
 
-        # Update profile fields
         user.full_name = full_name
         user.mobile_phone = mobile_phone
         user.country = country
@@ -97,20 +113,18 @@ def profile_view(request):
         current_password = request.POST.get('current_password')
         new_password = request.POST.get('new_password')
 
-        # Check if the current password is correct
         if current_password and new_password:
             if check_password(current_password, user.password):
                 user.set_password(new_password)  # Set the new password
                 user.save()
 
-                # Keep the user logged in after password change
                 update_session_auth_hash(request, user)
 
                 messages.success(request, "Password updated successfully!")
             else:
                 messages.error(request, "Current password is incorrect!")
 
-        return redirect('profile')
+        messages.success(request, "Well done!")
 
     context = {
         'username': user.username,
