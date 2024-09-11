@@ -43,27 +43,27 @@
       </div>
       <div class="col-sm-4">
         <div class="custom_showcase custom_showcase1">
-          <a href="collections/teaching.html">
+          <a href="{% url 'search_products' %}?category={{ 1 }}">
             <img
               src="{% static 'cdn/shop/t/2/assets/custom_showcase1_img.png@v=53468474497479421481400255163' %}"
             />
-            <h3>Binders</h3>
+            <h3 style="font-size: 35px;">Binders & Folders</h3>
           </a>
         </div>
         <div class="custom_showcase custom_showcase2">
-          <a href="collections/calculators.html">
+          <a href="{% url 'search_products' %}?category={{ 2 }}">
             <img
               src="{% static 'cdn/shop/t/2/assets/custom_showcase2_img.png@v=63648424160568979801400255163' %}"
             />
-            <h3>Pencils</h3>
+            <h3 style="font-size: 35px;">Pens & Pencils</h3>
           </a>
         </div>
         <div class="custom_showcase custom_showcase3">
-          <a href="collections/arts-crafts.html">
+          <a href="{% url 'search_products' %}?category={{ 3 }}">
             <img
               src="{% static 'cdn/shop/t/2/assets/custom_showcase3_img.png@v=128564072689118292591400255163' %}"
             />
-            <h3>Knives</h3>
+            <h3 style="font-size: 35px;">Knifes & Scissors</h3>
           </a>
         </div>
       </div>
