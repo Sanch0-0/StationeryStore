@@ -15,7 +15,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
             except User.DoesNotExist:
                 return None
         else:
-            # Authenticate using the default `USERNAME_FIELD`, which is email in your case
+            # if username
             try:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:

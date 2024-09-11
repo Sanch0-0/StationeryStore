@@ -33,7 +33,6 @@ class User(AbstractUser):
     full_name = models.CharField("Full name", max_length=100, null=True, blank=True)
     mobile_phone = models.IntegerField("Phone number", null=True, blank=True)
     avatar = models.ImageField("Avatar", upload_to='users/avatar', default='users/default/user-avatar.png', blank=True)
-    avatar_cropping = ImageRatioField('avatar', '200x200', verbose_name="cropping")
     place_of_delivery = models.CharField("Place of Delivery", max_length=100, null=True, blank=True)
     postal_code = models.PositiveIntegerField("Postal Code", null=True, blank=True)
     country = CountryField("Country", null=True, blank=True)
