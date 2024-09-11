@@ -1,13 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth import login as auth_login
 from django.contrib import messages
 
 from django.shortcuts import render, redirect
-
-from .models import User
 from .forms import UserCreationForm, LoginForm
 
 
@@ -17,7 +14,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             messages.success(request, "Registration successful!")
-            auth_login(request, user)  # Log in the user immediately
+            login(request, user, backend='yourapp.backends.EmailOrUsernameModelBackend')
         else:
             for field, errors in form.errors.items():
                 for error in errors:
@@ -66,7 +63,7 @@ def login_view(request):
         'form': form,
     }
     return render(request, 'login.html', context)
-    
+
 
 @login_required
 def profile_view(request):
@@ -103,10 +100,10 @@ def update_profile(request):
         user.place_of_delivery = place_of_delivery
         user.postal_code = postal_code
         user.username = username
-        
+
         if avatar:
             user.avatar = avatar
-        
+
         user.save()
 
         # Handle password change
