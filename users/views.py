@@ -14,7 +14,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             messages.success(request, "Registration successful!")
-            login(request, user, backend='yourapp.backends.EmailOrUsernameModelBackend')
+            login(request, user, backend='users.backends.EmailOrUsernameModelBackend')
         else:
             for field, errors in form.errors.items():
                 for error in errors:

@@ -1,5 +1,11 @@
 venv/
 .env
 media/products/*
+media/users/avatar/*
 __pycache__
 plan.md
+cart/migrations*
+favourite/migrations*
+shop/migrations*
+users/migrations*
+migrations
