@@ -11,12 +11,14 @@
 <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
 <title>Stationery | Stationery</title>
 <link href="{% static 'index.html' %}" rel="canonical"/>
+
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="{% static 'cdn/shop/t/2/assets/favicon.ico@v=57453645606032007371400252243' %}" rel="shortcut icon" type="image/x-icon"/>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="{% static 'js/cart/dynamic_cart_and_favourites.js' %}"></script>
 <script>window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.start');</script><meta content="/5005249/digital_wallets/dialog" id="shopify-digital-wallet" name="shopify-digital-wallet"/>
 <script async="async" src="https://tm-shopify047-stationery.myshopify.com/checkouts/internal/preloads.js?locale=en-US"></script>
 <script async="async" crossorigin="anonymous" src="https://shop.app/checkouts/internal/preloads.js?locale=en-US&amp;shop_id=5005249"></script>
@@ -559,13 +561,13 @@ for (var attr in meta) {
       <span>Favourite</span>
     </a>
 
-    <a href="/cart/">
-        <i class="fa fa-shopping-cart"></i>
-        <span class="cart-total-items">
-            <span class="count">{{ count_of_products }}</span>
-        </span>
-        <span>Product(s)</span>&nbsp;–&nbsp;
-        <span class="money cart-total-price" data-currency-usd="{{ cart_total_price|floatformat:2 }}">$ {{ cart_total_price|floatformat:2 }}</span>
+    <a href="/cart/" id="cart-info">
+      <i class="fa fa-shopping-cart"></i>
+      <span id="cart-total-quantity" class="count">{{ count_of_products }}</span>
+      <span>Product(s)</span>&nbsp;–&nbsp;
+      <span id="cart-total-price" class="money cart-total-price" data-currency-usd="{{ cart_total_price|floatformat:2 }}">
+        $ {{ cart_total_price|floatformat:2 }}
+      </span>
     </a>
 </div>
 

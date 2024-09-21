@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.template.loader import render_to_string 
+from django.template.loader import render_to_string
 from django.http import JsonResponse, response
 from django.contrib import messages
 from django.utils import timezone
@@ -73,9 +73,22 @@ def add_to_cart(request, product_id):
             cart_item.quantity += int(quantity)
         cart_item.save()
 
-        return JsonResponse({'success': True, 'message': 'Product added to favourites!'})
+        # Calculate the total number of products in the cart and the total price
+        count_of_products = cart.products.count()  # Total unique products in the cart
+        total_price = sum(
+            item.quantity * item.product.price_with_discount
+            for item in cart.cart_items.all()
+        )
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Product added to cart!',
+            'count_of_products': count_of_products,
+            'cart_total_price': f'{total_price:.2f}'
+        })
 
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
 
 
 
@@ -119,9 +132,9 @@ def delete_cart_items(request):
 def get_cart_items(user):
     try:
         cart = Cart.objects.get(user=user)  #ForeignKey from Cart to User
-        return cart.cart_items.all()  
+        return cart.cart_items.all()
     except Cart.DoesNotExist:
-        return []  
+        return []
 
 
 @login_required
@@ -130,8 +143,8 @@ def checkout(request):
 
     cart_items_with_total = []
     total_quantity = 0
-    total_discount = 0  
-    subtotal_price = 0 
+    total_discount = 0
+    subtotal_price = 0
     count_of_products = 0
     order_date = timezone.now()
 
@@ -147,7 +160,7 @@ def checkout(request):
         if product.discount > 0:
             subtotal_price += item.quantity * price
         else:
-            subtotal_price += total  
+            subtotal_price += total
 
         cart_items_with_total.append({
             'item': item,
@@ -161,7 +174,7 @@ def checkout(request):
         total_quantity += item.quantity
 
     total_price = sum(item['total'] for item in cart_items_with_total)
-    count_of_products = cart.products.count()  
+    count_of_products = cart.products.count()
 
     context = {
         'cart_items_with_total': cart_items_with_total,
@@ -212,4 +225,3 @@ def checkout(request):
             print("Error: Incorrect data!")
 
     return render(request, "checkout.html", context)
-

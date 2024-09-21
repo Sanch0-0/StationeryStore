@@ -86,64 +86,6 @@
 </div>
 
 
-<script src="{% static 'js/cart/dynamic_cart_icon.js' %}"></script>
-<script>
-function addToFavourite(productId) {
-    const form = document.getElementById(`add-to-favourite-form-${productId}`);
-    const formData = new FormData(form);
-
-    fetch(form.action, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Optionally update the UI to indicate the product was added to favourites
-            alert('Product added to favourites!');
-        } else {
-            alert('Failed to add product to favourites.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
-function addToCart(productId) {
-    const form = document.getElementById(`add-to-cart-form-${productId}`);
-    const formData = new FormData(form);
-
-    fetch(form.action, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Product added to cart!');
-
-            // Optionally update the UI to reflect the new cart state
-            document.getElementById('cart-total-quantity').innerText = data.total_quantity;
-            document.getElementById('cart-total-price').innerText = data.cart_total_price;
-        } else {
-            alert('Failed to add product to cart.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-</script>
-
 
 <style>
 .product_listing_main .row {
