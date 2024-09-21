@@ -18,6 +18,22 @@
             </div>
         </div>
 
+        <div class="widget widget__collections">
+            <h3 class="widget_header">Brands</h3>
+            <div class="widget_content">
+                <select name="brand" id="id_brand">
+                    <option enabled value="">All Brands</option>
+                    {% for brand in products_filter.form.fields.brand.choices %}
+                        <option value="{{ brand.0 }}" {% if request.GET.brand|stringformat:"s" == brand.0|stringformat:"s" %}selected{% endif %}>
+                            {{ brand.1 }}
+                        </option>
+                    {% empty %}
+                    <option disabled>No brands available.</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
         <div class="widget widget__types">
             <h3 class="widget_header">Filters</h3>
             <div class="widget_content">
@@ -94,5 +110,3 @@
     }
 
 </style>
-
-

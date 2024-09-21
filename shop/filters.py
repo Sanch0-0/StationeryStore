@@ -15,6 +15,18 @@ class ProductsFilter(django_filters.FilterSet):
         queryset=Category.objects.all()
     )
 
+    brand = django_filters.ChoiceFilter(
+        field_name='brand',
+        choices=[],  # Will populate in __init__
+        null_label="Unbranded"
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(ProductsFilter, self).__init__(*args, **kwargs)
+        # Dynamically populate brand choices from distinct values in Product
+        self.filters['brand'].extra['choices'] = [(b, b) for b in Product.objects.values_list('brand', flat=True).distinct()]
+
+
     def filter_has_discount(self, queryset, name, value):
         if value is True:
             # Only return products with a discount greater than 0
@@ -39,5 +51,6 @@ class ProductsFilter(django_filters.FilterSet):
         fields = [
             'name',
             'category',
-            'has_discount'
+            'has_discount',
+            'brand'
         ]
