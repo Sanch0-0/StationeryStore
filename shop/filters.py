@@ -17,8 +17,7 @@ class ProductsFilter(django_filters.FilterSet):
 
     brand = django_filters.ChoiceFilter(
         field_name='brand',
-        choices=[],  # Will populate in __init__
-        null_label="Unbranded"
+        choices=[],
     )
 
     def __init__(self, *args, **kwargs):
