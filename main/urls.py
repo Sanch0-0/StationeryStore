@@ -11,6 +11,7 @@ urlpatterns = [
     path('user/', include('users.urls')),
     path('cart/', include("cart.urls")),
     path('favourite/', include('favourite.urls')),
+    path('api/', include('api.urls'))
 ]
 
 if settings.DEBUG:

@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'api',
+    'drf_yasg',
+    'rest_framework_simplejwt',
     'rest_framework',
     'django_recaptcha',
     'easy_thumbnails',
@@ -206,7 +209,7 @@ RECAPTCHA_PRIVATE_KEY = '6LemUzgqAAAAAJfYSMT6YbpiHqnFnSYBeGNUi1Hw'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100,
+    'PAGE_SIZE': 6,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
