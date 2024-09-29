@@ -152,8 +152,6 @@ THUMBNAIL_ALIASES = {
     },
 }
 
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -203,15 +201,16 @@ EMAIL_HOST_USER = 'fff.alex.er1317.fff@mail.ru'
 EMAIL_HOST_PASSWORD = 'FiP9e1Ltx9mcR9PubcZC'
 
 
-RECAPTCHA_PUBLIC_KEY = '6LemUzgqAAAAAGOcdb2DcLyThy8716EF3v7hpPw5'
-RECAPTCHA_PRIVATE_KEY = '6LemUzgqAAAAAJfYSMT6YbpiHqnFnSYBeGNUi1Hw'
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
 
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 6,
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
