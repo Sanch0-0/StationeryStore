@@ -4,6 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
 from users.models import User
+from shop.models import Category, Product, ReviewRating
 
 
 
@@ -91,3 +92,18 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
         instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.save()
         return instance
+
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('id', 'name')
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ('id', 'image', 'name',
+                  'description', 'price', 'discount',
+                  'category', 'brand', 'created_at',
+                  'price_with_discount', 'average_rating')
