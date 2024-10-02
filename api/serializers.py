@@ -1,97 +1,65 @@
-from django.contrib.auth import authenticate
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth import get_user_model, authenticate
 
-from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
-from users.models import User
+
 from shop.models import Category, Product, ReviewRating
 
 
 
+User = get_user_model()
+
 class RegisterSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(
-        required=True,
-        validators=[UniqueValidator(queryset=User.objects.all(), message="This username is already taken.")]
-    )
-    email = serializers.EmailField(
-        required=True,
-        validators=[
-            UniqueValidator(queryset=User.objects.all(), message="This email is already registered.")
-        ]
-    )
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password_confirm = serializers.CharField(write_only=True, required=True)
-    mobile_phone = serializers.CharField(required=False)
-    full_name = serializers.CharField(required=True)
-    country = serializers.CharField(required=True)
-    postal_code = serializers.CharField(required=True)
-    place_of_delivery = serializers.CharField(required=True)
+    password1 = serializers.CharField(write_only=True, min_length=8)
+    password2 = serializers.CharField(write_only=True, min_length=8)
 
     class Meta:
         model = User
         fields = [
-            'username', 'email', 'password', 'password_confirm',
+            'username', 'email', 'password1', 'password2',
             'mobile_phone', 'full_name', 'country', 'postal_code', 'place_of_delivery'
         ]
 
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("A user with that email already exists.")
+        return value
+
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("A user with that username already exists.")
+        return value
+
     def validate(self, attrs):
-        if attrs['password'] != attrs['password_confirm']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        if attrs['password1'] != attrs['password2']:
+            raise serializers.ValidationError("Passwords don't match.")
         return attrs
 
     def create(self, validated_data):
-        validated_data.pop('password_confirm')
-        user = User.objects.create(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            full_name=validated_data.get('full_name'),
-            mobile_phone=validated_data.get('mobile_phone', None),
-            country=validated_data.get('country'),
-            postal_code=validated_data.get('postal_code'),
-            place_of_delivery=validated_data.get('place_of_delivery'),
-        )
-        user.set_password(validated_data['password'])
+        # Удаляем password1 и password2, так как они не нужны для создания пользователя
+        password = validated_data.pop('password1')
+        validated_data.pop('password2')  # Удаляем password2, так как он не нужен
+
+        user = User(**validated_data)
+        user.set_password(password)  # Устанавливаем хэшированный пароль
         user.save()
         return user
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(write_only=True, required=True)
-
-    class Meta:
-        fields = ['username', 'password']
+    username_or_email = serializers.CharField(max_length=100)
+    password = serializers.CharField(max_length=100, write_only=True)
 
     def validate(self, attrs):
-        user = authenticate(username=attrs['username'], password=attrs['password'])
-        if not user:
-            raise serializers.ValidationError("Invalid credentials.")
+        user = authenticate(username=attrs['username_or_email'], password=attrs['password'])
+        if user is None:
+            raise serializers.ValidationError("Invalid credentials. Please try again.")
         attrs['user'] = user
         return attrs
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'email']
 
 
-class UpdateProfileSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = User
-        fields = ['username', 'full_name', 'mobile_phone', 'country', 'place_of_delivery', 'postal_code', 'avatar']
-
-    def update(self, instance, validated_data):
-        instance.username = validated_data.get('username', instance.username)
-        instance.full_name = validated_data.get('full_name', instance.full_name)
-        instance.mobile_phone = validated_data.get('mobile_phone', instance.mobile_phone)
-        instance.country = validated_data.get('country', instance.country)
-        instance.place_of_delivery = validated_data.get('place_of_delivery', instance.place_of_delivery)
-        instance.postal_code = validated_data.get('postal_code', instance.postal_code)
-        instance.avatar = validated_data.get('avatar', instance.avatar)
-        instance.save()
-        return instance
 
 
 
@@ -100,10 +68,10 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ('id', 'name')
 
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'image', 'name',
                   'description', 'price', 'discount',
-                  'category', 'brand', 'created_at',
-                  'price_with_discount', 'average_rating')
+                  'category', 'brand','price_with_discount', 'average_rating')

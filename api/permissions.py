@@ -1,13 +1,11 @@
-from rest_framework import permissions
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-class IsSuperUser(permissions.BasePermission):
+class IsSuperUser(BasePermission):
     """
     Custom permission to only allow superusers to update or delete an object.
     """
     def has_permission(self, request, view):
-        # Allow read (GET, HEAD, OPTIONS) for any request
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in SAFE_METHODS:
             return True
 
-        # Only allow superusers to perform write operations (POST, PUT, DELETE)
-        return request.user.is_superuser
+        return bool(request.user and request.user.is_staff)
