@@ -11,12 +11,14 @@ from .views import (
     RegisterViewSet,
     CategoryViewSet,
     ProductViewSet,
+    UpdateProfileViewSet
 )
 
 router = DefaultRouter()
 router.register(r'login', LoginViewSet, basename='login')
 router.register(r'logout', LogoutViewSet, basename='logout')
 router.register(r'register', RegisterViewSet, basename='register')
+router.register(r'', UpdateProfileViewSet, basename='update_profile')
 router.register(r'category', CategoryViewSet, basename='category')
 router.register(r'product', ProductViewSet, basename='product')
 

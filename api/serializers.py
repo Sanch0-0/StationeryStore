@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model, authenticate
+from django_countries.fields import CountryField
 
 from rest_framework import serializers
-
 from shop.models import Category, Product, ReviewRating
 
 
@@ -56,6 +56,32 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
+
+
+
+class UpdateProfileSerializer(serializers.ModelSerializer):
+    country = serializers.CharField(allow_blank=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'full_name', 'mobile_phone', 'country', 'place_of_delivery', 'postal_code', 'avatar']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        # Convert country object to its string representation (like 'US' or 'United States')
+        representation['country'] = instance.country.name if instance.country else None
+        return representation
+
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.full_name = validated_data.get('full_name', instance.full_name)
+        instance.mobile_phone = validated_data.get('mobile_phone', instance.mobile_phone)
+        instance.country = validated_data.get('country', instance.country) 
+        instance.place_of_delivery = validated_data.get('place_of_delivery', instance.place_of_delivery)
+        instance.postal_code = validated_data.get('postal_code', instance.postal_code)
+        instance.avatar = validated_data.get('avatar', instance.avatar)
+        instance.save()
+        return instance
 
 
 

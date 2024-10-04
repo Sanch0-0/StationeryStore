@@ -13,7 +13,12 @@ from django.contrib.auth.backends import ModelBackend
 from shop.models import Category, Product, ReviewRating
 from .serializers import ProductSerializer, CategorySerializer
 from django.contrib.auth import get_user_model, authenticate, login
-from .serializers import (RegisterSerializer, LoginSerializer, ProductSerializer, CategorySerializer)
+from .serializers import (
+    RegisterSerializer,
+    LoginSerializer,
+    ProductSerializer,
+    CategorySerializer,
+    UpdateProfileSerializer)
 
 
 User = get_user_model()
@@ -78,6 +83,27 @@ class LogoutViewSet(viewsets.ViewSet):
 
         except (TokenError, InvalidToken):
             return Response({"detail": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UpdateProfileViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['put', 'get'], url_path='profile/update')
+    def update_profile(self, request):
+        user = request.user
+        if request.method == 'GET':
+            serializer = UpdateProfileSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        else:
+            serializer = UpdateProfileSerializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                user = serializer.save()
+                return Response({
+                    "user": serializer.data,
+                    "message": "Profile updated successfully!"
+                }, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
