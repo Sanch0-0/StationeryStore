@@ -22,7 +22,7 @@ router.register(r'product', ProductViewSet, basename='product')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('token/', TokenObtainPairView.as_view(), name='login'),
+    path('token/', TokenObtainPairView.as_view(), name='token'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('auth/', include('rest_framework.urls'))
