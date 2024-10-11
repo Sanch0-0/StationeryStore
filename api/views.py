@@ -12,6 +12,7 @@ from django.conf import settings
 from shop.models import Category, Product, ReviewRating
 from .serializers import ProductSerializer, CategorySerializer
 from django.contrib.auth import get_user_model, authenticate, login, logout
+from .permissions import IsOwnerOrReadOnly
 
 
 User = get_user_model()
@@ -100,6 +101,7 @@ class UpdateProfileViewSet(RetrieveModelMixin, UpdateModelMixin, viewsets.Generi
 
 
 
+
 #! Shop views set
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -116,10 +118,13 @@ class ProductViewSet(viewsets.ModelViewSet):
 class ReviewRatingViewSet(viewsets.ModelViewSet):
     queryset = ReviewRating.objects.all()
     serializer_class = ReviewRatingSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+
 
 #! Favourite views set
 

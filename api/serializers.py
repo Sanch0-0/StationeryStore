@@ -11,7 +11,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'full_name', 'mobile_phone', 'country', 'place_of_delivery', 'postal_code', 'avatar']
+        fields = ['id', 'username', 'full_name', 'mobile_phone', 'country', 'place_of_delivery', 'postal_code', 'avatar', 'email']
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -114,11 +114,19 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ReviewRatingSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = ReviewRating
-        fieds = '__all__'
+        fields = ['id', 'product', 'user', 'review', 'rating', 'created_at']
+
+    def validate_rating(self, value):
+        if not isinstance(value, int):
+            raise serializers.ValidationError("Raiting must be integer!")
+        if value < 1 or value > 5:
+            raise serializers.ValidationError("Min raiting value is 1, max is 5!")
+        return value
 
     def create(self, validated_data):
-        # Привязываем текущего пользователя к отзыву
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)

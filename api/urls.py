@@ -11,9 +11,12 @@ router = DefaultRouter()
 router.register(r'login', LoginViewSet, basename='login')
 router.register(r'logout', LogoutViewSet, basename='logout')
 router.register(r'register', RegisterViewSet, basename='register')
-router.register(r'category', CategoryViewSet, basename='category')
-router.register(r'product', ProductViewSet, basename='product')
-router.register(r'user', UpdateProfileViewSet, basename='profile')
+router.register(r'profile', UpdateProfileViewSet, basename='update')
+
+router.register(r'review', ReviewRatingViewSet, basename='review')
+router.register(r'category', CategoryViewSet)
+router.register(r'product', ProductViewSet)
+print(router.urls)
 
 urlpatterns = [
     path('', include(router.urls)),
