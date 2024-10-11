@@ -8,4 +8,4 @@ cart/migrations*
 favourite/migrations*
 shop/migrations*
 users/migrations*
-
+migrations_refresher.py

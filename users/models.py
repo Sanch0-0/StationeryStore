@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from image_cropping import ImageRatioField
 from django_countries.fields import CountryField
+from django.core.validators import RegexValidator
 
 
 class CustomUserManager(BaseUserManager):
@@ -31,7 +31,11 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     email = models.EmailField("Email", unique=True, null=False, blank=False)
     full_name = models.CharField("Full name", max_length=100, null=True, blank=True)
-    mobile_phone = models.IntegerField("Phone number", null=True, blank=True)
+    mobile_phone = models.CharField(
+        max_length=15,
+        validators=[RegexValidator(regex=r'^\d{10,15}$',
+        message="Phone number must starts from 0, up to 15 digits allowed.")]
+    )
     avatar = models.ImageField("Avatar", upload_to='users/avatar', default='users/default/user-avatar.png', blank=True)
     place_of_delivery = models.CharField("Place of Delivery", max_length=100, null=True, blank=True)
     postal_code = models.PositiveIntegerField("Postal Code", null=True, blank=True)

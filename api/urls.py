@@ -5,27 +5,19 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
-from .views import (
-    LoginViewSet,
-    LogoutViewSet,
-    RegisterViewSet,
-    CategoryViewSet,
-    ProductViewSet,
-    UpdateProfileViewSet
-)
+from .views import *
 
 router = DefaultRouter()
 router.register(r'login', LoginViewSet, basename='login')
 router.register(r'logout', LogoutViewSet, basename='logout')
 router.register(r'register', RegisterViewSet, basename='register')
-router.register(r'', UpdateProfileViewSet, basename='update_profile')
 router.register(r'category', CategoryViewSet, basename='category')
 router.register(r'product', ProductViewSet, basename='product')
+router.register(r'user', UpdateProfileViewSet, basename='profile')
 
 urlpatterns = [
     path('', include(router.urls)),
     path('token/', TokenObtainPairView.as_view(), name='token'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('auth/', include('rest_framework.urls'))
 ]

@@ -50,8 +50,8 @@ class Product(models.Model):
             avg_rating=Avg('review_ratings__rating'),
             rating_count=Count('review_ratings')
         ).filter(
-            avg_rating__gt=4.5,  
-            rating_count__gt=0   
+            avg_rating__gt=4.5,
+            rating_count__gt=0
         ).order_by('-avg_rating')[:limit]
 
 
@@ -59,7 +59,7 @@ class ReviewRating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="review_ratings")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     review = models.TextField(max_length=500, blank=True)
-    rating = models.PositiveSmallIntegerField(default=0) 
+    rating = models.PositiveSmallIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

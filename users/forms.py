@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.contrib.auth import authenticate
 from .models import User
 from django_recaptcha.fields import ReCaptchaField
@@ -8,6 +9,11 @@ class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='First password', min_length=8, widget=forms.PasswordInput)
     password2 = forms.CharField(label='Second password', min_length=8, widget=forms.PasswordInput)
     captcha = ReCaptchaField()
+
+    mobile_phone = forms.CharField(
+        label="Mobile phone",
+        validators=[RegexValidator(regex=r'^\d{10,15}$', message="Phone number must start from 0, up to 15 digits allowed.")]
+    )
 
     class Meta:
         model = User
@@ -58,8 +64,6 @@ class LoginForm(forms.Form):
 
         if user is None:
             raise ValidationError("Invalid credentials. Please try again.")
-        
+
         cleaned_data['user'] = user
         return cleaned_data
-
-
