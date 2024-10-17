@@ -25,7 +25,6 @@ class ProductsFilter(django_filters.FilterSet):
         # Dynamically populate brand choices from distinct values in Product
         self.filters['brand'].extra['choices'] = [(b, b) for b in Product.objects.values_list('brand', flat=True).distinct()]
 
-
     def filter_has_discount(self, queryset, name, value):
         if value is True:
             # Only return products with a discount greater than 0

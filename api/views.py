@@ -2,7 +2,7 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
+from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin, ListModelMixin
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly, IsAdminUser
@@ -124,8 +124,37 @@ class ReviewRatingViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
+class ProductFilterViewSet(ListModelMixin, viewsets.GenericViewSet):
+    queryset = Product.objects.all()
+    permission_classes = [AllowAny]
+
+    def get_serializer_class(self):
+        # Use ProductFilterSerializer for filtering input validation,
+        # and ProductSerializer for the actual product data response.
+        if self.action == 'list':
+            return ProductSerializer
+        return super().get_serializer_class()
+
+    def list(self, request, *args, **kwargs):
+        # Use ProductFilterSerializer to handle filtering and sorting
+        filter_serializer = ProductFilterSerializer(data=request.query_params)
+        filter_serializer.is_valid(raise_exception=True)
+
+        # Get the filtered and sorted queryset
+        queryset = filter_serializer.filter_queryset(self.queryset)
+
+        # Paginate the queryset
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        # Serialize the data without pagination
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
+    
 #! Favourite views set
 
 

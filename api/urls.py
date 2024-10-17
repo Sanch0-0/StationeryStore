@@ -14,9 +14,9 @@ router.register(r'register', RegisterViewSet, basename='register')
 router.register(r'profile', UpdateProfileViewSet, basename='update')
 
 router.register(r'review', ReviewRatingViewSet, basename='review')
+router.register(r'filters', ProductFilterViewSet, basename='filters')
 router.register(r'category', CategoryViewSet)
 router.register(r'product', ProductViewSet)
-print(router.urls)
 
 urlpatterns = [
     path('', include(router.urls)),

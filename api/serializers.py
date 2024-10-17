@@ -1,9 +1,9 @@
+from django.db.models import F
+from shop.filters import ProductsFilter
 from django.contrib.auth import get_user_model, authenticate
 from django.core.validators import RegexValidator
 from rest_framework import serializers
 from shop.models import Category, Product, ReviewRating
-
-
 
 User = get_user_model()
 
@@ -130,3 +130,38 @@ class ReviewRatingSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
+
+
+class ProductFilterSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False)
+    price__gt = serializers.DecimalField(required=False, max_digits=10, decimal_places=2)
+    price__lt = serializers.DecimalField(required=False, max_digits=10, decimal_places=2)
+    has_discount = serializers.BooleanField(required=False)
+    category = serializers.ListField(
+        child=serializers.IntegerField(), required=False
+    )
+    brand = serializers.CharField(required=False)
+
+    # Sorting options
+    ordering = serializers.ChoiceField(
+        choices=['price', '-price', 'created_at', '-created_at', 'name', '-name', 'random'],
+        required=False
+    )
+
+    def filter_queryset(self, queryset):
+        # Apply filters using the ProductFilter from filters.py
+        filter_data = {
+            key: value for key, value in self.validated_data.items()
+            if key in ['name', 'price__gt', 'price__lt', 'has_discount', 'category', 'brand']
+        }
+        filter_set = ProductsFilter(filter_data, queryset=queryset)
+        filtered_queryset = filter_set.qs
+
+        # Apply sorting
+        ordering = self.validated_data.get('ordering')
+        if ordering == 'random':
+            filtered_queryset = filtered_queryset.order_by('?')
+        elif ordering:
+            filtered_queryset = filtered_queryset.order_by(ordering)
+
+        return filtered_queryset
