@@ -7,12 +7,15 @@ from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly, IsAdminUser
 
-from .serializers import *
 from django.conf import settings
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model, authenticate, login, logout
+
+from .serializers import *
+from favourite.models import Favourite
+from .permissions import IsOwnerOrReadOnly
 from shop.models import Category, Product, ReviewRating
 from .serializers import ProductSerializer, CategorySerializer
-from django.contrib.auth import get_user_model, authenticate, login, logout
-from .permissions import IsOwnerOrReadOnly
 
 
 User = get_user_model()
@@ -50,25 +53,22 @@ class LoginViewSet(viewsets.ViewSet):
         serializer = LoginSerializer(data=request.data)
 
         if serializer.is_valid():
-            user = authenticate(username=serializer.validated_data['username_or_email'], password=serializer.validated_data['password'])
+            user = serializer.validated_data['user']
 
-            if user is not None:
-                # Проверка наличия активного refresh токена
-                if OutstandingToken.objects.filter(user=user).exists() and not BlacklistedToken.objects.filter(user=user).exists():
-                    return Response({
-                        'message': "User is already logged in.",
-                        'access': str(RefreshToken.for_user(user).access_token),
-                    }, status=status.HTTP_200_OK)
-
-                # Если нет активного токена, создаем новые токены
-                refresh = RefreshToken.for_user(user)
+            # Проверка наличия активного refresh токена
+            if OutstandingToken.objects.filter(user_id=user.id).exists() and not BlacklistedToken.objects.filter(token__user_id=user.id).exists():
                 return Response({
-                    'message': "Successfully logged in!",
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
+                    'message': "User is already logged in.",
+                    'access': str(RefreshToken.for_user(user).access_token),
                 }, status=status.HTTP_200_OK)
 
-            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            # Если нет активного токена, создаем новые токены
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'message': "Successfully logged in!",
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            }, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -154,8 +154,86 @@ class ProductFilterViewSet(ListModelMixin, viewsets.GenericViewSet):
         return Response(serializer.data)
 
 
-    
+
+
 #! Favourite views set
+# class FavouriteViewSet(viewsets.ModelViewSet):
+#     serializer_class = FavouriteItemSerializer
+#     permission_classes = [IsAuthenticated]
+
 
 
 #! Cart views set
+class CartViewSet(viewsets.ViewSet):
+    serializer_class = CartItemSerializer
+    permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, pk=None):
+        # Получаем корзину текущего пользователя
+        user = request.user
+        cart = get_object_or_404(Cart, user=user)
+
+        # Ищем элемент корзины по id (pk)
+        cart_item = get_object_or_404(CartItem, cart=cart, id=pk)
+
+        # Сериализуем найденный элемент
+        serializer = CartItemSerializer(cart_item)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def list(self, request):
+        user = request.user
+        cart, created = Cart.objects.get_or_create(user=user)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        return CartItem.objects.filter(cart__user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = CartItemSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            product_id = request.data.get('product_id')
+            quantity = request.data.get('quantity')
+
+            # Получаем или создаем корзину текущего пользователя
+            cart, created = Cart.objects.get_or_create(user=request.user)
+
+            # Обновляем или создаем элемент в корзине
+            cart_item, item_created = CartItem.objects.update_or_create(
+                cart=cart, product_id=product_id,
+                defaults={'quantity': quantity}
+            )
+
+            # Сериализуем созданный или обновленный элемент корзины
+            item_serializer = CartItemSerializer(cart_item, context={'request': request})
+
+            return Response({
+                'detail': "Product added to cart successfully.",
+                'cart_item': item_serializer.data
+            }, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk=None):
+        user = request.user
+        cart = get_object_or_404(Cart, user=user)
+        data = request.data
+
+        # Получаем элемент корзины
+        cart_item = get_object_or_404(CartItem, cart=cart, product__id=data.get('product_id'))
+        cart_item.quantity = data.get('quantity', cart_item.quantity)
+        cart_item.save()
+
+        item_serializer = CartItemSerializer(cart_item, context={'request': request})
+
+        return Response({
+            'detail': 'Quantity updated successfully.',
+            'cart_item': item_serializer.data}, status=status.HTTP_200_OK)
+
+    def destroy(self, request, pk=None):
+        user = request.user
+        cart = get_object_or_404(Cart, user=user)
+        cart_item = get_object_or_404(CartItem, cart=cart, id=pk)
+        cart_item.delete()
+        return Response({'detail': 'Item removed from cart.'}, status=status.HTTP_204_NO_CONTENT)
