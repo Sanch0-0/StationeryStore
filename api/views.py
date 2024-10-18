@@ -12,9 +12,9 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from .serializers import *
-from favourite.models import Favourite
 from .permissions import IsOwnerOrReadOnly
 from shop.models import Category, Product, ReviewRating
+# from favourite.models import Favourite, FavouriteProduct
 from .serializers import ProductSerializer, CategorySerializer
 
 
@@ -156,13 +156,6 @@ class ProductFilterViewSet(ListModelMixin, viewsets.GenericViewSet):
 
 
 
-#! Favourite views set
-# class FavouriteViewSet(viewsets.ModelViewSet):
-#     serializer_class = FavouriteItemSerializer
-#     permission_classes = [IsAuthenticated]
-
-
-
 #! Cart views set
 class CartViewSet(viewsets.ViewSet):
     serializer_class = CartItemSerializer
@@ -218,11 +211,10 @@ class CartViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         user = request.user
         cart = get_object_or_404(Cart, user=user)
-        data = request.data
 
         # Получаем элемент корзины
-        cart_item = get_object_or_404(CartItem, cart=cart, product__id=data.get('product_id'))
-        cart_item.quantity = data.get('quantity', cart_item.quantity)
+        cart_item = get_object_or_404(CartItem, cart=cart, id=pk)
+        cart_item.quantity = request.data.get('quantity', cart_item.quantity)
         cart_item.save()
 
         item_serializer = CartItemSerializer(cart_item, context={'request': request})
@@ -237,3 +229,75 @@ class CartViewSet(viewsets.ViewSet):
         cart_item = get_object_or_404(CartItem, cart=cart, id=pk)
         cart_item.delete()
         return Response({'detail': 'Item removed from cart.'}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+#! Favourite views set
+class FavouriteViewSet(viewsets.ModelViewSet):
+    serializer_class = FavouriteProductSerializer
+    permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, pk=None):
+        user = request.user
+        favourite = get_object_or_404(Favourite, user=user)
+
+        favourite_product = get_object_or_404(FavouriteProduct, favourite=favourite, id=pk)
+
+        serializer = FavouriteProductSerializer(favourite_product)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def list(self, request):
+        user = request.user
+        favourite, created = Favourite.objects.get_or_create(user=user)
+        serializer = FavouriteSerializer(favourite)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        return FavouriteProduct.objects.filter(cart__user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = FavouriteProductSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            product_id = request.data.get('product_id')
+            quantity = request.data.get('quantity')
+
+            favourite, created = Favourite.objects.get_or_create(user=request.user)
+
+            favourite_product, product_created = FavouriteProduct.objects.update_or_create(
+                favourite=favourite, product_id=product_id,
+                defaults={'quantity': quantity}
+            )
+
+            product_serializer = FavouriteProductSerializer(favourite_product, context={'request': request})
+
+            return Response({
+                'detail': "Product added to favourite successfully.",
+                'favourite_product': product_serializer.data
+            }, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk=None):
+        user = request.user
+        favourite = get_object_or_404(Favourite, user=user)
+
+        favourite_product = get_object_or_404(FavouriteProduct, favourite=favourite, id=pk)
+
+        favourite_product.quantity = request.data.get('quantity', favourite_product.quantity)
+        favourite_product.save()
+
+        product_serializer = FavouriteProductSerializer(favourite_product, context={'request': request})
+
+        return Response({
+            'detail': 'Quantity updated successfully.',
+            'favourite_product': product_serializer.data
+        }, status=status.HTTP_200_OK)
+
+    def destroy(self, request, pk=None):
+        user = request.user
+        favourite = get_object_or_404(Favourite, user=user)
+        favourite_product = get_object_or_404(FavouriteProduct, favourite=favourite, id=pk)
+        favourite_product.delete()
+        return Response({'detail': 'Item removed from favourites.'}, status=status.HTTP_204_NO_CONTENT)

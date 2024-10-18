@@ -18,7 +18,7 @@ router.register(r'filters', ProductFilterViewSet, basename='filters')
 router.register(r'category', CategoryViewSet)
 router.register(r'product', ProductViewSet)
 
-# router.register(r'favourite', FavouriteViewSet, basename='favourite')
+router.register(r'favourite', FavouriteViewSet, basename='favourite')
 router.register(r'cart', CartViewSet, basename='cart')
 
 urlpatterns = [
