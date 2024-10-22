@@ -14,7 +14,6 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from .serializers import *
 from .permissions import IsOwnerOrReadOnly
 from shop.models import Category, Product, ReviewRating
-# from favourite.models import Favourite, FavouriteProduct
 from .serializers import ProductSerializer, CategorySerializer
 
 
@@ -78,15 +77,17 @@ class LogoutViewSet(viewsets.ViewSet):
 
     def create(self, request):
         try:
-            # Получаем refresh-токен из тела запроса
+            # Get the refresh token from the request body
             refresh_token = request.data.get("refresh")
             if not refresh_token:
                 return Response({"detail": "Refresh token is required."}, status=status.HTTP_400_BAD_REQUEST)
 
+            # Blacklist the refresh token
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-            return Response({"detail": "Successfully logged out."}, status=status.HTTP_205_RESET_CONTENT)
+            # Inform the client to clear the access token
+            return Response({"detail": "Successfully logged out from account."}, status=status.HTTP_205_RESET_CONTENT)
 
         except (TokenError, InvalidToken):
             return Response({"detail": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST)

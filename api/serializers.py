@@ -76,6 +76,7 @@ class LoginSerializer(serializers.Serializer):
 
 class UpdateProfileSerializer(serializers.ModelSerializer):
     country = serializers.CharField(allow_blank=True)
+    avatar = serializers.ImageField(required=False)
 
     class Meta:
         model = User
@@ -94,7 +95,12 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
         instance.country = validated_data.get('country', instance.country)
         instance.place_of_delivery = validated_data.get('place_of_delivery', instance.place_of_delivery)
         instance.postal_code = validated_data.get('postal_code', instance.postal_code)
-        instance.avatar = validated_data.get('avatar', instance.avatar)
+
+        # Update the avatar only if a new file is provided
+        avatar = validated_data.get('avatar')
+        if avatar:
+            instance.avatar = avatar
+
         instance.save()
         return instance
 
