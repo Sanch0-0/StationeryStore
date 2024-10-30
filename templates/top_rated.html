@@ -24,7 +24,7 @@
                             {% for i in "12345" %}
                             <span class="star" data-value="{{ i }}">&#9733;</span>
                             {% endfor %}
-                            <span class="avg-rating">{{ product.avg_rating }}</span>
+                            <span class="avg-rating">{{ product.avg_rating|floatformat:1 }}</span>
                         </div>
                     </div>
                 </div>
