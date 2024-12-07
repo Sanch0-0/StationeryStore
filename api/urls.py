@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 from .views import *
+from .yasg import urlpatterns as doc_urls
 
 router = DefaultRouter()
 router.register(r'login', LoginViewSet, basename='login')
@@ -27,3 +28,4 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
+urlpatterns += doc_urls
