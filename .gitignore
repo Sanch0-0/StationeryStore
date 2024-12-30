@@ -9,3 +9,5 @@ favourite/migrations*
 shop/migrations*
 users/migrations*
 migrations_refresher.py
+logs/*
+debug.logs

@@ -9,7 +9,9 @@ from .models import Cart, CartItem
 from shop.models import Product
 from users.models import User
 
+from .tasks import send_checkout_email
 from main import utils
+from main.tasks import log_task
 import secrets
 import string
 
@@ -17,6 +19,7 @@ import string
 
 @login_required
 def get_cart(request):
+    log_task(f"User {request.user.username} accessed the Cart page.", 'info')
     cart, created = Cart.objects.get_or_create(user=request.user)
 
     cart_items_with_total = []
@@ -33,6 +36,7 @@ def get_cart(request):
             'total': total,
             'total_discounted_price': total_discounted_price,
         })
+        log_task(f"Processed cart item {item.id}: quantity={item.quantity}, total={total}.", 'debug')
         total_quantity += item.quantity
 
     total_price = sum(item['total'] for item in cart_items_with_total)
@@ -69,12 +73,14 @@ def add_to_cart(request, product_id):
 
         if created:
             cart_item.quantity = int(quantity)
+            log_task(f"User {request.user.username} added new product {product.id} to cart with quantity {quantity}.", 'info')
         else:
             cart_item.quantity += int(quantity)
+            log_task(f"User {request.user.username} updated product {product.id} quantity to {cart_item.quantity} in the cart.", info)
         cart_item.save()
 
         # Calculate the total number of products in the cart and the total price
-        count_of_products = cart.products.count()  # Total unique products in the cart
+        count_of_products = cart.products.count()
         total_price = sum(
             item.quantity * item.product.price_with_discount
             for item in cart.cart_items.all()
@@ -102,31 +108,36 @@ def update_cart_item(request, product_id):
         new_quantity = int(request.POST.get('quantity', 1))
         cart_item.quantity = new_quantity
         cart_item.save()
+        log_task(f"Cart for user {request.user.username} has been updated.", 'info')
 
     item_total = cart_item.quantity * cart_item.product.price_with_discount
     cart_total = sum(item.quantity * item.product.price_with_discount for item in cart.cart_items.all())
+
+    log_task(f"Total items in {request.user.username}'s cart: {cart_total}.", 'debug')
 
     return JsonResponse({
         'item_total': item_total,
         'cart_total': cart_total,
     })
 
-
 @login_required
 def delete_from_cart(request, product_id):
     cart = Cart.objects.get(user=request.user)
     cart_item = get_object_or_404(CartItem, cart=cart, product_id=product_id)
     cart_item.delete()
+
+    log_task(f"User {request.user.username} deleted a product: {product_id} from cart.", 'info')
     return redirect(request.META.get("HTTP_REFERER", "/"))
 
 
 @login_required
 def delete_cart_items(request):
-    print(request.POST)
     if request.method == "POST":
-        item_ids= request.POST.get("item_ids").split(",")
-        CartItem.objects.filter(id__in=item_ids).delete()
-    return response.HttpResponse(status=200)
+        item_ids = request.POST.get("item_ids").split(",")
+        deleted_count, _ = CartItem.objects.filter(id__in=item_ids).delete()
+            
+        log_task(f'The cart has been cleared of {deleted_count} products.', 'info')
+    return HttpResponse(status=200)
 
 
 def get_cart_items(user):
@@ -134,6 +145,7 @@ def get_cart_items(user):
         cart = Cart.objects.get(user=user)  #ForeignKey from Cart to User
         return cart.cart_items.all()
     except Cart.DoesNotExist:
+        log_task(f"Cart for user {user.username} doesn't exist!", 'error')
         return []
 
 
@@ -184,7 +196,6 @@ def checkout(request):
         'subtotal_price': subtotal_price,
     }
 
-
     if request.method == 'POST':
         full_name = request.POST.get('full-name')
         credit_card_num = request.POST.get('credit-card-num')
@@ -196,9 +207,12 @@ def checkout(request):
             def generate_personal_code(length=16):
                 characters = string.ascii_letters + string.digits
                 return ''.join(secrets.choice(characters) for _ in range(length))
+                log_task(f"Personal code for {request.user.name} has been generated", 'info')
 
             messages.success(request, "The payment was successful!")
             personal_number = generate_personal_code()
+
+            log_task(f"Checkout successful for user {request.user.email}, sending emails...", 'info')
 
             for email in emails:
                 subject = "Checkout Receipt"
@@ -221,7 +235,9 @@ def checkout(request):
                     html_message=html_message
                 )
 
+                log_task(f"Checkout email sent to {email}.", 'info')
+
         else:
-            print("Error: Incorrect data!")
+            log_task("Error: Incorrect data provided during checkout.", 'error')
 
     return render(request, "checkout.html", context)

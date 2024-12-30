@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     'django_recaptcha',
+    'django_celery_results',
     'easy_thumbnails',
     'image_cropping',
     'shop',
@@ -74,6 +75,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'main.urls'
+
 
 TEMPLATES = [
     {
@@ -201,6 +203,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'fff.alex.er1317.fff@mail.ru'
 EMAIL_HOST_PASSWORD = 'FiP9e1Ltx9mcR9PubcZC'
+DEFAULT_FROM_EMAIL = 'fff.alex.er1317.fff@mail.ru'
 
 
 RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
@@ -262,4 +265,74 @@ SIMPLE_JWT = {
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
+}
+
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://172.17.0.2:6379/0' # Connect to Redis
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+    }
+}
+CELERY_CACHE_BACKEND = 'default'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} => {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console', 'file'],
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'level': 'ERROR',
+            'handlers': ['console', 'file'],
+            'propagate': False,
+        },
+        'Stationery_Store': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',  # Logging level for your app
+            'propagate': True,
+        },
+    },
 }
