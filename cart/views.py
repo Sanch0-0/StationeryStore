@@ -57,7 +57,6 @@ def get_cart(request):
     return render(request, "cart.html", context)
 
 
-
 @login_required
 def add_to_cart(request, product_id):
     if request.method == 'POST':
@@ -76,7 +75,7 @@ def add_to_cart(request, product_id):
             log_task(f"User {request.user.username} added new product {product.id} to cart with quantity {quantity}.", 'info')
         else:
             cart_item.quantity += int(quantity)
-            log_task(f"User {request.user.username} updated product {product.id} quantity to {cart_item.quantity} in the cart.", info)
+            log_task(f"User {request.user.username} updated product {product.id} quantity to {cart_item.quantity} in the cart.", 'info')
         cart_item.save()
 
         # Calculate the total number of products in the cart and the total price
@@ -96,8 +95,6 @@ def add_to_cart(request, product_id):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 
-
-
 @login_required
 def update_cart_item(request, product_id):
 
@@ -113,12 +110,11 @@ def update_cart_item(request, product_id):
     item_total = cart_item.quantity * cart_item.product.price_with_discount
     cart_total = sum(item.quantity * item.product.price_with_discount for item in cart.cart_items.all())
 
-    log_task(f"Total items in {request.user.username}'s cart: {cart_total}.", 'debug')
-
     return JsonResponse({
         'item_total': item_total,
         'cart_total': cart_total,
     })
+
 
 @login_required
 def delete_from_cart(request, product_id):

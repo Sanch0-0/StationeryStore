@@ -85,8 +85,6 @@ def update_favourite_item(request, product_id):
     item_total = favourite_item.quantity * favourite_item.product.price_with_discount
     favourite_total = sum(item.quantity * item.product.price_with_discount for item in favourite.favourite_items.all())
 
-    log_task(f"Total items in {request.user.username}'s favourite list: {favourite_total}.", 'debug')
-
     return JsonResponse({
         'item_total': item_total,
         'favourite_total': favourite_total,
