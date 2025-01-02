@@ -33,7 +33,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Log out when the browser is closed
 SESSION_COOKIE_AGE = 1209600  # Two weeks in seconds (only if "Remember me" is checked)
 
-# SECURITY WARNING: don't run with debug turned on in production!
+#! SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -67,6 +67,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -273,12 +275,24 @@ CELERY_BROKER_URL = 'redis://172.17.0.2:6379/0' # Connect to Redis
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'django-db'
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'IGNORE_EXCEPTIONS': True,
+        },
+        'KEY_PREFIX': 'stationery_store',  # Unique prefix to prevent conflicts
     }
 }
+
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 60 * 15  # Cash lifetime (15 mins)
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
+
+
 CELERY_CACHE_BACKEND = 'default'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 

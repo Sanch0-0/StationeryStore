@@ -52,9 +52,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        # Удаляем password1 и password2, так как они не нужны для создания пользователя
+        # Deleting password1 and password2
         password = validated_data.pop('password1')
-        validated_data.pop('password2')  # Удаляем password2, так как он не нужен
+        validated_data.pop('password2')  # Deleting password2
 
         user = User(**validated_data)
         user.set_password(password)

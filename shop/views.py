@@ -7,11 +7,12 @@ from django.db import models
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
+from django.views.decorators.cache import cache_page
 from .models import Product, Category, ReviewRating
 from .filters import ProductsFilter
 from main.tasks import log_task
 
-
+ 
 def index(request):
     log_task(f"User {request.user.username} accessed the Home page.", 'info')
 
@@ -150,31 +151,37 @@ def search_products(request):
     return render(request, "search_products.html", context)
 
 
+@cache_page(60 * 60 * 24 * 180)  # Cash on 180 days (half of year)
 def delivery_policy(request):
     log_task(f"User {request.user.username} accessed the Delivery Policy page.", 'info')
     return render(request, "delivery_policy.html")
 
 
+@cache_page(60 * 60 * 24 * 180) 
 def terms(request):
     log_task(f"User {request.user.username} accessed the Terms page.", 'info')
     return render(request, "terms.html")
 
 
+@cache_page(60 * 60 * 24 * 180) 
 def privacy_policy(request):
     log_task(f"User {request.user.username} accessed the Privacy Policy page.", 'info')
     return render(request, "privacy_policy.html")
 
 
+@cache_page(60 * 60 * 24 * 180) 
 def refund_policy(request):
     log_task(f"User {request.user.username} accessed the Refund Policy page.", 'info')
     return render(request, "refund_policy.html")
 
 
+@cache_page(60 * 60 * 24 * 180) 
 def about_us(request):
     log_task(f"User {request.user.username} accessed the About Us page.", 'info')
     return render(request, "about_us.html")
 
 
+@cache_page(60 * 60 * 24 * 180)
 def contact_us(request):
     log_task(f"User {request.user.username} accessed the Contact Us page.", 'info')
     return render(request, "contact_us.html")
