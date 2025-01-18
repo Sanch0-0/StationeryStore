@@ -42,6 +42,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "admin_interface",
+    "colorfield",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,6 +65,9 @@ INSTALLED_APPS = [
     'cart',
     'favourite',
 ]
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -287,10 +292,6 @@ CACHES = {
         'KEY_PREFIX': 'stationery_store',  # Unique prefix to prevent conflicts
     }
 }
-
-CACHE_MIDDLEWARE_ALIAS = 'default'
-CACHE_MIDDLEWARE_SECONDS = 60 * 15  # Cash lifetime (15 mins)
-CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
 
 CELERY_CACHE_BACKEND = 'default'

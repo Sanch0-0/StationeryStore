@@ -12,7 +12,8 @@ from .models import Product, Category, ReviewRating
 from .filters import ProductsFilter
 from main.tasks import log_task
 
- 
+
+@cache_page(60 * 60 * 24)
 def index(request):
     log_task(f"User {request.user.username} accessed the Home page.", 'info')
 
@@ -32,7 +33,7 @@ def index(request):
 @csrf_exempt
 def get_product_by_id(request, id):
     log_task(f"User {request.user.username} accessed the Product_Info page for Product ID {id}.", 'info')
-    
+
     product = get_object_or_404(Product, id=id)
     categories = Category.objects.all()
 
