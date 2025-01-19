@@ -7,13 +7,12 @@ from django.db import models
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
-from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from .models import Product, Category, ReviewRating
 from .filters import ProductsFilter
 from main.tasks import log_task
 
 
-@cache_page(60 * 60 * 24)
 def index(request):
     log_task(f"User {request.user.username} accessed the Home page.", 'info')
 
@@ -26,6 +25,9 @@ def index(request):
         "categories": categories,
         "top_rated_products": top_rated_products,
     }
+
+    cache.set('index', context, timeout=60 * 60 * 24)
+    
 
     return render(request, "home.html", context)
 
@@ -152,37 +154,49 @@ def search_products(request):
     return render(request, "search_products.html", context)
 
 
-@cache_page(60 * 60 * 24 * 180)  # Cash on 180 days (half of year)
 def delivery_policy(request):
     log_task(f"User {request.user.username} accessed the Delivery Policy page.", 'info')
-    return render(request, "delivery_policy.html")
+    response = render(request, "delivery_policy.html")
+    cache.set('delivery_policy_page', response.content, timeout=60 * 60 * 24 * 180) # 180 days
+    log_task(f"Cache for Delivery Policy page has been added", 'debug')
+    return response
 
 
-@cache_page(60 * 60 * 24 * 180) 
 def terms(request):
     log_task(f"User {request.user.username} accessed the Terms page.", 'info')
-    return render(request, "terms.html")
+    response = render(request, "terms.html")
+    cache.set('delivery_policy_page', response.content, timeout=60 * 60 * 24 * 180)
+    log_task(f"Cache for Terms page has been added", 'debug')
+    return response
 
 
-@cache_page(60 * 60 * 24 * 180) 
 def privacy_policy(request):
     log_task(f"User {request.user.username} accessed the Privacy Policy page.", 'info')
-    return render(request, "privacy_policy.html")
+    response = render(request, "privacy_policy.html")
+    cache.set('delivery_policy_page', response.content, timeout=60 * 60 * 24 * 180)
+    log_task(f"Cache for Privacy Policy page has been added", 'debug')
+    return response
 
 
-@cache_page(60 * 60 * 24 * 180) 
 def refund_policy(request):
     log_task(f"User {request.user.username} accessed the Refund Policy page.", 'info')
-    return render(request, "refund_policy.html")
+    response = render(request, "refund_policy.html")
+    cache.set('delivery_policy_page', response.content, timeout=60 * 60 * 24 * 180)
+    log_task(f"Cache for Refund Policy page has been added", 'debug')
+    return response
 
 
-@cache_page(60 * 60 * 24 * 180) 
 def about_us(request):
     log_task(f"User {request.user.username} accessed the About Us page.", 'info')
-    return render(request, "about_us.html")
+    response = render(request, "about_us.html")
+    cache.set('delivery_policy_page', response.content, timeout=60 * 60 * 24 * 180)
+    log_task(f"Cache for About Us page has been added", 'debug')
+    return response
 
 
-@cache_page(60 * 60 * 24 * 180)
 def contact_us(request):
     log_task(f"User {request.user.username} accessed the Contact Us page.", 'info')
-    return render(request, "contact_us.html")
+    response = render(request, "contact_us.html")
+    cache.set('delivery_policy_page', response.content, timeout=60 * 60 * 24 * 180)
+    log_task(f"Cache for Contact Us page has been added", 'debug')
+    return response

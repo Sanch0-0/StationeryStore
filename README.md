@@ -7,3 +7,5 @@
     celery-worker (Обработчик задач)
     celery-beat (Если есть периодические задачи)
 
+Elasticsearch и Logstash на рассмотрение
+не забыть про Flower

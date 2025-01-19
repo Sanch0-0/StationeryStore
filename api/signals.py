@@ -51,7 +51,8 @@ def delete_favourite_cache(sender, instance, **kwargs):
 @receiver(post_save, sender=ReviewRating)
 def update_review_cache(sender, instance, created, **kwargs):
     cache_key = f"review_{instance.product.id}"
-    cache.set(cache_key, instance.product.reviews.all(), timeout=1800) # 30 mins
+    # Используйте 'review_ratings' вместо 'reviews'
+    cache.set(cache_key, instance.product.review_ratings.all(), timeout=1800)  # 30 mins
 
 # Delete the review cache when a review is deleted
 @receiver(post_delete, sender=ReviewRating)
