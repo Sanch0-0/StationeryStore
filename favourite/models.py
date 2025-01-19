@@ -20,8 +20,8 @@ class Favourite(models.Model):
         return total
 
 class FavouriteProduct(models.Model):
-    favourite = models.ForeignKey(Favourite, on_delete=models.CASCADE, related_name='favourite_items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    favourite = models.ForeignKey(Favourite, on_delete=models.CASCADE, related_name='favourite_items', db_index=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, db_index=True)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):

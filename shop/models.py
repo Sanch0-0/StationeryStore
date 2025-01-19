@@ -20,11 +20,11 @@ class Product(models.Model):
     cropping = ImageRatioField('image', '200x200', verbose_name="cropping")
     name = models.CharField(verbose_name="name", max_length=30)
     description = models.TextField(verbose_name="description")
-    price = models.DecimalField(verbose_name="price", max_digits=7, decimal_places=2, default=1, blank=True)
-    discount = models.SmallIntegerField(verbose_name="discount", default=0, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="products")
-    brand = models.CharField(verbose_name='brand', max_length=20,)
-    created_at = models.DateTimeField(verbose_name="Created at", default=timezone.now, blank=True)
+    price = models.DecimalField(verbose_name="price", max_digits=7, decimal_places=2, default=1, blank=True, db_index=True)
+    discount = models.SmallIntegerField(verbose_name="discount", default=0, blank=True, db_index=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="products", db_index=True)
+    brand = models.CharField(verbose_name='brand', max_length=20, db_index=True)
+    created_at = models.DateTimeField(verbose_name="Created at", default=timezone.now, blank=True, db_index=True)
 
     class Meta:
         verbose_name_plural = "Products"
@@ -59,8 +59,8 @@ class ReviewRating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="review_ratings")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     review = models.TextField(max_length=500, blank=True)
-    rating = models.PositiveSmallIntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
+    rating = models.PositiveSmallIntegerField(default=0, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         unique_together = ('product', 'user')
