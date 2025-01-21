@@ -1,0 +1,52 @@
+
+services:
+
+  postgres:
+    image: postgres:16 
+    container_name: postgres_db
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    container_name: redis_cache
+    restart: always
+    ports:
+      - "6380:6379"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_app
+    restart: always
+    env_file: .env
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: celery_worker
+    restart: always
+    depends_on:
+      - web
+      - redis
+    command: celery -A main worker --loglevel=info
+
+volumes:
+  postgres_data:

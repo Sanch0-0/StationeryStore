@@ -74,8 +74,6 @@ SILENCED_SYSTEM_CHECKS = ["security.W019"]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.cache.UpdateCacheMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -117,15 +115,11 @@ DATABASES = {
     'default': {
 
         'ENGINE': 'django.db.backends.postgresql',
-
         'NAME': os.getenv("DB_NAME"),
-
         'USER': os.getenv("DB_USER"),
-
         'PASSWORD': os.getenv("DB_PASSWORD"),
-
-        'HOST': os.getenv("DB_HOST"),
-
+        # 'HOST': os.getenv("DB_HOST"),
+        'HOST': 'postgres',
         'PORT': os.getenv("DB_PORT"),
 
     }
