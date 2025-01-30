@@ -36,7 +36,7 @@ SESSION_COOKIE_AGE = 1209600  # Two weeks in seconds (only if "Remember me" is c
 #! SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 
 # Application definition
@@ -177,11 +177,10 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
-# STATIC_ROOT = 'static/'
-STATICFILES_DIRS = [
-    'static'
-]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -273,7 +272,7 @@ SIMPLE_JWT = {
 
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://172.17.0.2:6379/0' # Connect to Redis
+CELERY_BROKER_URL = 'redis://redis_cache:6379/0' # Connect to Redis
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'django-db'
@@ -281,7 +280,7 @@ CELERY_RESULT_BACKEND = 'django-db'
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'LOCATION': 'redis://redis_cache:6379/1',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'IGNORE_EXCEPTIONS': True,

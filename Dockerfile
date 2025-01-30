@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Открываем порт (не обязательно, но полезно)
-EXPOSE 8000
+EXPOSE 8001
 
-# Запускаем Django
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Запускаем Gunicorn
+CMD ["gunicorn", "--config", "gunicorn.conf.py", "main.wsgi:application"]
