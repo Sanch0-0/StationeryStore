@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Открываем порт (не обязательно, но полезно)
-EXPOSE 8001
+EXPOSE 8888
 
 # Запускаем Gunicorn
 CMD ["gunicorn", "--config", "gunicorn.conf.py", "main.wsgi:application"]
