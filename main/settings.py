@@ -34,7 +34,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Log out when the browser is closed
 SESSION_COOKIE_AGE = 1209600  # Two weeks in seconds (only if "Remember me" is checked)
 
 #! SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost"]
 
@@ -176,11 +176,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
+STATIC_URL = '/static/'
+STATIC_ROOT = '/app/staticfiles/'  # Абсолютный путь внутри контейнера
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/app/media/'  # Абсолютный путь внутри контейнера
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -192,8 +193,6 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.EmailOrUsernameModelBackend'
 ]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 AUTH_USER_MODEL = "users.User"

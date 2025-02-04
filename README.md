@@ -16,7 +16,7 @@ Elasticsearch и Logstash на рассмотрение
 Description=gunicorn socket
 
 [Socket]
-ListenStream=/run/gunicorn.sock
+ListenStream=/app/gunicorn.sock
 
 [Install]
 WantedBy=sockets.target
@@ -29,10 +29,10 @@ Requires=gunicorn.socket
 After=network.target
 
 [Service]
-User=alex
-Group=alex
-WorkingDirectory=/home/alex/Python_course/Django/StationeryStore
-ExecStart=/home/alex/Python_course/Django/StationeryStore/venv/bin/gunicorn --config /home/alex/Python_course/Django/StationeryStore/gunicorn.conf main.wsgi:application
+User=www-data
+Group=www-data
+WorkingDirectory=/app
+ExecStart=/app/venv/bin/gunicorn --config /app/gunicorn.conf main.wsgi:application
 
 [Install]
 WantedBy=multi-user.target

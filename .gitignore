@@ -12,3 +12,4 @@ media/
 *.pid
 .vscode/
 /staticfiles/
+
