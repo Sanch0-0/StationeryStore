@@ -35,6 +35,13 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
 
+    command: >
+      gunicorn main.wsgi:application
+      --bind unix:/app/sockets/gunicorn.sock
+      --workers 7
+      --timeout 60
+      --access-logfile /app/logs/django.log
+
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -43,9 +50,9 @@ services:
       - "8888:80"  # Прокидываем порт 8888 на 80 внутри контейнера
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./app/gunicorn.sock:/app/gunicorn.sock 
       - static_volume:/app/static
       - media_volume:/app/media
+      - ./app/sockets:/app/sockets  # Монтируем папку с сокетами
     depends_on:
       - web
 
@@ -64,4 +71,3 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
-
