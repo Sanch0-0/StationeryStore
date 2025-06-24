@@ -1,6 +1,7 @@
 from django.conf import settings
 
 ALLOWED_HOSTS = ['*']
+MEDIA_URL = '/media/'
 
 DATABASES = {
     'default': {

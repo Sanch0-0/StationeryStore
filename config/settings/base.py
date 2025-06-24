@@ -1,7 +1,10 @@
-from pathlib import Path
+from config.settings.jazzmin import JAZZMIN_UI_TWEAKS, JAZZMIN_SETTINGS
 from decouple import config, Csv
+from pathlib import Path
 import os
 
+JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
+JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -21,10 +24,12 @@ else:
     from .dev import (
         ALLOWED_HOSTS,
         DATABASES,
+        MEDIA_URL
     )
 
 ALLOWED_HOSTS = ALLOWED_HOSTS
 DATABASES = DATABASES
+
 
 INSTALLED_APPS = [
     "admin_interface",
@@ -135,7 +140,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'localstatic')]
 
-MEDIA_URL = '/media/'
+MEDIA_URL = MEDIA_URL
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -155,8 +160,8 @@ LOGIN_URL =  reverse_lazy("login")
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
