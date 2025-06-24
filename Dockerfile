@@ -18,8 +18,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Копируем весь код проекта
 COPY . /app/
 
+# Даем права на выполнение entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Открываем порт (не обязательно, но полезно)
 EXPOSE 8888
 
-# Запускаем Gunicorn
-CMD ["gunicorn", "main.wsgi:application"]
+# Устанавливаем entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]
+

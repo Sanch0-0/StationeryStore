@@ -36,8 +36,7 @@ SESSION_COOKIE_AGE = 1209600  # Two weeks in seconds (only if "Remember me" is c
 #! SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost"]
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -177,10 +176,11 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/app/staticfiles/'  # Абсолютный путь внутри контейнера
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/app/media/'  # Абсолютный путь внутри контейнера
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type
