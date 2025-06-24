@@ -5,7 +5,8 @@ from main.tasks import log_task
 
 
 # Устанавливаем модуль настроек Django по умолчанию для Celery
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.base')
+#Todo - подключить celery как положено.
 
 app = Celery('main')
 

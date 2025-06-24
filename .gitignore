@@ -1,15 +1,49 @@
+# Environment files
 venv/
+.venv
+env/
 .env
+
+# Compiled Python files
+*.pyc
+
+# Database files
+db.sqlite3
+
+# Static files (usually managed by collectstatic)
+# localstatic/
+staticfiles/
+localstatic
+
+# Media files
+media/
+
+# dack_static
+static/
+
+
+# IDE/Editor specific files (choose those you use)
+.idea/
+.vscode/
+pycharm/
+
+# Local configuration files
+local_settings.py
+
+# Coverage reports
+coverage/
+
+# Test database
+test.db
+
+# Anything else project-specific you want to ignore
+*.log
+
+__pycache__/
+**/migrations/**
+!**/migrations/__init__.py
+.mypy_cache/
+letsencrypt
+
 media/products/*
 media/users/avatar/*
-__pycache__/
-plan.md
-migrations_refresher.py
-logs/*
-*.log
-debug.log
-media/
-*.pid
-.vscode/
-/staticfiles/
-
