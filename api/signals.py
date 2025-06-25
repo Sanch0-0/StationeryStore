@@ -8,7 +8,6 @@ from users.models import User
 from shop.models import Category
 
 
-#? API
 # Update the product cache on creation or update
 @receiver(post_save, sender=Product)
 def update_product_cache(sender, instance, created, **kwargs):
