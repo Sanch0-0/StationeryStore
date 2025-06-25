@@ -36,3 +36,20 @@ ExecStart=/app/venv/bin/gunicorn --config /app/gunicorn.conf main.wsgi:applicati
 
 [Install]
 WantedBy=multi-user.target
+
+
+
+#TODO
+Сделать поисковик,
+Подключить оплату по карте (Stripe, PyPal),
+По возможности прикрутить адаптивку,
+Настроить логирование (Elasticsearch, Logstash, Kibana/Flower),
+Оптимизировать (индексы, жадные запросы, профилирование),
+Сжатие файлов (Gzip/Brotli) + объединение CSS/JS (django-compressor),
+Конвертировать все изображения в webp с 80% качеством,
+Ограничение запросов (Rate Limiting),
+Разделение БД (репликация, шардинг),
+Настроить мониторинг и алертинг (Sentry для ошибок, Prometheus + Grafana для метрик),
+Использовать HTTP/2 для ускоренной загрузки страниц,
+Задеплоить + настроить CI/CD pipeline.
+Добавить интеграционные и юнит тесты + прописать моки и фикстуры.
