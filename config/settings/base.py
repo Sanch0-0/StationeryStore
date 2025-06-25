@@ -1,7 +1,10 @@
 from config.settings.jazzmin import JAZZMIN_UI_TWEAKS, JAZZMIN_SETTINGS
+from django.urls import reverse_lazy
 from decouple import config, Csv
+from datetime import timedelta
 from pathlib import Path
 import os
+
 
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
 JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS
@@ -32,8 +35,9 @@ DATABASES = DATABASES
 
 
 INSTALLED_APPS = [
-    "admin_interface",
-    "colorfield",
+    'jazzmin',
+    'corsheaders',
+    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

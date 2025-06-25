@@ -13,7 +13,7 @@ db.sqlite3
 # Static files (usually managed by collectstatic)
 # localstatic/
 staticfiles/
-localstatic
+
 
 # Media files
 media/

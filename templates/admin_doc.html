@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Документация по Админке</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 960px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        h1, h2 {
+            color: #1a73e8;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #444;
+            margin-top: 30px;
+        }
+        .section {
+            background: #ffffff;
+            padding: 20px 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .note {
+            background: #fff8e1;
+            border-left: 5px solid #fbc02d;
+            padding: 12px 20px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #5f4b00;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f3f4;
+            color: #333;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        .nav {
+            margin-bottom: 40px;
+            background: #fff;
+            padding: 15px 25px;
+            border-left: 4px solid #1a73e8;
+        }
+        .nav a {
+            display: inline-block;
+            margin: 0 10px 10px 0;
+            text-decoration: none;
+            color: #1a73e8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📘 Документация по административной панели</h1>
+    <p>Инструкция по работе с административной панелью. Ниже приведены описания всех разделов, ограничения на данные и требования к заполнению.</p>
+
+    <div class="nav">
+        <strong>Навигация:</strong><br>
+        <a href="#banners">Баннеры</a>
+        <a href="#ads">Рекламный блок</a>
+        <a href="#faq">FAQ</a>
+        <a href="#team">Наша команда</a>
+        <a href="#partners">Партнёры</a>
+        <a href="#contacts">Контакты</a>
+        <a href="#category">Категории</a>
+        <a href="#org">Организации</a>
+        <a href="#globalorg">Международные организации</a>
+        <a href="#KnowledgeBase">База знаний</a>
+        <a href="#news">Новости</a>
+        <a href="#events">Мероприятия</a>
+    </div>
+
+    <div class="section" id="banners">
+        <h2>🔰 Стартовый блок (Баннеры)</h2>
+        <table>
+            <tr><th>Поле</th><th>Описание</th></tr>
+            <tr><td><code>title</code></td><td>Заголовок баннера</td></tr>
+            <tr><td><code>image</code></td><td>Изображение (обязательно)</td></tr>
+            <tr><td><code>url</code></td><td>Ссылка (опционально)</td></tr>
+            <tr><td><code>is_active</code></td><td>Флаг активности</td></tr>
+        </table>
+        <div class="note">Максимум 5 активных баннеров. Активные отображаются на главной странице.</div>
+    </div>
+
+    <div class="section" id="ads">
+        <h2>🎯Динамический рекламный блок</h2>
+        <table>
+            <tr><th>Поле</th><th>Описание</th></tr>
+            <tr><td><code>title</code></td><td>Заголовок (обязательно)</td></tr>
+            <tr><td><code>start_date</code></td><td>Дата начала</td></tr>
+            <tr><td><code>end_date</code></td><td>Дата окончания</td></tr>
+            <tr><td><code>time</code></td><td>Время</td></tr>
+            <tr><td><code>address</code></td><td>Адрес</td></tr>
+            <tr><td><code>url</code></td><td>Ссылка</td></tr>
+            <tr><td><code>image</code></td><td>Изображение (обязательно)</td></tr>
+        </table>
+        <div class="note">Можно добавить только один блок. Если указана ссылка — остальные поля необязательны.</div>
+    </div>
+
+    <div class="section" id="faq">
+        <h2>❓ Часто задаваемые вопросы (FAQ)</h2>
+        <table>
+            <tr><th>Поле</th><th>Описание</th></tr>
+            <tr><td><code>question</code></td><td>Вопрос</td></tr>
+            <tr><td><code>answer</code></td><td>Ответ</td></tr>
+        </table>
+        <div class="note">Максимум 15 записей. Используется для справочной информации.</div>
+    </div>
+
+    <div class="section" id="team">
+        <h2>🧑‍🤝‍🧑 Наша команда</h2>
+        <table>
+            <tr><th>Поле</th><th>Описание</th></tr>
+            <tr><td><code>name</code></td><td>Имя</td></tr>
+            <tr><td><code>profession</code></td><td>Должность</td></tr>
+            <tr><td><code>description</code></td><td>Описание</td></tr>
+            <tr><td><code>image</code></td><td>Фото</td></tr>
+        </table>
+    </div>
+
+    <div class="section" id="partners">
+        <h2>🌍 Партнёры</h2>
+        <table>
+            <tr><th>Поле</th><th>Описание</th></tr>
+            <tr><td><code>image</code></td><td>Логотип</td></tr>
+            <tr><td><code>link</code></td><td>Ссылка</td></tr>
+            <tr><td><code>is_international</code></td><td>Флаг международного партнёра</td></tr>
+        </table>
+    </div>
+
+    <div class="section" id="contacts">
+        <h2>📞 Контакты</h2>
+        <table>
+            <tr><th>Поле</th><th>Описание</th></tr>
+            <tr><td><code>instagram, whatsapp, facebook, telegram</code></td><td>Ссылки на соцсети</td></tr>
+            <tr><td><code>phone_number</code></td><td>Номер телефона</td></tr>
+            <tr><td><code>address</code></td><td>Адрес</td></tr>
+            <tr><td><code>email</code></td><td>Email</td></tr>
+        </table>
+        <div class="note">Допускается только одна запись. Отображается в разделе контактов на сайте.</div>
+    </div>
+
+    <div class="section" id="category">
+        <h2>📂 Категории</h2>
+        <table>
+            <tr><th>Поле</th><th>Тип</th><th>Описание</th><th>Ограничения</th></tr>
+            <tr><td><code>title</code></td><td>CharField</td><td>Название категории</td><td>До 60 символов</td></tr>
+            <tr><td><code>type</code></td><td>ChoiceField</td><td>Тип категории</td><td>Выбор типа: категории услуг/вид продукции</td></tr>
+        </table>
+    </div>
+
+    <div class="section" id="org">
+        <h2>🏢 Организации</h2>
+        <table>
+            <tr><th>Поле</th><th>Тип</th><th>Описание</th><th>Ограничения</th></tr>
+            <tr><td><code>title</code></td><td>CharField</td><td>Название</td><td>Обязательно</td></tr>
+            <tr><td><code>description</code></td><td>TextField</td><td>Описание</td><td>Необязательно</td></tr>
+            <tr><td><code>image</code></td><td>ImageField</td><td>Изображение</td><td><code>validate_image</code></td></tr>
+            <tr><td><code>region</code></td><td>ChoiceField</td><td>Регион</td><td>Выбор из 7 регионов</td></tr>
+            <tr><td><code>address</code></td><td>CharField</td><td>Адрес</td><td>Макс. 200 символов</td></tr>
+            <tr><td><code>category</code></td><td>ManyToMany</td><td>Категории</td><td>Обязательно</td></tr>
+            <tr><td><code>status</code></td><td>Boolean</td><td>Активность</td><td>По умолчанию False</td></tr>
+        </table>
+    </div>
+
+    <div class="section" id="globalorg">
+        <h2>🌐 Международные организации</h2>
+        <table>
+            <tr><th>Поле</th><th>Тип</th><th>Описание</th><th>Ограничения</th></tr>
+            <tr><td><code>title</code></td><td>CharField</td><td>Название</td><td>Обязательно</td></tr>
+            <tr><td><code>description</code></td><td>TextField</td><td>Описание</td><td>Необязательно</td></tr>
+            <tr><td><code>image</code></td><td>ImageField</td><td>Изображение</td><td><code>validate_image</code></td></tr>
+            <tr><td><code>continent</code></td><td>ChoiceField</td><td>Континент</td><td>Выбор из континентов</td></tr>
+            <tr><td><code>address</code></td><td>CharField</td><td>Адрес</td><td>Макс. 200 символов</td></tr>
+            <tr><td><code>category</code></td><td>ManyToMany</td><td>Категории</td><td>Обязательно</td></tr>
+            <tr><td><code>status</code></td><td>Boolean</td><td>Активность</td><td>По умолчанию False</td></tr>
+        </table>
+    </div>
+    <div class="section" id="KnowledgeBase">
+      <h2>📚 База знаний</h2>
+
+      <h3>1. Категория знаний (<code>KnowledgeCategory</code>)</h3>
+      <table>
+        <tr><th>Поле</th><th>Тип</th><th>Описание</th><th>Ограничения</th></tr>
+        <tr><td><code>title</code></td><td>CharField (max 200)</td><td>Название категории</td><td>Обязательно</td></tr>
+      </table>
+
+      <h3>2. Подкатегория знаний (<code>KnowledgeSubCategory</code>)</h3>
+      <table>
+        <tr><th>Поле</th><th>Тип</th><th>Описание</th><th>Ограничения</th></tr>
+        <tr><td><code>title</code></td><td>CharField (max 200)</td><td>Название подкатегории</td><td>Обязательно</td></tr>
+        <tr><td><code>category</code></td><td>ForeignKey</td><td>Категория</td><td>Связь с <code>KnowledgeCategory</code></td></tr>
+      </table>
+
+      <h3>3. Учебный материал (<code>KnowledgeMaterial</code>)</h3>
+      <table>
+        <tr><th>Поле</th><th>Тип</th><th>Описание</th><th>Ограничения</th></tr>
+        <tr><td><code>subcategory</code></td><td>ForeignKey</td><td>Подкатегория</td><td>Связь с <code>KnowledgeSubCategory</code></td></tr>
+        <tr><td><code>title</code></td><td>CharField (max 200)</td><td>Заголовок</td><td>Обязательно</td></tr>
+        <tr><td><code>material_type</code></td><td>ChoiceField</td><td>Тип (Видео / PDF)</td><td><code>выбор ВИДЕО/PDF</code></td></tr>
+        <tr><td><code>pdf_file</code></td><td>FileField</td><td>PDF-файл</td><td>По желанию, проверка через <code>validate_pdf</code></td></tr>
+        <tr><td><code>video_link</code></td><td>URLField</td><td>Ссылка на видео (YouTube)</td><td>По желанию, проверка через <code>validate_youtube_link</code></td></tr>
+        <tr><td><code>clicks_count</code></td><td>PositiveInteger</td><td>Счётчик кликов</td><td>По умолчанию 0</td></tr>
+      </table>
+
+      <div class="note">
+        Для одного учебного материала можно указать либо PDF, либо видео (по типу). Важно соблюдать формат валидации и загружать только допустимые файлы или ссылки.
+      </div>
+    </div>
+    <div class="section" id="news">
+      <h2>🗞️ Новости (<code>News</code>)</h2>
+      <p>Раздел для публикации новостей. Можно добавлять видео или ссылку на сторонние источники.</p>
+      <table>
+        <tr><th>Поле</th><th>Тип</th><th>Описание</th><th>Ограничения</th></tr>
+        <tr><td><code>title</code></td><td>CharField</td><td>Заголовок</td><td>Обязательно</td></tr>
+        <tr><td><code>description</code></td><td>TextField</td><td>Описание</td><td>Опционально</td></tr>
+        <tr><td><code>image</code></td><td>ImageField</td><td>Изображение</td><td>Опционально</td></tr>
+        <tr><td><code>video_link</code></td><td>URLField</td><td>Ссылка на видео</td><td>По желанию, проверка YouTube</td></tr>
+        <tr><td><code>link</code></td><td>URLField</td><td>Сторонняя ссылка</td><td>Опционально</td></tr>
+        <tr><td><code>date</code></td><td>DateField</td><td>Дата публикации</td><td>Опционально</td></tr>
+      </table>
+    </div>
+
+    <div class="section" id="events">
+      <h2>📅 Мероприятия (<code>Events</code>)</h2>
+      <p>Раздел для управления событиями. Включает даты, адрес, видео и ссылки на регистрацию или карту.</p>
+      <table>
+        <tr><th>Поле</th><th>Тип</th><th>Описание</th><th>Ограничения</th></tr>
+        <tr><td><code>title</code></td><td>CharField</td><td>Название</td><td>Обязательно</td></tr>
+        <tr><td><code>description</code></td><td>TextField</td><td>Описание</td><td>Опционально</td></tr>
+        <tr><td><code>image</code></td><td>ImageField</td><td>Изображение</td><td>Опционально</td></tr>
+        <tr><td><code>start_date</code></td><td>DateField</td><td>Дата начала</td><td>Обязательно</td></tr>
+        <tr><td><code>end_date</code></td><td>DateField</td><td>Дата окончания</td><td>Опционально</td></tr>
+        <tr><td><code>time</code></td><td>CharField</td><td>Время проведения</td><td>До 250 символов</td></tr>
+        <tr><td><code>address</code></td><td>CharField</td><td>Адрес</td><td>До 250 символов</td></tr>
+        <tr><td><code>location_link</code></td><td>URLField</td><td>Ссылка на карту</td><td>Google Maps или 2GIS</td></tr>
+        <tr><td><code>participation_link</code></td><td>URLField</td><td>Ссылка для участия</td><td>Опционально</td></tr>
+        <tr><td><code>video_link</code></td><td>URLField</td><td>Видео</td><td>Опционально, YouTube</td></tr>
+      </table>
+      <div class="note">
+        Если не указана ссылка на участие, на сайте может отображаться форма регистрации.
+      </div>
+    </div>
+
+
+</body>
+</html>

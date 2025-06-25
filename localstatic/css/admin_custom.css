@@ -1,0 +1,24 @@
+.login-logo img {
+    max-height: 100px !important;
+    width: auto !important;
+}
+
+/* Логотип в хедере админки */
+.brand-link img {
+    max-height: 45px !important;
+    width: auto !important;
+}
+
+
+/* Увеличиваем ширину кнопки входа */
+.login-box .btn-block {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 10px; /* Отступ сверху, если нужно */
+}
+
+/* Если кнопка слишком маленькая по высоте */
+.login-box button[type="submit"] {
+    padding: 8px 16px !important;
+    font-size: 1rem !important;
+}

@@ -1,15 +1,15 @@
-logo = ('logo/logo_momo.png')
+logo = ('logo/logo.jpg')
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "Momo",
+    "site_title": "Stationery Store",
     "show_language_picker": True,
 
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "Admin Panel MoMo",
+    "site_header": "Admin Panel",
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "MoMo",
+    "site_brand": "Stationery Store",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
     "site_logo": logo,
@@ -31,20 +31,19 @@ JAZZMIN_SETTINGS = {
     "site_icon": logo,
 
     # Welcome text on the login screen
-    "welcome_sign": "Добро пожаловать в админ-панель",
+    "welcome_sign": "Welcome to the Admin panel!",
 
     # Copyright on the footer
-    "copyright": "MoMo",
+    "copyright": "Stationery Store",
 
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": "avatar",
 
     # Links to put along the top menu
     "topmenu_links": [
-        {"name": "На сайт", "url": "/", "permissions": ["auth.view_user"]},
-        {"name": "Русский", "url": "/admin/?language=ru", "new_window": False},
-        {"name": "Кыргызча", "url": "/admin/?language=ky", "new_window": False},
-        {"name": "English", "url": "/admin/?language=en", "new_window": False},
+        {"name": "To the website", "url": "/", "permissions": ["auth.view_user"]},
+        # {"name": "Russian", "url": "/admin/?language=ru", "new_window": False},
+        # {"name": "English", "url": "/admin/?language=en", "new_window": False},
     ],
 
     #############
