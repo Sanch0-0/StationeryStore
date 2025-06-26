@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from django.shortcuts import render, redirect
 from .forms import UserCreationForm, LoginForm
-from main.tasks import log_task
+from core.tasks import log_task
 
 
 def register_view(request):

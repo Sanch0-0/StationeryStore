@@ -6,4 +6,4 @@ class CartConfig(AppConfig):
     name = 'cart'
 
     def ready(self):
-        from main import signals  # Connect signals
+        from . import signals

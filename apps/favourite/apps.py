@@ -6,4 +6,4 @@ class FavouriteConfig(AppConfig):
     name = 'favourite'
 
     def ready(self):
-        from main import signals  # Connect signals
+        from . import signals
