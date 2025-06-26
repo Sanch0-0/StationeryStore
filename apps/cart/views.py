@@ -9,9 +9,8 @@ from .models import Cart, CartItem
 from shop.models import Product
 from users.models import User
 
-from .tasks import send_checkout_email
-from main import utils
-from main.tasks import log_task
+from core.utils import send_checkout_email
+from core.tasks import log_task
 import secrets
 import string
 

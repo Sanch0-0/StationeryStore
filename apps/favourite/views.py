@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, response
 from .models import Favourite, FavouriteProduct
 from shop.models import Product
-from main.tasks import log_task
+from core.tasks import log_task
+
 
 def get_favourite(request):
     log_task(f"User {request.user.username} accessed the Favourite page.", 'info')

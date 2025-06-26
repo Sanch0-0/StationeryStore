@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.core.cache import cache
 from .models import Product, Category, ReviewRating
 from .filters import ProductsFilter
-from main.tasks import log_task
+from core.tasks import log_task
 
 
 def index(request):
