@@ -3,7 +3,7 @@ from django.urls import path, include
 from .views import *
 
 
-router = DefaultRouter
+router = DefaultRouter()
 router.register(r'cart', CartViewSet, basename='cart')
 
 urlpatterns = [

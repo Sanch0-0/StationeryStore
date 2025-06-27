@@ -1,3 +1,4 @@
+from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from .yasg import urlpatterns as doc_urls
 from django.urls import path, include

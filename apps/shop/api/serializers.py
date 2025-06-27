@@ -1,5 +1,5 @@
-from shop.models import Category, Product, ReviewRating
-from shop.filters import ProductsFilter
+from apps.shop.models import Category, Product, ReviewRating
+from apps.shop.filters import ProductsFilter
 from rest_framework import serializers
 
 
