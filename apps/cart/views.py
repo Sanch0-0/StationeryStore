@@ -5,11 +5,10 @@ from django.http import JsonResponse, response
 from django.contrib import messages
 from django.utils import timezone
 
+from .tasks import send_checkout_email
+from apps.shop.models import Product
 from .models import Cart, CartItem
-from shop.models import Product
-from users.models import User
-
-from core.utils import send_checkout_email
+from apps.users.models import User
 from core.tasks import log_task
 import secrets
 import string

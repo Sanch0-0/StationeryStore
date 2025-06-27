@@ -63,7 +63,7 @@ services:
   celery:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: etc/docker/Dockerfile
     container_name: celery
     restart: always
     depends_on:

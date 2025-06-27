@@ -1,5 +1,5 @@
 from django.db import models
-from shop.models import Product
+from apps.shop.models import Product
 
 class Favourite(models.Model):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="favourite")

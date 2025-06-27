@@ -55,10 +55,11 @@ INSTALLED_APPS = [
     'django_celery_results',
     'easy_thumbnails',
     'image_cropping',
-    'shop',
-    'users',
-    'cart',
-    'favourite',
+    'apps.shop',
+    'apps.users',
+    'apps.cart',
+    'apps.favourite',
+    'core'
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
@@ -237,17 +238,17 @@ SIMPLE_JWT = {
 CELERY_BROKER_URL = 'redis://redis:6379/0' # Connect to Redis
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
 
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis:6379/1',
+        'LOCATION': 'redis://redis:6379/2',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'IGNORE_EXCEPTIONS': True,
         },
-        'KEY_PREFIX': 'stationery_store',  # Unique prefix to prevent conflicts
+        'KEY_PREFIX': 'django_cache',  # Unique prefix to prevent conflicts
     }
 }
 

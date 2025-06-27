@@ -43,7 +43,7 @@ WantedBy=multi-user.target
 Сделать поисковик,
 Подключить оплату по карте (Stripe, PyPal),
 По возможности прикрутить адаптивку,
-Настроить логирование (Elasticsearch, Logstash, Kibana/Flower),
+Настроить логирование (Elasticsearch, Logstash, Kibana + Flower),
 Оптимизировать (индексы, жадные запросы, профилирование),
 Сжатие файлов (Gzip/Brotli) + объединение CSS/JS (django-compressor),
 Конвертировать все изображения в webp с 80% качеством,

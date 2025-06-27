@@ -24,7 +24,7 @@ else:
 EOF
 
 echo "🔥 Запускаем Gunicorn..."
-exec gunicorn main.wsgi:application \
+exec gunicorn config.wsgi:application \
     --bind unix:/gunicorn/sockets/gunicorn.sock \
     --workers 7 \
     --timeout 60 \

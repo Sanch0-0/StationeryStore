@@ -1,13 +1,13 @@
 from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
-from .tasks import log_task
+from core.tasks import log_task
 
 
 # Устанавливаем модуль настроек Django по умолчанию для Celery
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.base')
 
-app = Celery('core')
+app = Celery('config')
 
 # Загружаем конфигурацию из settings.py с префиксом CELERY_
 app.config_from_object('django.conf:settings', namespace='CELERY')

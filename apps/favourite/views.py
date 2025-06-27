@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, response
 from .models import Favourite, FavouriteProduct
-from shop.models import Product
+from apps.shop.models import Product
 from core.tasks import log_task
 
 

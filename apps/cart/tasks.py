@@ -2,7 +2,7 @@ from celery import shared_task
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
-from main.tasks import log_task
+from core.tasks import log_task
 
 
 @shared_task
