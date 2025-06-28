@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
+from django.contrib.auth import get_user_model
 from django.http import JsonResponse, response
 from django.contrib import messages
 from django.utils import timezone
@@ -8,11 +9,13 @@ from django.utils import timezone
 from .tasks import send_checkout_email
 from apps.shop.models import Product
 from .models import Cart, CartItem
-from apps.users.models import User
+
 from core.tasks import log_task
 import secrets
 import string
 
+
+User = get_user_model()
 
 
 @login_required

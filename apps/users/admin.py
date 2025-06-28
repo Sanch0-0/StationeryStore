@@ -1,12 +1,15 @@
-from django.contrib import admin
-from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext as _
+from django.contrib.auth.models import Group
+from django.contrib import admin
 
-from .models import User
+from django.contrib.auth import get_user_model
 from .forms import UserCreationForm
 
+
+User = get_user_model()
 admin.site.unregister(Group)
+
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):

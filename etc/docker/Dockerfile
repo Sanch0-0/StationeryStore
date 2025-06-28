@@ -6,14 +6,14 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-COPY requirements.txt .
-
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app/
-
-RUN chmod +x /app/entrypoint.sh
+COPY . /app
 
 EXPOSE 8888
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+COPY /entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

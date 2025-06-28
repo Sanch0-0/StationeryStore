@@ -105,6 +105,6 @@ def delete_favourite_items(request):
     if request.method == "POST":
         item_ids = request.POST.get("item_ids").split(",")
         deleted_count, _ = FavouriteProduct.objects.filter(id__in=item_ids).delete()
-            
+
         log_task(f'The favourite list has been cleared of {deleted_count} products.', 'info')
     return response.HttpResponse(status=200)

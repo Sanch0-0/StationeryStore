@@ -1,9 +1,13 @@
-from django import forms
+from django_recaptcha.fields import ReCaptchaField
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
-from .models import User
-from django_recaptcha.fields import ReCaptchaField
+from django import forms
+
+
+User = get_user_model()
+
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='First password', min_length=8, widget=forms.PasswordInput)

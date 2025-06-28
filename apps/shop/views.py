@@ -1,14 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.db.models import F
 from django.db import models
 
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
-from django.core.cache import cache
 from .models import Product, Category, ReviewRating
+from django.core.cache import cache
 from .filters import ProductsFilter
 from core.tasks import log_task
 

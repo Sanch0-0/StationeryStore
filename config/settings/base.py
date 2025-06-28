@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'cachalot',
-
     'drf_yasg',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
@@ -55,11 +54,12 @@ INSTALLED_APPS = [
     'django_celery_results',
     'easy_thumbnails',
     'image_cropping',
+    'config',
+    'core',
     'apps.shop',
     'apps.users',
     'apps.cart',
     'apps.favourite',
-    'core'
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
