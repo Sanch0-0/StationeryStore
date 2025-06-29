@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from decouple import config, Csv
 from datetime import timedelta
 from pathlib import Path
+import sys
 import os
 
 
@@ -10,6 +11,7 @@ JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
 JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+sys.path.append(str(BASE_DIR / "apps"))
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1209600
@@ -24,14 +26,13 @@ PRODUCTION = config('PRODUCTION') == 'True'
 if PRODUCTION:
     from .prod import *
 else:
-    from .dev import (
-        ALLOWED_HOSTS,
-        DATABASES,
-        MEDIA_URL
-    )
+    from .dev import *
+
 
 ALLOWED_HOSTS = ALLOWED_HOSTS
 DATABASES = DATABASES
+
+DOMAIN_NAME = config('DOMAIN_NAME', default='localhost')
 
 
 INSTALLED_APPS = [
@@ -90,9 +91,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart_info',
-                'shop.context_processors.top_rated_products',
-                'favourite.context_processors.favourite_info',
+                'apps.cart.context_processors.cart_info',
+                'apps.shop.context_processors.top_rated_products',
+                'apps.favourite.context_processors.favourite_info',
             ],
         },
     },
@@ -142,8 +143,8 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'localstatic')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = MEDIA_URL
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

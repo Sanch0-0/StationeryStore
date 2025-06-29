@@ -11,15 +11,15 @@ env/
 db.sqlite3
 
 # Static files (usually managed by collectstatic)
-# localstatic/
+localstatic/
 staticfiles/
 
 
 # Media files
-media/
+/media/
 
 # dack_static
-static/
+/static/
 
 
 # IDE/Editor specific files (choose those you use)
