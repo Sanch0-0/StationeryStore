@@ -6,7 +6,7 @@ from image_cropping import ImageRatioField
 
 
 class Category(models.Model):
-    name = models.CharField(verbose_name="name", max_length=30)
+    name = models.CharField(verbose_name="name", max_length=40)
 
     class Meta:
         verbose_name_plural = "Categories"

@@ -1,7 +1,6 @@
 {% extends 'index.html' %}
 
 {% load static %}
-{% load thumbnail %}
 
 {% block content %}
 {% include 'banner.html' %}
@@ -18,58 +17,7 @@
               <div class="product_listing_main">
                 <div class="row">
                   {% for product in products %}
-                  <div class="product col-sm-4">
-                    <div style="border-radius: 10px;">
-                      <div>
-                        <a class="product_img_link" href="{% url 'get_product_by_id' product.id %}">
-                          <img
-                              alt="{{ product.name }}"
-                              src="{% thumbnail product.image 'product_thumbnail' %}"
-                              class="product_img"
-                              style="border-radius: 5px;"
-                          />
-                        </a>
-                      </div>
-                      <div class="product_info">
-                        <div class="products_name">
-                          <a href="{% url 'get_product_by_id' product.id %}">{{ product.name }}</a>
-                        </div>
-
-                        {% if product.discount == 0 %}
-                          <span class="original-price">${{ product.price }}</span>
-                        {% elif product.discount != 0 %}
-                          <div class="product-price">
-                            <div class="old-price-wrapper">
-                              <span class="price-striked">${{ product.price }}</span>
-                              <span class="discount-percentage">- {{ product.discount }}%</span>
-                            </div>
-                            <span class="discounted-price">${{ product.price_with_discount }}</span>
-                          </div>
-                        {% endif %}
-
-                        <form id="add-to-cart-form-{{ product.id }}" method="post" action="{% url 'add_to_cart' product.id %}" class="button">
-                          {% csrf_token %}
-                          <button class="btn btn-cart" type="button" style="font-size: 16px;" onclick="addToCart({{ product.id }})">
-                              Add to cart
-                          </button>
-                        </form>
-
-                        <form id="add-to-favourite-form-{{ product.id }}" action="{% url 'add_to_favourite' product.id %}" method="post">
-                          {% csrf_token %}
-                          <button class="m0b_4_6"
-                                  style="background: rgba(0, 48, 120, 0.039); color: rgb(255, 0, 0);"
-                                  type="button"
-                                  onclick="addToFavourite({{ product.id }})">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="ag013-b1">
-                                  <path fill="currentColor"
-                                        d="M16 6.022C16 3.457 14.052 1.5 11.5 1.5c-1.432 0-2.665.799-3.5 1.926C7.165 2.299 5.932 1.5 4.5 1.5 1.948 1.5 0 3.457 0 6.022c0 2.457 1.66 4.415 3.241 5.743 1.617 1.358 3.387 2.258 4.062 2.577.444.21.95.21 1.394 0 .675-.32 2.445-1.219 4.062-2.577C14.339 10.437 16 8.479 16 6.022"></path>
-                              </svg>
-                          </button>
-                        </form>
-
-                      </div>
-                    </div>
-                  </div>
+                    {% include 'product.html' %}
                   {% empty %}
                   <p>No products available.</p>
                   {% endfor %}
@@ -85,103 +33,5 @@
   </div>
 </div>
 
-
-
-<style>
-.product_listing_main .row {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 0px;
-}
-
-.product {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-}
-
-.products_name {
-  font-size: 17px;
-  text-align: center;
-  color: #3b3b3b;
-  margin-top: 20px;
-  font-weight: bolder;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-}
-
-
-
-.original-price {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  font-size: 24px;
-  color: #3b3b3b;
-  font-weight: bold;
-  margin-top: 25px;
-}
-
-.product-price {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.old-price-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 5px;
-}
-
-.price-striked {
-  color: gray;
-  text-decoration: line-through;
-  font-size: 14px;
-  margin-right: 8px;
-}
-
-.discount-percentage {
-  color: rgb(255, 72, 103);
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.discounted-price {
-  color: #3b3b3b;
-  font-size: 24px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-}
-
-.button {
-  display: flex;
-  justify-content: center;
-  margin-top: 5px;
-  float: left;
-}
-
-button.m0b_4_6 {
-  float: right;
-  height: 40px;
-  width: 40px;
-  border: 2px outset;
-  border-radius: 10px;
-  margin-top: 5%;
-}
-
-form.button{
-  border-radius: 15px;
-  border: outset 2px;
-}
-</style>
 
 {% endblock %}

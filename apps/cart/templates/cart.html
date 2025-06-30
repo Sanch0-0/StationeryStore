@@ -51,6 +51,7 @@
                       <div class="product_img_link">
                         <a href="{% url 'get_product_by_id' item.product.id %}">
                           <img
+                            class="product_img"
                             src="{% thumbnail  item.product.image 'product_thumbnail' %}"
                             alt="{{ item.product.name }}"
                             style="border-radius: 10px;"
@@ -386,6 +387,12 @@
     width: 16px;
     height: 16px;
     fill: currentColor;
+  }
+
+  .product_img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
   }
 
   .products_name {

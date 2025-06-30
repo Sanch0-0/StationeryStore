@@ -1,4 +1,4 @@
-from config.settings.jazzmin import JAZZMIN_UI_TWEAKS, JAZZMIN_SETTINGS
+from config.settings.jazzmin import DARK_THEME, LIGHT_THEME, JAZZMIN_SETTINGS
 from django.urls import reverse_lazy
 from decouple import config, Csv
 from datetime import timedelta
@@ -7,8 +7,9 @@ import sys
 import os
 
 
+ADMIN_DARK_THEME = config('ADMIN_DARK_THEME') == 'True'
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
-JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS
+JAZZMIN_UI_TWEAKS = DARK_THEME if ADMIN_DARK_THEME else LIGHT_THEME
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(BASE_DIR / "apps"))
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    "django.contrib.admindocs",
     'debug_toolbar',
     'cachalot',
     'drf_yasg',
