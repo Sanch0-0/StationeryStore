@@ -12,7 +12,6 @@ if [ "$DJANGO_ROLE" = "web" ]; then
   python manage.py collectstatic --noinput
 
   echo "👤 Создаем суперюзера..."
-  sleep 3
   PYTHONPATH=/app python core/create_superuser.py # для нахождения config/
 
   echo "🔥 Запускаем Gunicorn..."

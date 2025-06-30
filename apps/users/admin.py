@@ -1,5 +1,5 @@
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.utils.translation import gettext as _
+from django_celery_results.models import TaskResult, GroupResult
 from django.contrib.auth.models import Group
 from django.contrib import admin
 
@@ -9,6 +9,8 @@ from .forms import UserCreationForm
 
 User = get_user_model()
 admin.site.unregister(Group)
+admin.site.unregister(TaskResult)
+admin.site.unregister(GroupResult)
 
 
 @admin.register(User)

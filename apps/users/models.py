@@ -13,7 +13,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError("The Username field must be set!")
 
         email = self.normalize_email(email)
-        user = self.model(email=email, **kwargs)
+        user = self.model(username=username, email=email, **kwargs)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -48,7 +48,10 @@ class User(AbstractUser):
     first_name = None
     last_name = None
 
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.username
+        return self.username if self.username else str(self.pk)
