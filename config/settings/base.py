@@ -1,6 +1,6 @@
 from config.settings.jazzmin import DARK_THEME, LIGHT_THEME, JAZZMIN_SETTINGS
 from django.urls import reverse_lazy
-from decouple import config, Csv
+from decouple import config
 from datetime import timedelta
 from pathlib import Path
 import sys
